@@ -1,79 +1,79 @@
 package tree
 
 import (
-    "strconv"
-    //"strings"
-    //"errors"
-    "bytes"
+	"strconv"
+	//"strings"
+	//"errors"
+	"bytes"
 )
 
 type data struct {
-    Name string
-    Length float64
-    Id int
-    Level int
+	Name   string
+	Length float64
+	Id     int
+	Level  int
 }
 
 type Node struct {
-    *data
-    Father *Node
-    Children []*Node
+	*data
+	Father   *Node
+	Children []*Node
 }
 
 /*func newNode2() *Node{*/
-    //node := new(Node)
-    //node.data = new(data)
-    //return node
+//node := new(Node)
+//node.data = new(data)
+//return node
 /*}*/
 
 // newNode will allocate space for data while new(Node) not
 func newNode() *Node {
-    return &Node{&data{},nil,nil}
+	return &Node{&data{}, nil, nil}
 }
 
 func (n *Node) AddChild(c *Node) {
-    n.Children = append(n.Children, c)
-    c.Father = n
+	n.Children = append(n.Children, c)
+	c.Father = n
 }
 
-func (n *Node) toByte (b *bytes.Buffer, showlength bool){
-    writeNode := func (n *Node) {
-        b.WriteString(n.Name)
-        if showlength {
-            //b.WriteByte(byte(':'))
-            b.WriteRune(':')
-            length := strconv.FormatFloat(n.Length, 'f', -1, 64)
-            b.WriteString(length)
-        }
-    }
+func (n *Node) toByte(b *bytes.Buffer, showlength bool) {
+	writeNode := func(n *Node) {
+		b.WriteString(n.Name)
+		if showlength {
+			//b.WriteByte(byte(':'))
+			b.WriteRune(':')
+			length := strconv.FormatFloat(n.Length, 'f', -1, 64)
+			b.WriteString(length)
+		}
+	}
 
-    children := n.Children
-    if len(children) > 0 {
-        //b.WriteByte(byte('('))
-        b.WriteRune('(')
-        children[0].toByte(b, showlength)
-        for i:=1;i<len(children);i++{
-            //b.WriteByte(byte(','))
-            b.WriteRune(',')
-            //writeNode(children[i])
-            children[i].toByte(b, showlength)
-        }
-        //b.WriteByte(byte(')'))
-        b.WriteRune(')')
-    }
-    writeNode(n)
+	children := n.Children
+	if len(children) > 0 {
+		//b.WriteByte(byte('('))
+		b.WriteRune('(')
+		children[0].toByte(b, showlength)
+		for i := 1; i < len(children); i++ {
+			//b.WriteByte(byte(','))
+			b.WriteRune(',')
+			//writeNode(children[i])
+			children[i].toByte(b, showlength)
+		}
+		//b.WriteByte(byte(')'))
+		b.WriteRune(')')
+	}
+	writeNode(n)
 }
 
-func (n *Node) String () string {
-    b := new(bytes.Buffer)
-    n.toByte(b, false)
-    return b.String()
+func (n *Node) String() string {
+	b := new(bytes.Buffer)
+	n.toByte(b, false)
+	return b.String()
 }
 
 func (n *Node) toString(showlength bool) string {
-    b := new(bytes.Buffer)
-    n.toByte(b, showlength)
-    return b.String()
+	b := new(bytes.Buffer)
+	n.toByte(b, showlength)
+	return b.String()
 }
 
 func leftmost(node *Node) *Node {
@@ -84,21 +84,21 @@ func leftmost(node *Node) *Node {
 }
 
 // Postorder iterate the tree and put nodes into a list
-func (node *Node) Post2List () []*Node {
-    //var nl []*Node
-    nl := make([]*Node, 0, 20)
+func (node *Node) Post2List() []*Node {
+	//var nl []*Node
+	nl := make([]*Node, 0, 20)
 
-    // A function that appends node with its descandent to nl
-    var ap func (n *Node) //necessary for making a recursive function here
-    ap = func (n *Node) {
-        for _, c :=range n.Children {
-            ap(c)
-        }
-        nl = append(nl, n)
-    }
+	// A function that appends node with its descandent to nl
+	var ap func(n *Node) //necessary for making a recursive function here
+	ap = func(n *Node) {
+		for _, c := range n.Children {
+			ap(c)
+		}
+		nl = append(nl, n)
+	}
 
-    ap(node)
-    return nl
+	ap(node)
+	return nl
 }
 
 func (node *Node) IsLeaf() bool {
@@ -106,11 +106,11 @@ func (node *Node) IsLeaf() bool {
 }
 
 func (node *Node) IsRoot() bool {
-    return node.Father == nil
+	return node.Father == nil
 }
 
 func (node *Node) IsInternal() bool {
-    return !node.IsLeaf()
+	return !node.IsLeaf()
 }
 
 func (node *Node) IsBinary() bool {
@@ -123,18 +123,18 @@ func (node *Node) IsBinary() bool {
 // Note: Not finished yet.
 // TODO Fix this.
 func (node *Node) in2List() []*Node {
-    nl := make([]*Node, 0, 20)
+	nl := make([]*Node, 0, 20)
 
-    flag := false
-    for n := leftmost(node); n.Father!=nil; {
-        if flag {
-            n = n.Children[1] 
-        } else {
-            n = n.Father
-        }
-    } 
-    nl = append(nl, node)
-    return nl
+	flag := false
+	for n := leftmost(node); n.Father != nil; {
+		if flag {
+			n = n.Children[1]
+		} else {
+			n = n.Father
+		}
+	}
+	nl = append(nl, node)
+	return nl
 }
 
 // Inorder iterate the tree and put nodes into a list.
@@ -142,21 +142,21 @@ func (node *Node) in2List() []*Node {
 // It will cause panic for non-bianry tree.
 // Ugly!
 func (node *Node) In2List() []*Node {
-    //var nl []*Node
-    nl := make([]*Node, 0, 20)
+	//var nl []*Node
+	nl := make([]*Node, 0, 20)
 
-    // A function that appends node with its descandent to nl
-    var ap func (n *Node) //necessary for making a recursive function here
-    ap = func (n *Node) {
-        if n.IsInternal() {
-            ap(n.Children[0])
-        }
-        nl = append(nl, n)
-        if n.IsInternal() {
-            ap(n.Children[1])
-        }
-    }
+	// A function that appends node with its descandent to nl
+	var ap func(n *Node) //necessary for making a recursive function here
+	ap = func(n *Node) {
+		if n.IsInternal() {
+			ap(n.Children[0])
+		}
+		nl = append(nl, n)
+		if n.IsInternal() {
+			ap(n.Children[1])
+		}
+	}
 
-    ap(node)
-    return nl
+	ap(node)
+	return nl
 }
