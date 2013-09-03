@@ -73,6 +73,14 @@ func Test_LcaMap(t *testing.T) {
 		}
 	}
 
+    dup, loss, dc, err := BinaryCost(gt, sst)
+    if err != nil {
+        t.Log(err)
+    }
+    fmt.Println(dup, loss, dc)
+    if (dup!=1 || loss!=1 || dc != 1) {
+        t.Log("Incorrect binry cost.")
+    }
 	/*fmt.Println(st.Size)*/
 	//for i, n := range st.Nodes {
 	//fmt.Println(i, n.Name, n.Id)
