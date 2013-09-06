@@ -24,12 +24,12 @@ func LinearRefineGt(gt *Tree, st *SpeciesTree) ([][]*Node, error) {
 	}
 	M := lm.Map
 
-	//--------------------------------------------------------------
-	// 1) find the pre-image pre[s] of every species node s under
-	// LCA mapping.
+	//------------------------------------------------------
+	// 1) find the pre-image pre[s] of every species 
+	// node s under LCA mapping.
 	pre := make([][]*Node, len(sl))
 
-	// d[node.Id] : the index of node in node.Father.Children
+	// d[node.Id]: index of node in node.Father.Children
 	d := make([]int, len(sl))
 	var sid int
 	for i, gn := range gl {
@@ -42,10 +42,10 @@ func LinearRefineGt(gt *Tree, st *SpeciesTree) ([][]*Node, error) {
 		}
 	}
 
-	//--------------------------------------------------------------
-	// 2) reorder the children of every non-binary gene tree node
+	//------------------------------------------------------
+	// 2) reorder the children of every non-binary 
+	// gene tree node swap the children i and j
 
-	// swap the children i and j
 	swap := func(children []*Node, i, j int) {
 		children[i], children[j] = children[j], children[i]
 	}
@@ -128,8 +128,9 @@ func LinearRefineGt(gt *Tree, st *SpeciesTree) ([][]*Node, error) {
 	}
 	//println("Step 3 done.")
 
-	// 4) Using Euler Tour of species tree to find the corresponding
-	// Euler Tour a[g] (a[g.Id] in fact) of every I^*(g).
+	// 4) Using Euler Tour of species tree to find 
+	// the corresponding Euler Tour a[g] (a[g.Id] in fact) 
+	// of every I^*(g).
 
 	visit := make([]bool, len(sl))
 	a := make([][]*Node, len(gl))
@@ -164,9 +165,9 @@ func LinearRefineGt(gt *Tree, st *SpeciesTree) ([][]*Node, error) {
 	}
 	//println("Step 4 done.")
 
-	// 5) Finally, reconstruct I^*(g) using its Euler Tour a[g] (a[g.Id]).
-	// Notice that I^*(g) is just the reconstructed tree with
-	// root a[g][0] (a[g.Id][0]).
+	// 5) Finally, reconstruct I^*(g) using its Euler Tour 
+	// a[g] (a[g.Id]). Notice that I^*(g) is just the 
+	// reconstructed tree with root a[g][0] (a[g.Id][0]).
 
 	// use Eulor Tour to reconstruct the sub-tree
 	reconstruct := func(l []*Node) {
@@ -199,13 +200,14 @@ func LinearRefineGt(gt *Tree, st *SpeciesTree) ([][]*Node, error) {
 			}
 			reconstruct(a[i])
 
-			linearRefineGeneNode(a[i][0])
+			minDupPlusLoss(a[i][0])
 			gn.replaceBy(a[i][0])
 		}
 	}
 
-	gt.Update()
 	// some clean up
+	gt.Update()
+
 	for _, n := range gt.Nodes {
 		// remove node with out-degree 1.
 		// just by replace node with its single children
@@ -225,7 +227,7 @@ func LinearRefineGt(gt *Tree, st *SpeciesTree) ([][]*Node, error) {
 }
 
 // Refine gene tree node to achieve minimal duplication + loss cost
-func linearRefineGeneNode(root *Node) {
+func minDupPlusLoss(root *Node) {
 	// bottom up, update a, b on each edge with length d
 	// i.e. d = node.Level - father.Level
 	update := func(a, b, d int) (int, int) {
@@ -321,8 +323,14 @@ func linearRefineGeneNode(root *Node) {
 		}
 		//fmt.Println(A[i], B[i], W[i], a1, b1, d1, a2, b2, d2, node.Name)
 	}
-
+	
+	// K[i]: the number of gene lineages entering the
+	// incoming edge of node[i].
 	K := make([]int, size)
+
+	// T[i]: the number of gene lineages leaving the 
+	// incoming branch of node[i], and entering node[i].
+	// i.e. the number of gene copies that node[i] inherited.
 	T := make([]int, size)
 	// there is no extra lineage at root, thus t = 0
 	T[size-1] = 0
@@ -340,16 +348,23 @@ func linearRefineGeneNode(root *Node) {
 		node = nl[i]
 		father = node.Father
 		Fid[i] = father.Id
-		//fmt.Println(":", node.Name, father.Name)
 		t = K[father.Id] - W[father.Id]
-		// if level difference > 2, it's fine to loss all extra lineages
+
+		// if level difference > 2, it's fine to 
+		// loss all extra lineages
 		if node.Level-father.Level > 2 {
 			t = 0
 		}
 		T[i] = t
 		K[i] = getk(A[i], B[i], t)
 	}
+	simpleConstruct(nl, K, T, W, Fid, P)
+}
 
+// A simple construction of subtree with
+// the information on I^*(g).
+// All duplication occurs on the background tree.
+func simpleConstruct(nl []*Node, K, T, W, Fid []int, P [][]*Node) {
 	// insert nodes onto the edge (node.Father, node)
 	insertNode := func(node *Node, nodes []*Node) {
 		if len(nodes) == 0 {
@@ -368,7 +383,6 @@ func linearRefineGeneNode(root *Node) {
 		node.AddChild(lchild)
 		node.AddChild(nodes[len(nodes)-1])
 	}
-	//fmt.Println()
 
 	// every node = nl[i] in the tree I^*(g) 
 	// may has multiple extra copies,
@@ -382,11 +396,7 @@ func linearRefineGeneNode(root *Node) {
 			nodes[i][j] = new(Node)
 		}
 
-		node = nl[i]
-		//fmt.Println("in  ", root)
-		//length := 0
-
-		//fmt.Println(node.Name, length, K[i])
+		node := nl[i]
 
 		// we need to replace the leave with original 
 		// children of non-binary gene tree node, 
@@ -416,8 +426,9 @@ func linearRefineGeneNode(root *Node) {
 
 		if node.Father != nil {
 			fid := Fid[i]
-			// connect extra nodes at n to the nodes at n.Father
-			// as much as possible
+			// connect extra nodes at n to the nodes 
+			// at n.Father as much as possible
+
 			//extra := nodes[fid][0 : K[fid]-W[fid]]
 
 			// there are T[i] lineages inherited from n.father
@@ -445,6 +456,8 @@ func linearRefineGeneNode(root *Node) {
 			n.replaceBy(n.Children[0])
 		}
 	}
+
+	// This step has been moved to the caller function!
 
 	// // now replace the original non-binary tree node with root of I^*(g)
 	// replaceNode(root.Map, root)

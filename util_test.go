@@ -35,9 +35,11 @@ func Test_Prune(t *testing.T) {
 }
 
 func Test_Simu(t *testing.T) {
-	tree := SimuTree(20)
+	size := 100
+	ntaxon := 50
+	tree := SimuTree(size)
 	fmt.Println(tree)
-	tree2 := SimuTreeRandomTaxon(20, 10)
+	tree2 := SimuTreeRandomTaxon(size, ntaxon)
 	fmt.Println(tree2)
 	tree2.RandomContract(0.8)
 	fmt.Println(tree2)
