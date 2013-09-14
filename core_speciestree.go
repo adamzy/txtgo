@@ -7,7 +7,7 @@ import (
 type SpeciesTree struct {
 	*Tree
 	//Taxon map[string]*Node // a map that maps taxa to the unique leaf node
-    Taxon Taxonmap
+	Taxon Taxonmap
 	Lca   func(a, b *Node) *Node
 }
 
@@ -62,12 +62,13 @@ func (t *Tree) LCAer() func(a, b *Node) *Node {
 	}
 	array = array[:index]
 
+	//fmt.Println(array)
 	rmqer := rmq.ResRMQ(array)
 	return func(a, b *Node) *Node {
 		aid := mapid[a.Id]
 		bid := mapid[b.Id]
-		//fmt.Println(a.Name, aid, b.Name, bid, len(array))
 		p, _ := rmqer(aid, bid)
+		//println(a.Name, aid, b.Name, bid, p, len(array))
 		return nodes[p]
 	}
 }

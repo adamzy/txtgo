@@ -2,7 +2,6 @@ package tree
 
 import (
 	"errors"
-	"fmt"
 )
 
 /*type GeneTree struct {*/
@@ -27,7 +26,7 @@ func LcaMap(t *Tree, st *SpeciesTree) (*Lcamap, error) {
 
 func genLcaMap(t *Tree, st *SpeciesTree) ([]*Node, error) {
 	taxon := st.Taxon
-	fmt.Println(taxon)
+	//fmt.Println(taxon)
 	lca := st.Lca
 	lcamap := make([]*Node, t.Size)
 
@@ -40,11 +39,16 @@ func genLcaMap(t *Tree, st *SpeciesTree) ([]*Node, error) {
 			lcamap[i] = sn
 		} else {
 			sn := lca(lcamap[n.Children[0].Id], lcamap[n.Children[1].Id])
+			//println("lca: ~~ ", lcamap[n.Children[0].Id].Name, lcamap[n.Children[1].Id].Name, sn.Name)
 			for j := 2; j < len(n.Children); j++ {
+				//println(sn.Name)
+				//ssn := sn
 				sn = lca(sn, lcamap[n.Children[j].Id])
+				//println("lca: ~~ ", ssn.Name, lcamap[n.Children[j].Id].Name, sn.Name)
 			}
 			lcamap[i] = sn
 		}
+		//println("lca: ", n.Name, lcamap[i].Name)
 	}
 	return lcamap, nil
 }

@@ -20,7 +20,7 @@ type data struct {
 	// to bind extra data to that node.
 	// The data can be accessed by node.Ext.(type),
 	// e.g. a := node.Ext.([]int).
-	Ext   interface{} 
+	Ext interface{}
 }
 
 type Node struct {

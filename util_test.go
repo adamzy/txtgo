@@ -27,16 +27,16 @@ func Test_Prune(t *testing.T) {
 		t.Log(err)
 	}
 
-    _, _, _, err = BinaryCost(gt, sst)
-    if err != nil {
-        t.Log(err)
-    }
+	_, _, _, err = BinaryCost(gt, sst)
+	if err != nil {
+		t.Log(err)
+	}
 
 }
 
 func Test_Simu(t *testing.T) {
-	size := 100
-	ntaxon := 50
+	size := 10
+	ntaxon := 5
 	tree := SimuTree(size)
 	fmt.Println(tree)
 	tree2 := SimuTreeRandomTaxon(size, ntaxon)
@@ -44,20 +44,3 @@ func Test_Simu(t *testing.T) {
 	tree2.RandomContract(0.8)
 	fmt.Println(tree2)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

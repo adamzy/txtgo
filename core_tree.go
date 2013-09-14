@@ -104,11 +104,11 @@ func (t *Tree) UpdateInfo() {
 
 // Update everything of a tree from tree.Node,
 // including tree.Nodes, size, node.id, level.
-// Useful after tree was edited manually 
+// Useful after tree was edited manually
 func (t *Tree) Update() {
-    t.Nodes = t.Node.Post2List()
-    t.Size = len(t.Nodes)
-    t.UpdateInfo()
+	t.Nodes = t.Node.Post2List()
+	t.Size = len(t.Nodes)
+	t.UpdateInfo()
 }
 
 // A tree is binary tree <==> every internal node has two children.
@@ -169,12 +169,12 @@ func (tree *Tree) In2List() []*Node {
 	return nl
 }
 
-func (t *Tree) TaxonMap () Taxonmap {
-    taxon := make(Taxonmap, t.Size)
+func (t *Tree) TaxonMap() Taxonmap {
+	taxon := make(Taxonmap, t.Size)
 	for _, n := range t.Nodes {
 		if n.IsLeaf() {
 			taxon[n.Name] = n
 		}
 	}
-    return taxon
+	return taxon
 }

@@ -6,9 +6,33 @@ import (
 )
 
 func Test_Lineartimegt(t *testing.T) {
-	gs := "((a,b,c)A,(d,e)D)R;"
-	ss := "((a,b)A,(c,(d,e)D)C)R;"
-	gt, err  := Make(gs)
+	var gs, ss string
+	//gs = "((a,b,c)A,(d,e)D)R;"
+	//gs = "(a,a,(a,b),b,c,d,d);"
+	//gs = "(a,b,a);"
+	gs = "(a,a,a)"
+	//gs = "(a,a,b,b,c,d,d)"
+	ss = "((a,b)A,(c,(d,e)D)C)R;"
+
+	gs = "((1,4),2,2,1,1)"
+	ss = "(((0,1),2),(3,4))"
+
+	gs = "(0,0,4,2,1,2)"
+	ss = "((0,1)A,((2,3)B,4)C)R"
+
+	gs = "((0,2,2),(1,0),3)"
+	ss = "(0,((1,2)A,(3,4)B)C)R"
+
+	//gs = "((1,1,3),(4,4,1))"
+	gs = "(1,1,3)r"
+	ss = "((((0,1)A,2)B,3)C,4)R"
+	//gs = "(0,2,2)"
+	//ss = "(0, 2)"
+
+	gs = "((1,2),(3,1),3,1,3)"
+	ss = "((0,((1,2)A,3)B)C,4)R;"
+
+	gt, err := Make(gs)
 	if err != nil {
 		t.Log(err)
 	}
@@ -16,7 +40,80 @@ func Test_Lineartimegt(t *testing.T) {
 	if err != nil {
 		t.Log(err)
 	}
+	//st.PruneFromTree(gt)
 	sst := st.SpeciesTree()
-	LinearRefineGt(gt, sst)
+	fmt.Println(sst.IsBinary())
 	fmt.Println(gt)
+	fmt.Println(sst)
+	RefineGt(gt, sst, 3, 3, 1)
+	fmt.Println(gt)
+	fmt.Println(BinaryCost(gt, sst))
+}
+
+func Test_Weight(t *testing.T) {
+	niter := 10
+	crate := 0.8
+	ntaxon := 10000
+	nleaves := 20000
+
+	testone := func() {
+		gt := SimuTreeRandomTaxon(nleaves, ntaxon)
+		gt.RandomContract(crate)
+		st := SimuTree(ntaxon)
+		gs := gt.String()
+		ss := st.String()
+		//fmt.Println(":")
+		//fmt.Println(gs)
+		//fmt.Println(ss)
+
+		gt1, err := Make(gs)
+		if err != nil {
+			t.Log(err)
+		}
+		st1, err := Make(ss)
+		if err != nil {
+			t.Log(err)
+		}
+		sst1 := st1.SpeciesTree()
+		RefineGt(gt1, sst1, 1)
+		//fmt.Println(gt1)
+		d1, l1, dc1, err := BinaryCost(gt1, sst1)
+		if err != nil {
+			t.Log(err)
+		}
+
+		gt2, err := Make(gs)
+		if err != nil {
+			t.Log(err)
+		}
+		st2, err := Make(ss)
+		if err != nil {
+			t.Log(err)
+		}
+		sst2 := st2.SpeciesTree()
+		//RefineGt(gt2, sst2, 3, 2001, 1000)
+        RefineGt(gt2, sst2, 3, 3, 1)
+		d2, l2, dc2, err := BinaryCost(gt2, sst2)
+		if err != nil {
+			t.Log(err)
+		}
+
+        if d1+l1 != d2+l2 {
+        //if d1 != d2 || l1 != l2 {
+			fmt.Println(gs)
+			fmt.Println(ss)
+		    fmt.Println(gt1)
+		    fmt.Println(gt2)
+            fmt.Println(d1, l1, dc1)
+			fmt.Println(d2, l2, dc2)
+			t.Log("Not equal, fail!")
+			panic("Fail!!!")
+		}
+	}
+
+	for i := 0; i < niter; i++ {
+        print("~")
+		testone()
+	}
+    println()
 }
