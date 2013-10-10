@@ -108,3 +108,59 @@ func (t *Tree) AssignLeafName() {
 		}
 	}
 }
+
+
+func lineTree(nodes []*Node) *Tree {
+    l := nodes[0]
+    for i:=1; i<len(nodes); i++ {
+        r := nodes[i]
+        n := newNode()
+        n.AddChild(l)
+        n.AddChild(r)
+        l = n
+    }
+ 	t := new(Tree)
+	t.Node = l
+	t.Update()
+	return t
+   
+}
+
+func LineTree(nleaves int) *Tree {
+    nodes := make([]*Node, nleaves)
+    for i, _ := range nodes {
+        n := newNode()
+        n.Name = "a" + strconv.Itoa(i)
+        nodes[i] = n
+    }
+    return lineTree(nodes)
+}
+
+func LineTree2(nleaves int) *Tree {
+    nodes := make([]*Node, nleaves)
+    for i, _ := range nodes {
+        n := newNode()
+        n.Name = strconv.Itoa(i)
+        nodes[i] = n
+    }
+    return lineTree(nodes)
+}
+
+func ExampleTree(nleaves int) *Tree {
+    nodes := make([]*Node, nleaves)
+    for i, _ := range nodes {
+        n := newNode()
+        a := newNode()
+        b := newNode()
+        c := newNode()
+        a.Name = "a" + strconv.Itoa(0)
+        b.Name = "a" + strconv.Itoa(i)
+        c.Name = "a" + strconv.Itoa(nleaves-1)
+        n.AddChild(a)
+        n.AddChild(b)
+        n.AddChild(c)
+
+        nodes[i] = n
+    }
+    return lineTree(nodes)
+}

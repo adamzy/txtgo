@@ -44,3 +44,11 @@ func Test_Simu(t *testing.T) {
 	tree2.RandomContract(0.8)
 	fmt.Println(tree2)
 }
+
+func Test_Linetree(t *testing.T) {
+    size := 5
+    tree := LineTree(size)
+    fmt.Println(tree)
+    tree2 := ExampleTree(size)
+    fmt.Println(tree2)
+}
