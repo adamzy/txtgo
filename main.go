@@ -53,14 +53,6 @@ func read(fname string) string {
 	return string(data)
 }
 
-//func usage() {
-    //fmt.Fprintf(os.Stderr, "TxT-RGT\n")
-    //fmt.Fprintf(os.Stderr, "usage:\n")
-    //flag.PrintDefaults()
-    //os.Exit(2)
-//}
-
-
 func main() {
     flag.Usage = usage
 	flag.Parse()
@@ -119,7 +111,6 @@ func main() {
 	fmt.Println("Refined Gene Tree:")
 	fmt.Println(gt)
 	fmt.Printf("\nDup: %d, Loss: %d\n", dup, loss)
-	//fmt.Print(dup, loss, dc, err)
 	//fmt.Println(method, wdup, wdc)
 }
 
