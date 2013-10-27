@@ -112,7 +112,7 @@ func main() {
         log.Fatal("Species must be binary.")
     }
 	T.RefineGt(gt, sst, _m, _wdup, _wdc)
-	dup, loss, _, err := T.BinaryCost(gt, sst)
+	dup, loss, _, err := binaryCost(gt, sst)
 	if err != nil {
 		log.Fatal(err)
 	}
