@@ -10,7 +10,7 @@ import (
     "os"
 )
 
-const version = "201310027"
+const version = "20131027"
 
 var (
 	gf     = flag.String("g", "", "gene tree file")
