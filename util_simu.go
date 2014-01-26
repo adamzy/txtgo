@@ -45,6 +45,22 @@ func SimuTree(size int) *Tree {
 	return t
 }
 
+// TODO Check this
+func YuleTree(size int) *Tree {
+    t := simuTree(size)
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+
+    p := r.Perm(size)
+    i := 0
+    for _, n:= range t.Nodes {
+        if n.IsLeaf() {
+            n.Name = strconv.Itoa(p[i])
+            i++
+        }
+    }
+    return t
+}
+
 func SimuTreeRandomTaxon(size, ntaxon int) *Tree {
 	t := simuTree(size)
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
@@ -59,45 +75,45 @@ func SimuTreeRandomTaxon(size, ntaxon int) *Tree {
 	return t
 }
 
-func (t *Tree) RandomContract(rate float64) {
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	d := make([]int, t.Size)
-	for _, n := range t.Nodes {
-		if n.IsInternal() {
-			for j, c := range n.Children {
-				d[c.Id] = j
-			}
-		}
-	}
+//func (t *Tree) RandomContract(rate float64) {
+	//r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	//d := make([]int, t.Size)
+	//for _, n := range t.Nodes {
+		//if n.IsInternal() {
+			//for j, c := range n.Children {
+				//d[c.Id] = j
+			//}
+		//}
+	//}
 
-	removeChild := func(n *Node, i int) {
-		a := n.Children
+	//removeChild := func(n *Node, i int) {
+		//a := n.Children
 
-		// update the index of last child
-		d[a[len(a)-1].Id] = i // important!
+		//// update the index of last child
+		//d[a[len(a)-1].Id] = i // important!
 
-		a[len(a)-1], a[i], a = nil, a[len(a)-1], a[:len(a)-1]
-		n.Children = a
-	}
+		//a[len(a)-1], a[i], a = nil, a[len(a)-1], a[:len(a)-1]
+		//n.Children = a
+	//}
 
-	Contract := func(n *Node) {
-		f := n.Father
-		cn := n.Children
-		removeChild(n.Father, d[n.Id])
-		for _, c := range cn {
-			f.AddChild(c)
-		}
-	}
+	//Contract := func(n *Node) {
+		//f := n.Father
+		//cn := n.Children
+		//removeChild(n.Father, d[n.Id])
+		//for _, c := range cn {
+			//f.AddChild(c)
+		//}
+	//}
 
-	// avoid root
-	for i := 0; i < t.Size-1; i++ {
-		n := t.Nodes[i]
-		if !n.IsLeaf() && r.Float64() < rate {
-			Contract(n)
-		}
-	}
-	t.Update()
-}
+	//// avoid root
+	//for i := 0; i < t.Size-1; i++ {
+		//n := t.Nodes[i]
+		//if !n.IsLeaf() && r.Float64() < rate {
+			//Contract(n)
+		//}
+	//}
+	//t.Update()
+//}
 
 func (t *Tree) AssignLeafName() {
 	count := 0
@@ -108,7 +124,6 @@ func (t *Tree) AssignLeafName() {
 		}
 	}
 }
-
 
 func lineTree(nodes []*Node) *Tree {
     l := nodes[0]
@@ -123,7 +138,6 @@ func lineTree(nodes []*Node) *Tree {
 	t.Node = l
 	t.Update()
 	return t
-   
 }
 
 func LineTree(nleaves int) *Tree {

@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>util_simu.go</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="gocco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <div id="jump_to">
+        Jump To &hellip;
+        <div id="jump_wrapper">
+          <div id="jump_page">
+              
+              <a class="source" href="core_binaryreconcile.html">
+                  core_binaryreconcile.go
+              </a>
+              
+              <a class="source" href="core_genetree.html">
+                  core_genetree.go
+              </a>
+              
+              <a class="source" href="core_node.html">
+                  core_node.go
+              </a>
+              
+              <a class="source" href="core_rf.html">
+                  core_rf.go
+              </a>
+              
+              <a class="source" href="core_speciestree.html">
+                  core_speciestree.go
+              </a>
+              
+              <a class="source" href="core_test.html">
+                  core_test.go
+              </a>
+              
+              <a class="source" href="core_tree.html">
+                  core_tree.go
+              </a>
+              
+              <a class="source" href="refine_linearrefinegt.html">
+                  refine_linearrefinegt.go
+              </a>
+              
+              <a class="source" href="refine_test.html">
+                  refine_test.go
+              </a>
+              
+              <a class="source" href="util_contract.html">
+                  util_contract.go
+              </a>
+              
+              <a class="source" href="util_prune.html">
+                  util_prune.go
+              </a>
+              
+              <a class="source" href="util_simu.html">
+                  util_simu.go
+              </a>
+              
+              <a class="source" href="util_test.html">
+                  util_test.go
+              </a>
+              
+          </div>
+        </div>
+      </div>
+    
+    <table cellpadding="0" cellspacing="0">
+      <thead>
+        <tr>
+          <th class="docs">
+            <h1>
+                util_simu.go
+            </h1>
+          </th>
+          <th class="code">
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+          
+          <tr id="section-1">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+                
+            </td>
+            <td class="code">
+                <div class="highlight"><pre><span class="kn">package</span> <span class="nx">tree</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&quot;math/rand&quot;</span>
+	<span class="s">&quot;strconv&quot;</span>
+	<span class="s">&quot;time&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nx">simuTree</span><span class="p">(</span><span class="nx">size</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="nx">Tree</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="nx">size</span> <span class="p">&lt;</span> <span class="mi">1</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="kc">nil</span>
+	<span class="p">}</span>
+
+	<span class="nx">r</span> <span class="o">:=</span> <span class="nx">rand</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="nx">rand</span><span class="p">.</span><span class="nx">NewSource</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Now</span><span class="p">().</span><span class="nx">UnixNano</span><span class="p">()))</span>
+	<span class="nx">root</span> <span class="o">:=</span> <span class="nx">newNode</span><span class="p">()</span>
+	<span class="nx">leaves</span> <span class="o">:=</span> <span class="p">[]</span><span class="o">*</span><span class="nx">Node</span><span class="p">{</span><span class="nx">root</span><span class="p">}</span>
+
+	<span class="nx">duplicate</span> <span class="o">:=</span> <span class="kd">func</span><span class="p">(</span><span class="nx">n</span> <span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="o">*</span><span class="nx">Node</span> <span class="p">{</span>
+		<span class="nx">c1</span> <span class="o">:=</span> <span class="nx">newNode</span><span class="p">()</span>
+		<span class="nx">c2</span> <span class="o">:=</span> <span class="nx">newNode</span><span class="p">()</span>
+		<span class="nx">node</span> <span class="o">:=</span> <span class="nx">leaves</span><span class="p">[</span><span class="nx">n</span><span class="p">]</span>
+		<span class="nx">node</span><span class="p">.</span><span class="nx">AddChild</span><span class="p">(</span><span class="nx">c1</span><span class="p">)</span>
+		<span class="nx">node</span><span class="p">.</span><span class="nx">AddChild</span><span class="p">(</span><span class="nx">c2</span><span class="p">)</span>
+		<span class="nx">leaves</span><span class="p">[</span><span class="nx">n</span><span class="p">]</span> <span class="p">=</span> <span class="nx">c1</span>
+		<span class="nx">leaves</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">leaves</span><span class="p">,</span> <span class="nx">c2</span><span class="p">)</span>
+		<span class="k">return</span> <span class="nx">leaves</span>
+	<span class="p">}</span>
+
+	<span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="nx">leaves</span><span class="p">)</span> <span class="p">&lt;</span> <span class="nx">size</span> <span class="p">{</span>
+		<span class="nx">leaves</span> <span class="p">=</span> <span class="nx">duplicate</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">Intn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nx">leaves</span><span class="p">)))</span>
+	<span class="p">}</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-2">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+                <p>root.UpdateIndex()</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>	<span class="nx">t</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">Tree</span><span class="p">)</span>
+	<span class="nx">t</span><span class="p">.</span><span class="nx">Node</span> <span class="p">=</span> <span class="nx">root</span>
+	<span class="nx">t</span><span class="p">.</span><span class="nx">Update</span><span class="p">()</span>
+	<span class="k">return</span> <span class="nx">t</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">SimuTree</span><span class="p">(</span><span class="nx">size</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="nx">Tree</span> <span class="p">{</span>
+	<span class="nx">t</span> <span class="o">:=</span> <span class="nx">simuTree</span><span class="p">(</span><span class="nx">size</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Node</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nx">AssignLeafName</span><span class="p">()</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">t</span>
+<span class="p">}</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-3">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+                <p>TODO Check this</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre><span class="kd">func</span> <span class="nx">YuleTree</span><span class="p">(</span><span class="nx">size</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="nx">Tree</span> <span class="p">{</span>
+    <span class="nx">t</span> <span class="o">:=</span> <span class="nx">simuTree</span><span class="p">(</span><span class="nx">size</span><span class="p">)</span>
+	<span class="nx">r</span> <span class="o">:=</span> <span class="nx">rand</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="nx">rand</span><span class="p">.</span><span class="nx">NewSource</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Now</span><span class="p">().</span><span class="nx">UnixNano</span><span class="p">()))</span>
+
+    <span class="nx">p</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nx">Perm</span><span class="p">(</span><span class="nx">size</span><span class="p">)</span>
+    <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">n</span><span class="o">:=</span> <span class="k">range</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Nodes</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="nx">n</span><span class="p">.</span><span class="nx">IsLeaf</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">n</span><span class="p">.</span><span class="nx">Name</span> <span class="p">=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nx">Itoa</span><span class="p">(</span><span class="nx">p</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span>
+            <span class="nx">i</span><span class="o">++</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">t</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">SimuTreeRandomTaxon</span><span class="p">(</span><span class="nx">size</span><span class="p">,</span> <span class="nx">ntaxon</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="nx">Tree</span> <span class="p">{</span>
+	<span class="nx">t</span> <span class="o">:=</span> <span class="nx">simuTree</span><span class="p">(</span><span class="nx">size</span><span class="p">)</span>
+	<span class="nx">r</span> <span class="o">:=</span> <span class="nx">rand</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="nx">rand</span><span class="p">.</span><span class="nx">NewSource</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Now</span><span class="p">().</span><span class="nx">UnixNano</span><span class="p">()))</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-4">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+                <p>for n:=root.PostStart();n!=nil;n=n.PostNext(){</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">n</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Nodes</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="nx">n</span><span class="p">.</span><span class="nx">IsLeaf</span><span class="p">()</span> <span class="p">{</span>
+			<span class="nx">n</span><span class="p">.</span><span class="nx">Name</span> <span class="p">=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nx">Itoa</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">Intn</span><span class="p">(</span><span class="nx">ntaxon</span><span class="p">))</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-5">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+                <p>n.Name = &ldquo;l_&ldquo;+strconv.Itoa(r.Intn(ntaxon))</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">t</span>
+<span class="p">}</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-6">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+                <p>func (t *Tree) RandomContract(rate float64) {
+r := rand.New(rand.NewSource(time.Now().UnixNano()))
+d := make([]int, t.Size)
+for _, n := range t.Nodes {
+if n.IsInternal() {
+for j, c := range n.Children {
+d[c.Id] = j
+}
+}
+}</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-7">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+                <p>removeChild := func(n *Node, i int) {
+a := n.Children</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-8">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+                <p>// update the index of last child
+d[a[len(a)-1].Id] = i // important!</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-9">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+                <p>a[len(a)-1], a[i], a = nil, a[len(a)-1], a[:len(a)-1]
+n.Children = a
+}</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-10">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+                <p>Contract := func(n *Node) {
+f := n.Father
+cn := n.Children
+removeChild(n.Father, d[n.Id])
+for _, c := range cn {
+f.AddChild&copy;
+}
+}</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-11">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+                <p>// avoid root
+for i := 0; i &lt; t.Size-1; i++ {
+n := t.Nodes[i]
+if !n.IsLeaf() &amp;&amp; r.Float64() &lt; rate {
+Contract(n)
+}
+}
+t.Update()
+}</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre><span class="kd">func</span> <span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">Tree</span><span class="p">)</span> <span class="nx">AssignLeafName</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">count</span> <span class="o">:=</span> <span class="mi">0</span>
+	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">node</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Nodes</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="nx">node</span><span class="p">.</span><span class="nx">IsLeaf</span><span class="p">()</span> <span class="p">{</span>
+			<span class="nx">node</span><span class="p">.</span><span class="nx">Name</span> <span class="p">=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nx">Itoa</span><span class="p">(</span><span class="nx">count</span><span class="p">)</span>
+			<span class="nx">count</span><span class="o">++</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">lineTree</span><span class="p">(</span><span class="nx">nodes</span> <span class="p">[]</span><span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="o">*</span><span class="nx">Tree</span> <span class="p">{</span>
+    <span class="nx">l</span> <span class="o">:=</span> <span class="nx">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="nx">i</span><span class="o">:=</span><span class="mi">1</span><span class="p">;</span> <span class="nx">i</span><span class="p">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="nx">nodes</span><span class="p">);</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="nx">r</span> <span class="o">:=</span> <span class="nx">nodes</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
+        <span class="nx">n</span> <span class="o">:=</span> <span class="nx">newNode</span><span class="p">()</span>
+        <span class="nx">n</span><span class="p">.</span><span class="nx">AddChild</span><span class="p">(</span><span class="nx">l</span><span class="p">)</span>
+        <span class="nx">n</span><span class="p">.</span><span class="nx">AddChild</span><span class="p">(</span><span class="nx">r</span><span class="p">)</span>
+        <span class="nx">l</span> <span class="p">=</span> <span class="nx">n</span>
+    <span class="p">}</span>
+ 	<span class="nx">t</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">Tree</span><span class="p">)</span>
+	<span class="nx">t</span><span class="p">.</span><span class="nx">Node</span> <span class="p">=</span> <span class="nx">l</span>
+	<span class="nx">t</span><span class="p">.</span><span class="nx">Update</span><span class="p">()</span>
+	<span class="k">return</span> <span class="nx">t</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">LineTree</span><span class="p">(</span><span class="nx">nleaves</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="nx">Tree</span> <span class="p">{</span>
+    <span class="nx">nodes</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="o">*</span><span class="nx">Node</span><span class="p">,</span> <span class="nx">nleaves</span><span class="p">)</span>
+    <span class="k">for</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">nodes</span> <span class="p">{</span>
+        <span class="nx">n</span> <span class="o">:=</span> <span class="nx">newNode</span><span class="p">()</span>
+        <span class="nx">n</span><span class="p">.</span><span class="nx">Name</span> <span class="p">=</span> <span class="s">&quot;a&quot;</span> <span class="o">+</span> <span class="nx">strconv</span><span class="p">.</span><span class="nx">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
+        <span class="nx">nodes</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">=</span> <span class="nx">n</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">lineTree</span><span class="p">(</span><span class="nx">nodes</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">LineTree2</span><span class="p">(</span><span class="nx">nleaves</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="nx">Tree</span> <span class="p">{</span>
+    <span class="nx">nodes</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="o">*</span><span class="nx">Node</span><span class="p">,</span> <span class="nx">nleaves</span><span class="p">)</span>
+    <span class="k">for</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">nodes</span> <span class="p">{</span>
+        <span class="nx">n</span> <span class="o">:=</span> <span class="nx">newNode</span><span class="p">()</span>
+        <span class="nx">n</span><span class="p">.</span><span class="nx">Name</span> <span class="p">=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nx">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
+        <span class="nx">nodes</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">=</span> <span class="nx">n</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">lineTree</span><span class="p">(</span><span class="nx">nodes</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">ExampleTree</span><span class="p">(</span><span class="nx">nleaves</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="nx">Tree</span> <span class="p">{</span>
+    <span class="nx">nodes</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="o">*</span><span class="nx">Node</span><span class="p">,</span> <span class="nx">nleaves</span><span class="p">)</span>
+    <span class="k">for</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">nodes</span> <span class="p">{</span>
+        <span class="nx">n</span> <span class="o">:=</span> <span class="nx">newNode</span><span class="p">()</span>
+        <span class="nx">a</span> <span class="o">:=</span> <span class="nx">newNode</span><span class="p">()</span>
+        <span class="nx">b</span> <span class="o">:=</span> <span class="nx">newNode</span><span class="p">()</span>
+        <span class="nx">c</span> <span class="o">:=</span> <span class="nx">newNode</span><span class="p">()</span>
+        <span class="nx">a</span><span class="p">.</span><span class="nx">Name</span> <span class="p">=</span> <span class="s">&quot;a&quot;</span> <span class="o">+</span> <span class="nx">strconv</span><span class="p">.</span><span class="nx">Itoa</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="nx">b</span><span class="p">.</span><span class="nx">Name</span> <span class="p">=</span> <span class="s">&quot;a&quot;</span> <span class="o">+</span> <span class="nx">strconv</span><span class="p">.</span><span class="nx">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
+        <span class="nx">c</span><span class="p">.</span><span class="nx">Name</span> <span class="p">=</span> <span class="s">&quot;a&quot;</span> <span class="o">+</span> <span class="nx">strconv</span><span class="p">.</span><span class="nx">Itoa</span><span class="p">(</span><span class="nx">nleaves</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="nx">n</span><span class="p">.</span><span class="nx">AddChild</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span>
+        <span class="nx">n</span><span class="p">.</span><span class="nx">AddChild</span><span class="p">(</span><span class="nx">b</span><span class="p">)</span>
+        <span class="nx">n</span><span class="p">.</span><span class="nx">AddChild</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span>
+
+        <span class="nx">nodes</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">=</span> <span class="nx">n</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">lineTree</span><span class="p">(</span><span class="nx">nodes</span><span class="p">)</span>
+<span class="p">}</span>
+
+</pre></div>
+            </td>
+          </tr>
+          
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

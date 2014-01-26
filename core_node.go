@@ -9,7 +9,7 @@ import (
 
 type data struct {
 	// built-in values
-	// enough for most of time
+	// enough for most cases
 	Name   string
 	Length float64
 	Id     int

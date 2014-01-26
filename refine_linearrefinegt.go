@@ -3,7 +3,7 @@ package tree
 import (
 	//	. "txtgo/tree"
 	"errors"
-	"sort"
+    "sort"
 )
 
 // A dispatch function
@@ -401,10 +401,10 @@ func minDupPlusLoss(root *Node) {
 	}
 
 	//bottom up, get a, b from w, a1, b1, a2, b2
-	getab := func(w int, args ...int) (int, int) {
-		sort.Ints(args)
-		return w + args[1], w + args[2]
-	}
+    getab := func(w int, args ...int) (int, int) {
+        sort.Ints(args)
+        return w+args[1], w+args[2]
+    }
 
 	//top down, get k from t, a, b
 	getk := func(a, b, t int) int {
@@ -435,12 +435,12 @@ func minDupPlusLoss(root *Node) {
 	// level difference, i.e. node.Level-father.Level
 	//d := make([]int, size)
 
-	var a1, b1, a2, b2, d1, d2, nchild int
-	var node, father, lchild, rchild *Node
-	var i int
+    var a1, b1, a2, b2, d1, d2 int
+    var node, father, lchild, rchild *Node
+    var i, t int
 
 	// Now calculate a, b, and w for each node.
-	for i, node = range nl {
+    for i, node = range nl {
 		node.Id = i
 		if node.Ext != nil {
 			P[i] = node.Ext.([]*Node)
@@ -454,33 +454,38 @@ func minDupPlusLoss(root *Node) {
 			A[i] = W[i] - 1 // remove background tree
 			B[i] = A[i]
 		} else {
-			nchild = len(node.Children)
-			//println(node.Name, nchild)
-			//for i, c := range node.Children {
-			//println(i, c.Name)
+			//nchild = len(node.Children)
+            //var a1,b1,a2,b2,d1,d2 int
+            //var lchild, rchild *Node
+			//switch len(node.Children){
+            ////case nchild > 2 || nchild == 0:
+				//////fmt.Println(node)
+				////panic("Incorrect number of children.")
+			//case 2:
+                //rchild := node.Children[1]
+                //a2, b2 := A[rchild.Id], B[rchild.Id]
+                //d2 := rchild.Level - node.Level
+				//a2, b2 = update(a2, b2, d2)
+			//case 1:
+                //a2, b2 := 0, 0
 			//}
-			switch {
-			case nchild > 2 || nchild == 0:
-				//fmt.Println(node)
-				panic("Incorrect number of children.")
-			case nchild == 2:
-				rchild = node.Children[1]
-				a2 = A[rchild.Id]
-				b2 = B[rchild.Id]
-				d2 = rchild.Level - node.Level
-				a2, b2 = update(a2, b2, d2)
-			case nchild == 1:
-				a2, b2 = 0, 0
-			}
 
-			lchild = node.Children[0]
-			a1 = A[lchild.Id]
-			b1 = B[lchild.Id]
-			d1 = lchild.Level - node.Level
+            if len(node.Children) == 2 {
+                rchild = node.Children[1]
+                a2, b2 = A[rchild.Id], B[rchild.Id]
+                d2 = rchild.Level - node.Level
+				a2, b2 = update(a2, b2, d2)
+            } else {
+                a2, b2 = 0, 0
+            }
+             
+
+            lchild = node.Children[0]
+            a1,b1 = A[lchild.Id],  B[lchild.Id]
+            d1 = lchild.Level - node.Level
 			a1, b1 = update(a1, b1, d1)
 
 			A[i], B[i] = getab(W[i], a1, b1, a2, b2)
-
 		}
 		//fmt.Println(A[i], B[i], W[i], a1, b1, d1, a2, b2, d2, node.Name)
 	}
@@ -493,23 +498,20 @@ func minDupPlusLoss(root *Node) {
 	// incoming branch of node[i], and entering node[i].
 	// i.e. the number of gene copies that node[i] inherited.
 	T := make([]int, size)
-	// there is no extra lineage at root, thus t = 0
-	T[size-1] = 0
-	K[size-1] = getk(A[size-1], B[size-1], 0)
-
-	//fmt.Println(K[size-1], nl[size-1].Name)
 
 	// use Fid[i] to store the nl[i].Father.Id,
 	// as nl[i].Father will change later.
 	Fid := make([]int, size)
 
+	// There is no extra lineage at root, thus t = 0
+	T[size-1] = 0
+	K[size-1] = getk(A[size-1], B[size-1], 0)
 	// the number of incoming extra lineages at node
-	var t int
-	for i = size - 2; i >= 0; i-- {
-		node = nl[i]
-		father = node.Father
+    for i = size - 2; i >= 0; i-- {
+        node = nl[i]
+        father = node.Father
 		Fid[i] = father.Id
-		t = K[father.Id] - W[father.Id]
+        t = K[father.Id] - W[father.Id]
 
 		// if level difference > 2, it's fine to
 		// loss all extra lineages
@@ -523,158 +525,6 @@ func minDupPlusLoss(root *Node) {
 	simpleConstruct(nl, K, T, W, Fid, P)
 }
 
-// Buggy!
-func weightedCost_old(wdup, wdc float64) func(*Node) {
-	return func(root *Node) {
-		nl := root.Post2List()
-		size := len(nl)
-		M := make([]int, size)
-		W := make([]int, size)
-		P := make([][]*Node, size)
-		C := make([][]float64, size)
-		U := make([][]float64, size)
-		I := make([][]int, size)
-		for i, n := range nl {
-			n.Id = i
-			if n.Ext != nil {
-				P[i] = n.Ext.([]*Node)
-				n.Ext = nil
-			}
-			W[i] = len(P[i])
-			switch {
-			case len(n.Children) == 0:
-				M[i] = W[i] - 1
-			case len(n.Children) == 1:
-				M[i] = M[n.Children[0].Id] + W[i]
-			case len(n.Children) == 2:
-				v1 := M[n.Children[0].Id]
-				v2 := M[n.Children[1].Id]
-				if v1 > v2 {
-					M[i] = v1
-				} else {
-					M[i] = v2
-				}
-				M[i] += W[i]
-			}
-		}
-
-		// A special case is that there is
-		// only one node in I^*(g).
-		if size == 1 {
-			K := make([]int, size)
-			T := make([]int, size)
-			T[0] = 0
-			K[0] = W[0] - 1
-			simpleConstruct(nl, K, T, W, nil, P)
-			return
-		}
-
-		mul := M[size-1]
-
-		min := func(args ...float64) float64 {
-			m := args[0]
-			for i := 1; i < len(args); i++ {
-				if args[i] < m {
-					m = args[i]
-				}
-			}
-			return m
-		}
-
-		getCost := func(in, out, d int) float64 {
-			m := min(float64(d)*wdc, wdup)
-			if in >= out {
-				return m * float64(out)
-			} else {
-				return m*float64(in) + wdup*float64(out-in)
-			}
-		}
-
-		getMin := func(ind, in, d int) {
-			w := W[ind] // multiplicity
-			l := C[ind] // list of cost
-			// (p, m): the cost m with p outgoing lineages
-			// in branch ind with in incoming lineages.
-			p, m := w, getCost(in, w, d)+l[w]
-			//println(nl[ind].Name, int(m), in, p, int(l[w]))
-            for out := w + 1; out <= mul; out++ {
-				t := getCost(in, out, d) + l[out]
-				//println(nl[ind].Name, int(t), in, out, int(l[out]))
-				if t < m {
-					p, m = out, t
-				}
-			}
-			U[ind][in] = m
-			I[ind][in] = p
-			//println("->", nl[ind].Name, int(m), in, p)
-		}
-
-		getC := func(i, w int) {
-			n := nl[i]
-			switch {
-			case len(n.Children) == 1:
-				lu := U[n.Children[0].Id]
-                for j := w; j <= mul; j++ {
-					C[i][j] = lu[j-w]
-					//println("C", n.Name, j, int(C[i][j]))
-				}
-			case len(n.Children) == 2:
-				lu := U[n.Children[0].Id]
-				ru := U[n.Children[1].Id]
-                for j := w; j <= mul; j++ {
-					C[i][j] = lu[j-w] + ru[j-w]
-				}
-			}
-		}
-
-		Fid := make([]int, size)
-		for i := 0; i < size-1; i++ {
-			Fid[i] = nl[i].Father.Id
-		}
-
-		//println("--")
-		for i, n := range nl {
-			C[i] = make([]float64, mul+1)
-			U[i] = make([]float64, mul+1)
-			I[i] = make([]int, mul+1)
-
-			w := W[i]
-			//println(n.Name, w)
-			switch {
-			case n.IsLeaf():
-				d := n.Level - n.Father.Level
-                for j := 0; j <= mul; j++ {
-					U[i][j] = getCost(j, w-1, d)
-					I[i][j] = w - 1
-				}
-			case n.IsRoot():
-				getC(i, w)
-				getMin(i, 0, 0)
-			default: // internal not root
-				getC(i, w)
-				d := n.Level - n.Father.Level
-                for j := 0; j <= mul; j++ {
-					getMin(i, j, d)
-				}
-			}
-		}
-
-		K := make([]int, size)
-		T := make([]int, size)
-		T[size-1] = 0
-		K[size-1] = I[size-1][0]
-		for i := size - 2; i >= 0; i-- {
-			n := nl[i]
-			T[i] = K[n.Father.Id] - W[n.Father.Id]
-            //println(T[i])
-			K[i] = I[i][T[i]]
-		}
-
-		simpleConstruct(nl, K, T, W, Fid, P)
-	}
-}
-
-
 func weightedCost(wdup, wdc float64) func(*Node) {
 	return func(root *Node) {
 		nl := root.Post2List()
@@ -682,7 +532,7 @@ func weightedCost(wdup, wdc float64) func(*Node) {
 		M := make([]int, size)
 		W := make([]int, size)
 		P := make([][]*Node, size)
-		C := make([][]float64, size)
+		//C := make([][]float64, size)
 		U := make([][]float64, size)
 		I := make([][]int, size)
 		for i, n := range nl {
@@ -709,16 +559,6 @@ func weightedCost(wdup, wdc float64) func(*Node) {
 			}
 		}
 
-		//N := make([]int, size)
-        //for i,n := range nl {
-            //switch n.Father{
-            //case nil:
-                //N[i] = 0
-            //default:
-                //N[i] = M[n.Father.Id]
-            //}
-        //}
-
 		// A special case is that there is
 		// only one node in I^*(g).
 		if size == 1 {
@@ -731,6 +571,7 @@ func weightedCost(wdup, wdc float64) func(*Node) {
 		}
 
 		mul := M[size-1]
+        C := make([]float64, mul+1)
 
 		min := func(args ...float64) float64 {
 			m := args[0]
@@ -753,7 +594,8 @@ func weightedCost(wdup, wdc float64) func(*Node) {
 
 		getMin := func(ind, in, d int) {
 			w := W[ind] // multiplicity
-			l := C[ind] // list of cost
+			//l := C[ind] // list of cost
+            l := C
 			// (p, m): the cost m with p outgoing lineages
 			// in branch ind with in incoming lineages.
 			p, m := w, getCost(in, w, d)+l[w]
@@ -778,7 +620,8 @@ func weightedCost(wdup, wdc float64) func(*Node) {
 				lu := U[n.Children[0].Id]
 				//for j := w; j <= mul; j++ {
 				for j := w; j <= M[i]; j++ {
-					C[i][j] = lu[j-w]
+					//C[i][j] = lu[j-w]
+                    C[j] = lu[j-w]
 					//println("C", n.Name, j, int(C[i][j]))
 				}
 			case len(n.Children) == 2:
@@ -786,7 +629,8 @@ func weightedCost(wdup, wdc float64) func(*Node) {
 				ru := U[n.Children[1].Id]
 				//for j := w; j <= mul; j++ {
 				for j := w; j <= M[i]; j++ {
-					C[i][j] = lu[j-w] + ru[j-w]
+					//C[i][j] = lu[j-w] + ru[j-w]
+                    C[j] = lu[j-w] + ru[j-w]
 				}
 			}
 		}
@@ -798,16 +642,18 @@ func weightedCost(wdup, wdc float64) func(*Node) {
 
 		//println("--")
 		for i, n := range nl {
-			C[i] = make([]float64, mul+1)
-			U[i] = make([]float64, mul+1)
-			I[i] = make([]int, mul+1)
+			//C[i] = make([]float64, mul+1)
+			//U[i] = make([]float64, mul+1)
+			//I[i] = make([]int, mul+1)
 
 			w := W[i]
 			//println(n.Name, w)
 			switch {
 			case n.IsLeaf():
-                U[i] = U[i][0:M[Fid[i]]- W[Fid[i]]+1]
-                I[i] = I[i][0:M[Fid[i]]- W[Fid[i]]+1]
+                //U[i] = U[i][0:M[Fid[i]]- W[Fid[i]]+1]
+                //I[i] = I[i][0:M[Fid[i]]- W[Fid[i]]+1]
+                U[i] = make([]float64,M[Fid[i]]- W[Fid[i]]+1)
+                I[i] = make([]int,M[Fid[i]]- W[Fid[i]]+1)
 				d := n.Level - n.Father.Level
                 //for j := 0; j <= mul; j++ {
                 //for j := 0; j <= N[i]; j++ {
@@ -816,13 +662,17 @@ func weightedCost(wdup, wdc float64) func(*Node) {
 					I[i][j] = w - 1
 				}
 			case n.IsRoot():
-                U[i] = U[i][0:1]
-                I[i] = I[i][0:1]
+                //U[i] = U[i][0:1]
+                //I[i] = I[i][0:1]
+                U[i] = make([]float64, 1)
+                I[i] = make([]int, 1)
 				getC(i, w)
 				getMin(i, 0, 0)
 			default: // internal not root
-                U[i] = U[i][0:M[Fid[i]]- W[Fid[i]]+1]
-                I[i] = I[i][0:M[Fid[i]]- W[Fid[i]]+1]
+                //U[i] = U[i][0:M[Fid[i]]- W[Fid[i]]+1]
+                //I[i] = I[i][0:M[Fid[i]]- W[Fid[i]]+1]
+                U[i] = make([]float64,M[Fid[i]]- W[Fid[i]]+1)
+                I[i] = make([]int,M[Fid[i]]- W[Fid[i]]+1)
 				getC(i, w)
 				d := n.Level - n.Father.Level
                 //for j := 0; j <= mul; j++ {

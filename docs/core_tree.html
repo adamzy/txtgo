@@ -1,0 +1,440 @@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>core_tree.go</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="gocco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <div id="jump_to">
+        Jump To &hellip;
+        <div id="jump_wrapper">
+          <div id="jump_page">
+              
+              <a class="source" href="core_binaryreconcile.html">
+                  core_binaryreconcile.go
+              </a>
+              
+              <a class="source" href="core_genetree.html">
+                  core_genetree.go
+              </a>
+              
+              <a class="source" href="core_node.html">
+                  core_node.go
+              </a>
+              
+              <a class="source" href="core_rf.html">
+                  core_rf.go
+              </a>
+              
+              <a class="source" href="core_speciestree.html">
+                  core_speciestree.go
+              </a>
+              
+              <a class="source" href="core_test.html">
+                  core_test.go
+              </a>
+              
+              <a class="source" href="core_tree.html">
+                  core_tree.go
+              </a>
+              
+              <a class="source" href="refine_linearrefinegt.html">
+                  refine_linearrefinegt.go
+              </a>
+              
+              <a class="source" href="refine_test.html">
+                  refine_test.go
+              </a>
+              
+              <a class="source" href="util_contract.html">
+                  util_contract.go
+              </a>
+              
+              <a class="source" href="util_prune.html">
+                  util_prune.go
+              </a>
+              
+              <a class="source" href="util_simu.html">
+                  util_simu.go
+              </a>
+              
+              <a class="source" href="util_test.html">
+                  util_test.go
+              </a>
+              
+          </div>
+        </div>
+      </div>
+    
+    <table cellpadding="0" cellspacing="0">
+      <thead>
+        <tr>
+          <th class="docs">
+            <h1>
+                core_tree.go
+            </h1>
+          </th>
+          <th class="code">
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+          
+          <tr id="section-1">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+                
+            </td>
+            <td class="code">
+                <div class="highlight"><pre><span class="kn">package</span> <span class="nx">tree</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&quot;errors&quot;</span>
+	<span class="s">&quot;regexp&quot;</span>
+	<span class="s">&quot;strconv&quot;</span>
+	<span class="s">&quot;strings&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">type</span> <span class="nx">Tree</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="o">*</span><span class="nx">Node</span>
+	<span class="nx">Nodes</span> <span class="p">[]</span><span class="o">*</span><span class="nx">Node</span>
+	<span class="nx">Size</span>  <span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="nx">Taxonmap</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="o">*</span><span class="nx">Node</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-2">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+                <p>Maybe using regexp is not fast enough.
+TODO Write a native one.</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre><span class="kd">func</span> <span class="nx">tokenize3</span><span class="p">(</span><span class="nx">s</span> <span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span> <span class="p">{</span>
+	<span class="nx">s</span> <span class="p">=</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">Replace</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="s">&quot; &quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+	<span class="nx">reg</span> <span class="o">:=</span> <span class="s">`[\(\),;:]|[^\(\),;:]+`</span>
+	<span class="nx">re</span> <span class="o">:=</span> <span class="nx">regexp</span><span class="p">.</span><span class="nx">MustCompile</span><span class="p">(</span><span class="nx">reg</span><span class="p">)</span>
+	<span class="k">return</span> <span class="nx">re</span><span class="p">.</span><span class="nx">FindAllString</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">tokenize2</span><span class="p">(</span><span class="nx">s</span> <span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span> <span class="p">{</span>
+	<span class="nx">s</span> <span class="p">=</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">Replace</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="s">&quot; &quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+	<span class="nx">s</span> <span class="p">=</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">Replace</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="s">&quot;,&quot;</span><span class="p">,</span> <span class="s">&quot; , &quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+	<span class="nx">s</span> <span class="p">=</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">Replace</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="s">&quot;(&quot;</span><span class="p">,</span> <span class="s">&quot; ( &quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+	<span class="nx">s</span> <span class="p">=</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">Replace</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="s">&quot;)&quot;</span><span class="p">,</span> <span class="s">&quot; ) &quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+	<span class="nx">s</span> <span class="p">=</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">Replace</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="s">&quot;:&quot;</span><span class="p">,</span> <span class="s">&quot; : &quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+	<span class="nx">s</span> <span class="p">=</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">Replace</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="s">&quot;;&quot;</span><span class="p">,</span> <span class="s">&quot; ; &quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+	<span class="k">return</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">Fields</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
+<span class="p">}</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-3">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+                <p>This one seems faster.</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre><span class="kd">func</span> <span class="nx">tokenize</span><span class="p">(</span><span class="nx">s</span> <span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span> <span class="p">{</span>
+	<span class="nx">s</span> <span class="p">=</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">Replace</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="s">&quot; &quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+	<span class="nx">r</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">NewReplacer</span><span class="p">(</span><span class="s">&quot;(&quot;</span><span class="p">,</span> <span class="s">&quot; ( &quot;</span><span class="p">,</span> <span class="s">&quot;)&quot;</span><span class="p">,</span> <span class="s">&quot; ) &quot;</span><span class="p">,</span> <span class="s">&quot;:&quot;</span><span class="p">,</span> <span class="s">&quot; : &quot;</span><span class="p">,</span> <span class="s">&quot;;&quot;</span><span class="p">,</span> <span class="s">&quot; ; &quot;</span><span class="p">,</span> <span class="s">&quot;,&quot;</span><span class="p">,</span> <span class="s">&quot; , &quot;</span><span class="p">)</span>
+	<span class="k">return</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">Fields</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">Replace</span><span class="p">(</span><span class="nx">s</span><span class="p">))</span>
+<span class="p">}</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-4">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+                <p>Make a tree from a string</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre><span class="kd">func</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">s</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">Tree</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">token</span> <span class="o">:=</span> <span class="nx">tokenize</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">token</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="s">&quot;Invalid tree.&quot;</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">t</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">Tree</span><span class="p">)</span>
+	<span class="nx">t</span><span class="p">.</span><span class="nx">Node</span> <span class="p">=</span> <span class="nx">newNode</span><span class="p">()</span>
+
+	<span class="nx">size</span> <span class="o">:=</span> <span class="mi">1</span>
+	<span class="nx">flag</span> <span class="o">:=</span> <span class="kc">false</span>
+	<span class="kd">var</span> <span class="nx">n</span><span class="p">,</span> <span class="nx">c</span> <span class="o">*</span><span class="nx">Node</span>
+	<span class="nx">n</span> <span class="p">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Node</span>
+
+	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">token</span> <span class="p">{</span>
+		<span class="k">switch</span> <span class="nx">v</span> <span class="p">{</span>
+		<span class="k">case</span> <span class="s">&quot;(&quot;</span><span class="p">:</span>
+			<span class="nx">c</span> <span class="p">=</span> <span class="nx">newNode</span><span class="p">()</span>
+			<span class="nx">size</span><span class="o">++</span>
+			<span class="nx">n</span><span class="p">.</span><span class="nx">AddChild</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span>
+			<span class="nx">n</span> <span class="p">=</span> <span class="nx">c</span>
+			<span class="nx">flag</span> <span class="p">=</span> <span class="kc">false</span>
+		<span class="k">case</span> <span class="s">&quot;)&quot;</span><span class="p">:</span>
+			<span class="nx">n</span> <span class="p">=</span> <span class="nx">n</span><span class="p">.</span><span class="nx">Father</span>
+			<span class="nx">flag</span> <span class="p">=</span> <span class="kc">false</span>
+		<span class="k">case</span> <span class="s">&quot;,&quot;</span><span class="p">:</span>
+			<span class="nx">c</span> <span class="p">=</span> <span class="nx">newNode</span><span class="p">()</span>
+			<span class="nx">size</span><span class="o">++</span>
+			<span class="nx">n</span><span class="p">.</span><span class="nx">Father</span><span class="p">.</span><span class="nx">AddChild</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span>
+			<span class="nx">n</span> <span class="p">=</span> <span class="nx">c</span>
+			<span class="nx">flag</span> <span class="p">=</span> <span class="kc">false</span>
+		<span class="k">case</span> <span class="s">&quot;:&quot;</span><span class="p">:</span>
+			<span class="nx">flag</span> <span class="p">=</span> <span class="kc">true</span>
+		<span class="k">case</span> <span class="s">&quot;;&quot;</span><span class="p">:</span>
+			<span class="k">break</span>
+		<span class="k">default</span><span class="p">:</span>
+			<span class="k">if</span> <span class="nx">flag</span> <span class="p">{</span>
+				<span class="nx">length</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nx">ParseFloat</span><span class="p">(</span><span class="nx">v</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+				<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+					<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="s">&quot;Invalid branch length.&quot;</span><span class="p">)</span>
+				<span class="p">}</span>
+				<span class="nx">n</span><span class="p">.</span><span class="nx">Length</span> <span class="p">=</span> <span class="nx">length</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+				<span class="nx">n</span><span class="p">.</span><span class="nx">Name</span> <span class="p">=</span> <span class="nx">v</span>
+				<span class="nx">flag</span> <span class="p">=</span> <span class="kc">false</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Node</span> <span class="o">!=</span> <span class="nx">n</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="s">&quot;Invalid tree.&quot;</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="nx">t</span><span class="p">.</span><span class="nx">Size</span> <span class="p">=</span> <span class="nx">size</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-5">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+                <p>Update t.Nodes once the tree is successfully built.</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>	<span class="nx">t</span><span class="p">.</span><span class="nx">Nodes</span> <span class="p">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Post2List</span><span class="p">()</span>
+	<span class="nx">t</span><span class="p">.</span><span class="nx">UpdateInfo</span><span class="p">()</span>
+	<span class="k">return</span> <span class="nx">t</span><span class="p">,</span> <span class="kc">nil</span>
+<span class="p">}</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-6">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+                <p>Update node.Level and node.Id for tree</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre><span class="kd">func</span> <span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">Tree</span><span class="p">)</span> <span class="nx">UpdateInfo</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">t</span><span class="p">.</span><span class="nx">Node</span><span class="p">.</span><span class="nx">Level</span> <span class="p">=</span> <span class="mi">0</span>
+	<span class="nx">t</span><span class="p">.</span><span class="nx">Node</span><span class="p">.</span><span class="nx">Id</span> <span class="p">=</span> <span class="nb">len</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">Nodes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">Nodes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">--</span> <span class="p">{</span>
+		<span class="nx">n</span> <span class="o">:=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Nodes</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
+		<span class="nx">n</span><span class="p">.</span><span class="nx">Level</span> <span class="p">=</span> <span class="nx">n</span><span class="p">.</span><span class="nx">Father</span><span class="p">.</span><span class="nx">Level</span> <span class="o">+</span> <span class="mi">1</span>
+		<span class="nx">n</span><span class="p">.</span><span class="nx">Id</span> <span class="p">=</span> <span class="nx">i</span>
+	<span class="p">}</span>
+<span class="p">}</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-7">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+                <p>Update everything of a tree from tree.Node,
+including tree.Nodes, size, node.id, level.
+Useful after the tree was manually edited</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre><span class="kd">func</span> <span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">Tree</span><span class="p">)</span> <span class="nx">Update</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">t</span><span class="p">.</span><span class="nx">Nodes</span> <span class="p">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Node</span><span class="p">.</span><span class="nx">Post2List</span><span class="p">()</span>
+	<span class="nx">t</span><span class="p">.</span><span class="nx">Size</span> <span class="p">=</span> <span class="nb">len</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">Nodes</span><span class="p">)</span>
+	<span class="nx">t</span><span class="p">.</span><span class="nx">UpdateInfo</span><span class="p">()</span>
+<span class="p">}</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-8">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+                <p>A tree is binary tree &lt;=&gt; every internal node has two children.
+Overwrite node.IsBinary method.</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre><span class="kd">func</span> <span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">Tree</span><span class="p">)</span> <span class="nx">IsBinary</span><span class="p">()</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Nodes</span> <span class="p">{</span>
+		<span class="nx">n</span> <span class="o">:=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Nodes</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
+		<span class="k">if</span> <span class="nx">n</span><span class="p">.</span><span class="nx">IsInternal</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="p">!</span><span class="nx">n</span><span class="p">.</span><span class="nx">IsBinary</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="kc">false</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="kc">true</span>
+<span class="p">}</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-9">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+                <p>The following is unnecessary.</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-10">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+                <p>Post-Order iterate the tree and put nodes into a list
+Rewrite method of node.Post2List, because the size is known for tree.</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre><span class="kd">func</span> <span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">Tree</span><span class="p">)</span> <span class="nx">Post2List</span><span class="p">()</span> <span class="p">[]</span><span class="o">*</span><span class="nx">Node</span> <span class="p">{</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-11">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+                <p>var nl []*Node</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>	<span class="nx">nl</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="o">*</span><span class="nx">Node</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">Size</span><span class="p">)</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-12">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+                <p>A function that appends node with its descendent to nl</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>	<span class="kd">var</span> <span class="nx">ap</span> <span class="kd">func</span><span class="p">(</span><span class="nx">n</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="c1">//necessary for making a recursive function here</span>
+	<span class="nx">ap</span> <span class="p">=</span> <span class="kd">func</span><span class="p">(</span><span class="nx">n</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">n</span><span class="p">.</span><span class="nx">Children</span> <span class="p">{</span>
+			<span class="nx">ap</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="nx">nl</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">nl</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="nx">ap</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">Node</span><span class="p">)</span>
+	<span class="k">return</span> <span class="nx">nl</span>
+<span class="p">}</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-13">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+                <p>In-Order iterate the tree and put nodes into a list.
+It&rsquo;s only defined for binary tree.
+It will cause panic for non-binary tree.
+Rewrite method of node.In2List, because the size is known for tree.
+Ugly!</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre><span class="kd">func</span> <span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">Tree</span><span class="p">)</span> <span class="nx">In2List</span><span class="p">()</span> <span class="p">[]</span><span class="o">*</span><span class="nx">Node</span> <span class="p">{</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-14">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+                <p>var nl []*Node</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>	<span class="nx">nl</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="o">*</span><span class="nx">Node</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">Size</span><span class="p">)</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-15">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+                <p>A function that appends node with its descendent to nl</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>	<span class="kd">var</span> <span class="nx">ap</span> <span class="kd">func</span><span class="p">(</span><span class="nx">n</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="c1">//necessary for making a recursive function here</span>
+	<span class="nx">ap</span> <span class="p">=</span> <span class="kd">func</span><span class="p">(</span><span class="nx">n</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="nx">n</span><span class="p">.</span><span class="nx">IsInternal</span><span class="p">()</span> <span class="p">{</span>
+			<span class="nx">ap</span><span class="p">(</span><span class="nx">n</span><span class="p">.</span><span class="nx">Children</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+		<span class="p">}</span>
+		<span class="nx">nl</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">nl</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">n</span><span class="p">.</span><span class="nx">IsInternal</span><span class="p">()</span> <span class="p">{</span>
+			<span class="nx">ap</span><span class="p">(</span><span class="nx">n</span><span class="p">.</span><span class="nx">Children</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="nx">ap</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">Node</span><span class="p">)</span>
+	<span class="k">return</span> <span class="nx">nl</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">Tree</span><span class="p">)</span> <span class="nx">TaxonMap</span><span class="p">()</span> <span class="nx">Taxonmap</span> <span class="p">{</span>
+	<span class="nx">taxon</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="nx">Taxonmap</span><span class="p">,</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Size</span><span class="p">)</span>
+	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">n</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Nodes</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="nx">n</span><span class="p">.</span><span class="nx">IsLeaf</span><span class="p">()</span> <span class="p">{</span>
+			<span class="nx">taxon</span><span class="p">[</span><span class="nx">n</span><span class="p">.</span><span class="nx">Name</span><span class="p">]</span> <span class="p">=</span> <span class="nx">n</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">taxon</span>
+<span class="p">}</span>
+
+</pre></div>
+            </td>
+          </tr>
+          
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

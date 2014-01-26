@@ -1,0 +1,531 @@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>refine_test.go</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="gocco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <div id="jump_to">
+        Jump To &hellip;
+        <div id="jump_wrapper">
+          <div id="jump_page">
+              
+              <a class="source" href="core_binaryreconcile.html">
+                  core_binaryreconcile.go
+              </a>
+              
+              <a class="source" href="core_genetree.html">
+                  core_genetree.go
+              </a>
+              
+              <a class="source" href="core_node.html">
+                  core_node.go
+              </a>
+              
+              <a class="source" href="core_rf.html">
+                  core_rf.go
+              </a>
+              
+              <a class="source" href="core_speciestree.html">
+                  core_speciestree.go
+              </a>
+              
+              <a class="source" href="core_test.html">
+                  core_test.go
+              </a>
+              
+              <a class="source" href="core_tree.html">
+                  core_tree.go
+              </a>
+              
+              <a class="source" href="refine_linearrefinegt.html">
+                  refine_linearrefinegt.go
+              </a>
+              
+              <a class="source" href="refine_test.html">
+                  refine_test.go
+              </a>
+              
+              <a class="source" href="util_contract.html">
+                  util_contract.go
+              </a>
+              
+              <a class="source" href="util_prune.html">
+                  util_prune.go
+              </a>
+              
+              <a class="source" href="util_simu.html">
+                  util_simu.go
+              </a>
+              
+              <a class="source" href="util_test.html">
+                  util_test.go
+              </a>
+              
+          </div>
+        </div>
+      </div>
+    
+    <table cellpadding="0" cellspacing="0">
+      <thead>
+        <tr>
+          <th class="docs">
+            <h1>
+                refine_test.go
+            </h1>
+          </th>
+          <th class="code">
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+          
+          <tr id="section-1">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+                
+            </td>
+            <td class="code">
+                <div class="highlight"><pre><span class="kn">package</span> <span class="nx">tree</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&quot;fmt&quot;</span>
+	<span class="s">&quot;testing&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nx">Test_Lineartimegt</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">gs</span><span class="p">,</span> <span class="nx">ss</span> <span class="kt">string</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-2">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+                <p>gs = &ldquo;((a,b,c)A,(d,e)D)R;&rdquo;
+gs = &ldquo;(a,a,(a,b),b,c,d,d);&rdquo;
+gs = &ldquo;(a,b,a);&rdquo;</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>	<span class="nx">gs</span> <span class="p">=</span> <span class="s">&quot;(a,a,a)&quot;</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-3">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+                <p>gs = &ldquo;(a,a,b,b,c,d,d)&rdquo;</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>	<span class="nx">ss</span> <span class="p">=</span> <span class="s">&quot;((a,b)A,(c,(d,e)D)C)R;&quot;</span>
+
+	<span class="nx">gs</span> <span class="p">=</span> <span class="s">&quot;((1,4),2,2,1,1)&quot;</span>
+	<span class="nx">ss</span> <span class="p">=</span> <span class="s">&quot;(((0,1),2),(3,4))&quot;</span>
+
+	<span class="nx">gs</span> <span class="p">=</span> <span class="s">&quot;(0,0,4,2,1,2)&quot;</span>
+	<span class="nx">ss</span> <span class="p">=</span> <span class="s">&quot;((0,1)A,((2,3)B,4)C)R&quot;</span>
+
+	<span class="nx">gs</span> <span class="p">=</span> <span class="s">&quot;((0,2,2),(1,0),3)&quot;</span>
+	<span class="nx">ss</span> <span class="p">=</span> <span class="s">&quot;(0,((1,2)A,(3,4)B)C)R&quot;</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-4">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+                <p>gs = &ldquo;((1,1,3),(4,4,1))&rdquo;</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>	<span class="nx">gs</span> <span class="p">=</span> <span class="s">&quot;(1,1,3)r&quot;</span>
+	<span class="nx">ss</span> <span class="p">=</span> <span class="s">&quot;((((0,1)A,2)B,3)C,4)R&quot;</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-5">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+                <p>gs = &ldquo;(0,2,2)&rdquo;
+ss = &ldquo;(0, 2)&rdquo;</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>	<span class="nx">gs</span> <span class="p">=</span> <span class="s">&quot;((1,2),(3,1),3,1,3)&quot;</span>
+	<span class="nx">ss</span> <span class="p">=</span> <span class="s">&quot;((0,((1,2)A,3)B)C,4)R;&quot;</span>
+
+	<span class="nx">gt</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">gs</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">st</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">ss</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-6">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+                <p>st.PruneFromTree(gt)</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>	<span class="nx">sst</span> <span class="o">:=</span> <span class="nx">st</span><span class="p">.</span><span class="nx">SpeciesTree</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">sst</span><span class="p">.</span><span class="nx">IsBinary</span><span class="p">())</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">gt</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">sst</span><span class="p">)</span>
+	<span class="nx">RefineGt</span><span class="p">(</span><span class="nx">gt</span><span class="p">,</span> <span class="nx">sst</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">gt</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">BinaryCost</span><span class="p">(</span><span class="nx">gt</span><span class="p">,</span> <span class="nx">sst</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">Test_Mutation1</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">gs</span> <span class="o">:=</span> <span class="s">&quot;(1,1,7,7,8,8)&quot;</span>
+    <span class="nx">ss</span> <span class="o">:=</span> <span class="s">&quot;(((((((1,2),3),4),5),6),7),8);&quot;</span>
+
+    <span class="nx">gt</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">gs</span><span class="p">)</span>
+    <span class="nx">st</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span><span class="nx">Make</span><span class="p">(</span><span class="nx">ss</span><span class="p">)</span>
+    <span class="nx">sst</span> <span class="o">:=</span> <span class="nx">st</span><span class="p">.</span><span class="nx">SpeciesTree</span><span class="p">()</span>
+    <span class="nx">RefineGt</span><span class="p">(</span><span class="nx">gt</span><span class="p">,</span> <span class="nx">sst</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">gt</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">BinaryCost</span><span class="p">(</span><span class="nx">gt</span><span class="p">,</span> <span class="nx">sst</span><span class="p">))</span>
+    <span class="nx">gt1</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">gs</span><span class="p">)</span>
+    <span class="nx">RefineGt</span><span class="p">(</span><span class="nx">gt1</span><span class="p">,</span> <span class="nx">sst</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">gt1</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">BinaryCost</span><span class="p">(</span><span class="nx">gt1</span><span class="p">,</span> <span class="nx">sst</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">Test_Weight</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">niter</span> <span class="o">:=</span> <span class="mi">100000</span>
+	<span class="nx">crate</span> <span class="o">:=</span> <span class="mf">0.8</span>
+	<span class="nx">ntaxon</span> <span class="o">:=</span> <span class="mi">40</span>
+	<span class="nx">nleaves</span> <span class="o">:=</span> <span class="mi">80</span>
+
+	<span class="nx">testone</span> <span class="o">:=</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+		<span class="nx">gt</span> <span class="o">:=</span> <span class="nx">SimuTreeRandomTaxon</span><span class="p">(</span><span class="nx">nleaves</span><span class="p">,</span> <span class="nx">ntaxon</span><span class="p">)</span>
+		<span class="nx">gt</span><span class="p">.</span><span class="nx">RandomContract</span><span class="p">(</span><span class="nx">crate</span><span class="p">)</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-7">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+                <p>st := SimuTree(ntaxon)</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>        <span class="nx">st</span> <span class="o">:=</span> <span class="nx">LineTree2</span><span class="p">(</span><span class="nx">ntaxon</span><span class="p">)</span>
+		<span class="nx">gs</span> <span class="o">:=</span> <span class="nx">gt</span><span class="p">.</span><span class="nx">String</span><span class="p">()</span>
+		<span class="nx">ss</span> <span class="o">:=</span> <span class="nx">st</span><span class="p">.</span><span class="nx">String</span><span class="p">()</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-8">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+                <p>fmt.Println(&rdquo;:&ldquo;)
+fmt.Println(gs)
+fmt.Println(ss)</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>		<span class="nx">gt1</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">gs</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="nx">st1</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">ss</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="nx">sst1</span> <span class="o">:=</span> <span class="nx">st1</span><span class="p">.</span><span class="nx">SpeciesTree</span><span class="p">()</span>
+		<span class="nx">RefineGt</span><span class="p">(</span><span class="nx">gt1</span><span class="p">,</span> <span class="nx">sst1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-9">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+                <p>fmt.Println(gt1)</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>		<span class="nx">d1</span><span class="p">,</span> <span class="nx">l1</span><span class="p">,</span> <span class="nx">dc1</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">BinaryCost</span><span class="p">(</span><span class="nx">gt1</span><span class="p">,</span> <span class="nx">sst1</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+
+		<span class="nx">gt2</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">gs</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="nx">st2</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">ss</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="nx">sst2</span> <span class="o">:=</span> <span class="nx">st2</span><span class="p">.</span><span class="nx">SpeciesTree</span><span class="p">()</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-10">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+                <p>RefineGt(gt2, sst2, 3, 2001, 1000)
+RefineGt(gt2, sst2, 3, 3000, 1)</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>        <span class="nx">RefineGt</span><span class="p">(</span><span class="nx">gt2</span><span class="p">,</span> <span class="nx">sst2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+		<span class="nx">d2</span><span class="p">,</span> <span class="nx">l2</span><span class="p">,</span> <span class="nx">dc2</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">BinaryCost</span><span class="p">(</span><span class="nx">gt2</span><span class="p">,</span> <span class="nx">sst2</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+
+        <span class="k">if</span> <span class="nx">d1</span><span class="o">+</span><span class="nx">l1</span> <span class="o">!=</span> <span class="nx">d2</span><span class="o">+</span><span class="nx">l2</span> <span class="p">{</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-11">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+                <p>if d1 != d2 || l1 != l2 {</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>			<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">gs</span><span class="p">)</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">ss</span><span class="p">)</span>
+		    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">gt1</span><span class="p">)</span>
+		    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">gt2</span><span class="p">)</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">d1</span><span class="p">,</span> <span class="nx">l1</span><span class="p">,</span> <span class="nx">dc1</span><span class="p">)</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">d2</span><span class="p">,</span> <span class="nx">l2</span><span class="p">,</span> <span class="nx">dc2</span><span class="p">)</span>
+			<span class="nx">t</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="s">&quot;Not equal, fail!&quot;</span><span class="p">)</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-12">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+                <p>panic(&ldquo;Fail!!!&rdquo;)</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">niter</span><span class="o">/</span><span class="mi">100</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s">&quot;~&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="nx">j</span><span class="o">:=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">j</span><span class="p">&lt;</span> <span class="mi">100</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span> <span class="p">{</span>
+		<span class="nx">testone</span><span class="p">()</span>
+        <span class="p">}</span>
+	<span class="p">}</span>
+    <span class="nb">println</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">test_Integer</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">niter</span> <span class="o">:=</span> <span class="mi">1000</span>
+	<span class="nx">crate</span> <span class="o">:=</span> <span class="mf">0.8</span>
+	<span class="nx">ntaxon</span> <span class="o">:=</span> <span class="mi">50</span>
+	<span class="nx">nleaves</span> <span class="o">:=</span> <span class="mi">100</span>
+
+	<span class="nx">testone</span> <span class="o">:=</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+		<span class="nx">gt</span> <span class="o">:=</span> <span class="nx">SimuTreeRandomTaxon</span><span class="p">(</span><span class="nx">nleaves</span><span class="p">,</span> <span class="nx">ntaxon</span><span class="p">)</span>
+		<span class="nx">gt</span><span class="p">.</span><span class="nx">RandomContract</span><span class="p">(</span><span class="nx">crate</span><span class="p">)</span>
+		<span class="nx">st</span> <span class="o">:=</span> <span class="nx">SimuTree</span><span class="p">(</span><span class="nx">ntaxon</span><span class="p">)</span>
+		<span class="nx">gs</span> <span class="o">:=</span> <span class="nx">gt</span><span class="p">.</span><span class="nx">String</span><span class="p">()</span>
+		<span class="nx">ss</span> <span class="o">:=</span> <span class="nx">st</span><span class="p">.</span><span class="nx">String</span><span class="p">()</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-13">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+                <p>fmt.Println(&rdquo;:&ldquo;)
+fmt.Println(gs)
+fmt.Println(ss)</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>		<span class="nx">gt1</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">gs</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="nx">st1</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">ss</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="nx">sst1</span> <span class="o">:=</span> <span class="nx">st1</span><span class="p">.</span><span class="nx">SpeciesTree</span><span class="p">()</span>
+		<span class="nx">RefineGt</span><span class="p">(</span><span class="nx">gt1</span><span class="p">,</span> <span class="nx">sst1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-14">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+                <p>fmt.Println(gt1)</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>		<span class="nx">d1</span><span class="p">,</span> <span class="nx">l1</span><span class="p">,</span> <span class="nx">dc1</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">BinaryCost</span><span class="p">(</span><span class="nx">gt1</span><span class="p">,</span> <span class="nx">sst1</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+
+		<span class="nx">gt2</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">gs</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="nx">st2</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">ss</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="nx">sst2</span> <span class="o">:=</span> <span class="nx">st2</span><span class="p">.</span><span class="nx">SpeciesTree</span><span class="p">()</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-15">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+                <p>RefineGt(gt2, sst2, 3, 2001, 1000)</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>        <span class="nx">RefineGt</span><span class="p">(</span><span class="nx">gt2</span><span class="p">,</span> <span class="nx">sst2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+		<span class="nx">d2</span><span class="p">,</span> <span class="nx">l2</span><span class="p">,</span> <span class="nx">dc2</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">BinaryCost</span><span class="p">(</span><span class="nx">gt2</span><span class="p">,</span> <span class="nx">sst2</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+
+		<span class="nx">gt3</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">gs</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="nx">st3</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">ss</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="nx">sst3</span> <span class="o">:=</span> <span class="nx">st3</span><span class="p">.</span><span class="nx">SpeciesTree</span><span class="p">()</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-16">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+                <p>RefineGt(gt2, sst2, 3, 2001, 1000)</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>        <span class="nx">RefineGt</span><span class="p">(</span><span class="nx">gt3</span><span class="p">,</span> <span class="nx">sst3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">4.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+		<span class="nx">d3</span><span class="p">,</span> <span class="nx">l3</span><span class="p">,</span> <span class="nx">dc3</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">BinaryCost</span><span class="p">(</span><span class="nx">gt3</span><span class="p">,</span> <span class="nx">sst3</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+
+
+        <span class="nx">f</span> <span class="o">:=</span> <span class="kd">func</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">float64</span><span class="p">{</span>
+            <span class="k">return</span> <span class="nb">float64</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span><span class="o">*</span><span class="mf">2.1</span><span class="o">+</span><span class="nb">float64</span><span class="p">(</span><span class="nx">b</span><span class="p">)</span>
+        <span class="p">}</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-17">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+                <p>if d1+l1 != d2+l2 {
+if d1 != d2 || l1 != l2 {</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>        <span class="k">if</span> <span class="nx">f</span><span class="p">(</span><span class="nx">d1</span><span class="p">,</span><span class="nx">l1</span><span class="p">)</span> <span class="o">!=</span> <span class="nx">f</span><span class="p">(</span><span class="nx">d3</span><span class="p">,</span><span class="nx">l3</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">f</span><span class="p">(</span><span class="nx">d2</span><span class="p">,</span><span class="nx">l2</span><span class="p">)</span><span class="o">!=</span><span class="nx">f</span><span class="p">(</span><span class="nx">d3</span><span class="p">,</span><span class="nx">l3</span><span class="p">){</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">gs</span><span class="p">)</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">ss</span><span class="p">)</span>
+		    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">gt1</span><span class="p">)</span>
+		    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">gt2</span><span class="p">)</span>
+		    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">gt3</span><span class="p">)</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">d1</span><span class="p">,</span> <span class="nx">l1</span><span class="p">,</span> <span class="nx">dc1</span><span class="p">)</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">d2</span><span class="p">,</span> <span class="nx">l2</span><span class="p">,</span> <span class="nx">dc2</span><span class="p">)</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">d3</span><span class="p">,</span> <span class="nx">l3</span><span class="p">,</span> <span class="nx">dc3</span><span class="p">)</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-18">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+                <p>t.Log(&ldquo;Not equal, fail!&rdquo;)
+panic(&ldquo;Fail!!!&rdquo;)</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>            <span class="nx">t</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="s">&quot;Not equal, fail!&quot;</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">niter</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-19">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+                <p>print(&rdquo;~&ldquo;)</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>		<span class="nx">testone</span><span class="p">()</span>
+	<span class="p">}</span>
+    <span class="nb">println</span><span class="p">()</span>
+<span class="p">}</span>
+
+</pre></div>
+            </td>
+          </tr>
+          
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

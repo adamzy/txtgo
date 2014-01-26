@@ -67,10 +67,10 @@ func Test_Mutation1(t *testing.T) {
 }
 
 func Test_Weight(t *testing.T) {
-	niter := 50000
+	niter := 100000
 	crate := 0.8
-	ntaxon := 80
-	nleaves := 120
+	ntaxon := 40
+	nleaves := 80
 
 	testone := func() {
 		gt := SimuTreeRandomTaxon(nleaves, ntaxon)
@@ -108,7 +108,8 @@ func Test_Weight(t *testing.T) {
 			t.Log(err)
 		}
 		sst2 := st2.SpeciesTree()
-		//RefineGt(gt2, sst2, 3, 2001, 1000)
+        //RefineGt(gt2, sst2, 3, 2001, 1000)
+        //RefineGt(gt2, sst2, 3, 3000, 1)
         RefineGt(gt2, sst2, 3, 3, 1)
 		d2, l2, dc2, err := BinaryCost(gt2, sst2)
 		if err != nil {

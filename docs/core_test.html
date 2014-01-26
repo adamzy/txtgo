@@ -1,0 +1,278 @@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>core_test.go</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="gocco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <div id="jump_to">
+        Jump To &hellip;
+        <div id="jump_wrapper">
+          <div id="jump_page">
+              
+              <a class="source" href="core_binaryreconcile.html">
+                  core_binaryreconcile.go
+              </a>
+              
+              <a class="source" href="core_genetree.html">
+                  core_genetree.go
+              </a>
+              
+              <a class="source" href="core_node.html">
+                  core_node.go
+              </a>
+              
+              <a class="source" href="core_rf.html">
+                  core_rf.go
+              </a>
+              
+              <a class="source" href="core_speciestree.html">
+                  core_speciestree.go
+              </a>
+              
+              <a class="source" href="core_test.html">
+                  core_test.go
+              </a>
+              
+              <a class="source" href="core_tree.html">
+                  core_tree.go
+              </a>
+              
+              <a class="source" href="refine_linearrefinegt.html">
+                  refine_linearrefinegt.go
+              </a>
+              
+              <a class="source" href="refine_test.html">
+                  refine_test.go
+              </a>
+              
+              <a class="source" href="util_contract.html">
+                  util_contract.go
+              </a>
+              
+              <a class="source" href="util_prune.html">
+                  util_prune.go
+              </a>
+              
+              <a class="source" href="util_simu.html">
+                  util_simu.go
+              </a>
+              
+              <a class="source" href="util_test.html">
+                  util_test.go
+              </a>
+              
+          </div>
+        </div>
+      </div>
+    
+    <table cellpadding="0" cellspacing="0">
+      <thead>
+        <tr>
+          <th class="docs">
+            <h1>
+                core_test.go
+            </h1>
+          </th>
+          <th class="code">
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+          
+          <tr id="section-1">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+                
+            </td>
+            <td class="code">
+                <div class="highlight"><pre><span class="kn">package</span> <span class="nx">tree</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&quot;fmt&quot;</span>
+	<span class="s">&quot;testing&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nx">Test_Node</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">n</span> <span class="o">:=</span> <span class="nx">newNode</span><span class="p">()</span>
+	<span class="nx">n</span><span class="p">.</span><span class="nx">Name</span> <span class="p">=</span> <span class="s">&quot;hello&quot;</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">Test_MakePrint</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-2">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+                <p>s := &ldquo;((a,b ), ( c:3.2, (d , e , fff:-23 ) D ): 23 ) root&rdquo;</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>	<span class="nx">s</span> <span class="o">:=</span> <span class="s">&quot;((a,b )A, ( c:3.2, (d , eee :-23 ) D )C: 23 ) root&quot;</span>
+	<span class="nx">tree</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">tree</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="kc">true</span><span class="p">))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;size:&quot;</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">Size</span><span class="p">)</span>
+
+	<span class="nx">tree</span><span class="p">.</span><span class="nx">Nodes</span> <span class="p">=</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">Post2List</span><span class="p">()</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">Nodes</span> <span class="p">{</span>
+		<span class="nx">n</span> <span class="o">:=</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">Nodes</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">n</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span> <span class="nx">n</span><span class="p">.</span><span class="nx">IsBinary</span><span class="p">())</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">IsBinary</span><span class="p">())</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">IsRoot</span><span class="p">())</span>
+	<span class="nx">sss</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">Node</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">sss</span><span class="p">.</span><span class="nx">IsRoot</span><span class="p">())</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">sss</span><span class="p">.</span><span class="nx">IsLeaf</span><span class="p">())</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">sss</span><span class="p">.</span><span class="nx">IsBinary</span><span class="p">())</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">Test_In2List</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">s</span> <span class="o">:=</span> <span class="s">&quot;((a,b )A, ( c:3.2, (d , eee :-23 ) D )C: 23 ) root&quot;</span>
+	<span class="nx">tree</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">tree</span><span class="p">)</span>
+	<span class="nx">il</span> <span class="o">:=</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">In2List</span><span class="p">()</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">il</span> <span class="p">{</span>
+		<span class="nx">n</span> <span class="o">:=</span> <span class="nx">il</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">n</span><span class="p">.</span><span class="nx">Name</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">Name</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">Test_LcaMap</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">gs</span> <span class="o">:=</span> <span class="s">&quot;((a,b)A,(c,(c,d)D)D)R;&quot;</span>
+	<span class="nx">ss</span> <span class="o">:=</span> <span class="s">&quot;((a,b)A,(c,d)D)R;&quot;</span>
+	<span class="nx">gt</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">gs</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">st</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">ss</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="nx">sst</span> <span class="o">:=</span> <span class="nx">st</span><span class="p">.</span><span class="nx">SpeciesTree</span><span class="p">()</span>
+	<span class="nx">lm</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">LcaMap</span><span class="p">(</span><span class="nx">gt</span><span class="p">,</span> <span class="nx">sst</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">sn</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">lm</span><span class="p">.</span><span class="nx">Map</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">gt</span><span class="p">.</span><span class="nx">Nodes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">Name</span><span class="p">,</span> <span class="nx">sn</span><span class="p">.</span><span class="nx">Name</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">gt</span><span class="p">.</span><span class="nx">Nodes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">Name</span> <span class="o">!=</span> <span class="nx">sn</span><span class="p">.</span><span class="nx">Name</span> <span class="p">{</span>
+			<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="s">&quot;Incorrect LCA!&quot;</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="nx">dup</span><span class="p">,</span> <span class="nx">loss</span><span class="p">,</span> <span class="nx">dc</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">BinaryCost</span><span class="p">(</span><span class="nx">gt</span><span class="p">,</span> <span class="nx">sst</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">dup</span><span class="p">,</span> <span class="nx">loss</span><span class="p">,</span> <span class="nx">dc</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">dup</span> <span class="o">!=</span> <span class="mi">1</span> <span class="o">||</span> <span class="nx">loss</span> <span class="o">!=</span> <span class="mi">1</span> <span class="o">||</span> <span class="nx">dc</span> <span class="o">!=</span> <span class="mi">1</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="s">&quot;Incorrect binry cost.&quot;</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="cm">/*fmt.Println(st.Size)*/</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-3">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+                <p>for i, n := range st.Nodes {
+fmt.Println(i, n.Name, n.Id)</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>	<span class="cm">/*}*/</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">Test_Nodeex</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">n</span> <span class="o">:=</span> <span class="nx">newNode</span><span class="p">()</span>
+	<span class="nx">pre</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+	<span class="nx">pre</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="mi">11</span>
+	<span class="nx">pre</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="mi">21</span>
+	<span class="nx">n</span><span class="p">.</span><span class="nx">Ext</span> <span class="p">=</span> <span class="nx">pre</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-4">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+                <p>n.Ext = append(n.Ext, 31) // doesn&rsquo;t work</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>	<span class="nx">p</span> <span class="o">:=</span> <span class="nx">n</span><span class="p">.</span><span class="nx">Ext</span><span class="p">.([]</span><span class="kt">int</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">Test_RF</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">gs</span> <span class="o">:=</span> <span class="s">&quot;(((1,2),(3,4)),(5,6))&quot;</span>
+    <span class="nx">ss</span> <span class="o">:=</span> <span class="s">&quot;(((1,3),(2,6)),(4,5))&quot;</span>
+    <span class="nx">gt</span><span class="p">,</span><span class="nx">err</span>  <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">gs</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+    <span class="nx">st</span><span class="p">,</span><span class="nx">err</span>  <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">ss</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+    <span class="nx">rf</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">RF</span><span class="p">(</span><span class="nx">gt</span><span class="p">,</span> <span class="nx">st</span><span class="p">.</span><span class="nx">SpeciesTree</span><span class="p">())</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+    <span class="k">if</span> <span class="nx">rf</span> <span class="o">!=</span> <span class="mi">4</span> <span class="p">{</span>
+        <span class="nx">t</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="s">&quot;Incorrect RF&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">Test_RF2</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">gs</span> <span class="o">:=</span> <span class="s">&quot;(((1,2),(3,4)),(5,6))&quot;</span>
+    <span class="nx">ss</span> <span class="o">:=</span> <span class="s">&quot;(((1,3),(2,4)),(6,5))&quot;</span>
+    <span class="nx">gt</span><span class="p">,</span><span class="nx">err</span>  <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">gs</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+    <span class="nx">st</span><span class="p">,</span><span class="nx">err</span>  <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">ss</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+    <span class="nx">rf</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">RF</span><span class="p">(</span><span class="nx">gt</span><span class="p">,</span> <span class="nx">st</span><span class="p">.</span><span class="nx">SpeciesTree</span><span class="p">())</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+    <span class="k">if</span> <span class="nx">rf</span> <span class="o">!=</span> <span class="mi">2</span> <span class="p">{</span>
+        <span class="nx">t</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="s">&quot;Incorrect RF&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</pre></div>
+            </td>
+          </tr>
+          
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

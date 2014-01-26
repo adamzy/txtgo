@@ -17,15 +17,25 @@ type Taxonmap map[string]*Node
 
 // Maybe using regexp is not fast enough.
 // TODO Write a native one.
-func tokenize(s string) []string {
+func tokenize3(s string) []string {
 	s = strings.Replace(s, " ", "", -1)
 	reg := `[\(\),;:]|[^\(\),;:]+`
 	re := regexp.MustCompile(reg)
 	return re.FindAllString(s, -1)
 }
 
-// Don't know which one is faster
 func tokenize2(s string) []string {
+	s = strings.Replace(s, " ", "", -1)
+	s = strings.Replace(s, ",", " , ", -1)
+	s = strings.Replace(s, "(", " ( ", -1)
+	s = strings.Replace(s, ")", " ) ", -1)
+	s = strings.Replace(s, ":", " : ", -1)
+	s = strings.Replace(s, ";", " ; ", -1)
+	return strings.Fields(s)
+}
+
+// This one seems faster.
+func tokenize(s string) []string {
 	s = strings.Replace(s, " ", "", -1)
 	r := strings.NewReplacer("(", " ( ", ")", " ) ", ":", " : ", ";", " ; ", ",", " , ")
 	return strings.Fields(r.Replace(s))
@@ -104,14 +114,14 @@ func (t *Tree) UpdateInfo() {
 
 // Update everything of a tree from tree.Node,
 // including tree.Nodes, size, node.id, level.
-// Useful after tree was edited manually
+// Useful after the tree was manually edited 
 func (t *Tree) Update() {
 	t.Nodes = t.Node.Post2List()
 	t.Size = len(t.Nodes)
 	t.UpdateInfo()
 }
 
-// A tree is binary tree <==> every internal node has two children.
+// A tree is binary tree <=> every internal node has two children.
 // Overwrite node.IsBinary method.
 func (t *Tree) IsBinary() bool {
 	for i := range t.Nodes {

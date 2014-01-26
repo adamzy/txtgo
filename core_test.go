@@ -97,3 +97,43 @@ func Test_Nodeex(t *testing.T) {
 	p := n.Ext.([]int)
 	fmt.Println(p)
 }
+
+func Test_RF(t *testing.T) {
+    gs := "(((1,2),(3,4)),(5,6))"
+    ss := "(((1,3),(2,6)),(4,5))"
+    gt,err  := Make(gs)
+	if err != nil {
+		fmt.Println(err)
+	}
+    st,err  := Make(ss)
+	if err != nil {
+		fmt.Println(err)
+	}
+    rf, err := RF(gt, st.SpeciesTree())
+	if err != nil {
+		fmt.Println(err)
+	}
+    if rf != 4 {
+        t.Fatal("Incorrect RF")
+    }
+}
+
+func Test_RF2(t *testing.T) {
+    gs := "(((1,2),(3,4)),(5,6))"
+    ss := "(((1,3),(2,4)),(6,5))"
+    gt,err  := Make(gs)
+	if err != nil {
+		fmt.Println(err)
+	}
+    st,err  := Make(ss)
+	if err != nil {
+		fmt.Println(err)
+	}
+    rf, err := RF(gt, st.SpeciesTree())
+	if err != nil {
+		fmt.Println(err)
+	}
+    if rf != 2 {
+        t.Fatal("Incorrect RF")
+    }
+}

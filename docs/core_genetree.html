@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>core_genetree.go</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="gocco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <div id="jump_to">
+        Jump To &hellip;
+        <div id="jump_wrapper">
+          <div id="jump_page">
+              
+              <a class="source" href="core_binaryreconcile.html">
+                  core_binaryreconcile.go
+              </a>
+              
+              <a class="source" href="core_genetree.html">
+                  core_genetree.go
+              </a>
+              
+              <a class="source" href="core_node.html">
+                  core_node.go
+              </a>
+              
+              <a class="source" href="core_rf.html">
+                  core_rf.go
+              </a>
+              
+              <a class="source" href="core_speciestree.html">
+                  core_speciestree.go
+              </a>
+              
+              <a class="source" href="core_test.html">
+                  core_test.go
+              </a>
+              
+              <a class="source" href="core_tree.html">
+                  core_tree.go
+              </a>
+              
+              <a class="source" href="refine_linearrefinegt.html">
+                  refine_linearrefinegt.go
+              </a>
+              
+              <a class="source" href="refine_test.html">
+                  refine_test.go
+              </a>
+              
+              <a class="source" href="util_contract.html">
+                  util_contract.go
+              </a>
+              
+              <a class="source" href="util_prune.html">
+                  util_prune.go
+              </a>
+              
+              <a class="source" href="util_simu.html">
+                  util_simu.go
+              </a>
+              
+              <a class="source" href="util_test.html">
+                  util_test.go
+              </a>
+              
+          </div>
+        </div>
+      </div>
+    
+    <table cellpadding="0" cellspacing="0">
+      <thead>
+        <tr>
+          <th class="docs">
+            <h1>
+                core_genetree.go
+            </h1>
+          </th>
+          <th class="code">
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+          
+          <tr id="section-1">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+                
+            </td>
+            <td class="code">
+                <div class="highlight"><pre><span class="kn">package</span> <span class="nx">tree</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&quot;errors&quot;</span>
+<span class="p">)</span>
+
+<span class="cm">/*type GeneTree struct {*/</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-2">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+                <p>*Tree
+Map []*Node
+}</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre><span class="kd">type</span> <span class="nx">Lcamap</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">G</span>   <span class="o">*</span><span class="nx">Tree</span>
+	<span class="nx">S</span>   <span class="o">*</span><span class="nx">SpeciesTree</span>
+	<span class="nx">Map</span> <span class="p">[]</span><span class="o">*</span><span class="nx">Node</span>
+<span class="p">}</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-3">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+                <p>Assume that every internal genetree node has at least two children</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre><span class="kd">func</span> <span class="nx">LcaMap</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">Tree</span><span class="p">,</span> <span class="nx">st</span> <span class="o">*</span><span class="nx">SpeciesTree</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">Lcamap</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">maps</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">genLcaMap</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">st</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="nx">Lcamap</span><span class="p">{</span><span class="nx">G</span><span class="p">:</span> <span class="nx">t</span><span class="p">,</span> <span class="nx">S</span><span class="p">:</span> <span class="nx">st</span><span class="p">,</span> <span class="nx">Map</span><span class="p">:</span> <span class="nx">maps</span><span class="p">},</span> <span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">genLcaMap</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">Tree</span><span class="p">,</span> <span class="nx">st</span> <span class="o">*</span><span class="nx">SpeciesTree</span><span class="p">)</span> <span class="p">([]</span><span class="o">*</span><span class="nx">Node</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">taxon</span> <span class="o">:=</span> <span class="nx">st</span><span class="p">.</span><span class="nx">Taxon</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-4">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+                <p>fmt.Println(taxon)</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>	<span class="nx">lca</span> <span class="o">:=</span> <span class="nx">st</span><span class="p">.</span><span class="nx">Lca</span>
+	<span class="nx">lcamap</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="o">*</span><span class="nx">Node</span><span class="p">,</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Size</span><span class="p">)</span>
+
+	<span class="k">for</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">n</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Nodes</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="nx">n</span><span class="p">.</span><span class="nx">IsLeaf</span><span class="p">()</span> <span class="p">{</span>
+			<span class="nx">sn</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">taxon</span><span class="p">[</span><span class="nx">n</span><span class="p">.</span><span class="nx">Name</span><span class="p">]</span>
+			<span class="k">if</span> <span class="p">!</span><span class="nx">ok</span> <span class="p">{</span>
+				<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="s">&quot;Cannot find taxa &#39;&quot;</span> <span class="o">+</span> <span class="nx">n</span><span class="p">.</span><span class="nx">Name</span> <span class="o">+</span> <span class="s">&quot;&#39; in species tree.&quot;</span><span class="p">)</span>
+			<span class="p">}</span>
+			<span class="nx">lcamap</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">=</span> <span class="nx">sn</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="nx">sn</span> <span class="o">:=</span> <span class="nx">lca</span><span class="p">(</span><span class="nx">lcamap</span><span class="p">[</span><span class="nx">n</span><span class="p">.</span><span class="nx">Children</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">Id</span><span class="p">],</span> <span class="nx">lcamap</span><span class="p">[</span><span class="nx">n</span><span class="p">.</span><span class="nx">Children</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">Id</span><span class="p">])</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-5">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+                <p>println(&ldquo;lca: ~~ &ldquo;, lcamap[n.Children[0].Id].Name, lcamap[n.Children[1].Id].Name, sn.Name)</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>			<span class="k">for</span> <span class="nx">j</span> <span class="o">:=</span> <span class="mi">2</span><span class="p">;</span> <span class="nx">j</span> <span class="p">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="nx">n</span><span class="p">.</span><span class="nx">Children</span><span class="p">);</span> <span class="nx">j</span><span class="o">++</span> <span class="p">{</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-6">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+                <p>println(sn.Name)
+ssn := sn</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>				<span class="nx">sn</span> <span class="p">=</span> <span class="nx">lca</span><span class="p">(</span><span class="nx">sn</span><span class="p">,</span> <span class="nx">lcamap</span><span class="p">[</span><span class="nx">n</span><span class="p">.</span><span class="nx">Children</span><span class="p">[</span><span class="nx">j</span><span class="p">].</span><span class="nx">Id</span><span class="p">])</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-7">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+                <p>println(&ldquo;lca: ~~ &ldquo;, ssn.Name, lcamap[n.Children[j].Id].Name, sn.Name)</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>			<span class="p">}</span>
+			<span class="nx">lcamap</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">=</span> <span class="nx">sn</span>
+		<span class="p">}</span></pre></div>
+            </td>
+          </tr>
+          
+          <tr id="section-8">
+            <td class="docs">
+              <div class="pilwrap">
+                  <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+                <p>println(&ldquo;lca: &ldquo;, n.Name, lcamap[i].Name)</p>
+
+            </td>
+            <td class="code">
+                <div class="highlight"><pre>	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">lcamap</span><span class="p">,</span> <span class="kc">nil</span>
+<span class="p">}</span>
+
+</pre></div>
+            </td>
+          </tr>
+          
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
