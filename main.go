@@ -29,8 +29,8 @@ Usage:
 Options:
     -g      gene tree file    
     -s      species tree file
-    -m      method [mutation/duploss/lossdup/affine]
-    -wdup   weight for duplication, only for affine
+    -m      method [mutation/duploss/lossdup/weighted/affine]
+    -wdup   weight for duplication, only for weighted/affine
     -wloss  weight for loss, only for affine
     -V      show version
 Example:
@@ -67,13 +67,20 @@ func main() {
 	var _m int
 	switch *m {
 	case "mutation":
+        //println("got mu")
 		_m = 1
 	case "duploss":
+        //println("got dl")
 		_m = 0
 	case "lossdup":
+        //println("got ld")
 		_m = 2
-	case "affine":
+	case "weighted":
+        //println("got af")
 		_m = 3
+	case "affine":
+        //println("got af")
+		_m = 4
 	default:
 		log.Fatal("Invalid method.")
 	}
