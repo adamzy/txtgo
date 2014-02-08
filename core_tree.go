@@ -114,7 +114,7 @@ func (t *Tree) UpdateInfo() {
 
 // Update everything of a tree from tree.Node,
 // including tree.Nodes, size, node.id, level.
-// Useful after the tree was manually edited 
+// Useful after the tree was manually edited
 func (t *Tree) Update() {
 	t.Nodes = t.Node.Post2List()
 	t.Size = len(t.Nodes)

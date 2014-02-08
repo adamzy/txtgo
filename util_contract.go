@@ -1,11 +1,11 @@
 package tree
 
 import (
-    "math/rand"
+	"math/rand"
 	"time"
 )
 
- func (t *Tree) ContractByLength(length float64) {
+func (t *Tree) ContractByLength(length float64) {
 	d := make([]int, t.Size)
 	for _, n := range t.Nodes {
 		if n.IsInternal() {
@@ -37,7 +37,7 @@ import (
 	// avoid root
 	for i := 0; i < t.Size-1; i++ {
 		n := t.Nodes[i]
-        if !n.IsLeaf() && n.Length < length {
+		if !n.IsLeaf() && n.Length < length {
 			Contract(n)
 		}
 	}

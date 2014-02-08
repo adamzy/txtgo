@@ -51,23 +51,23 @@ func Test_Lineartimegt(t *testing.T) {
 }
 
 func Test_Mutation1(t *testing.T) {
-    gs := "(1,1,7,7,8,8)"
-    ss := "(((((((1,2),3),4),5),6),7),8);"
+	gs := "(1,1,7,7,8,8)"
+	ss := "(((((((1,2),3),4),5),6),7),8);"
 
-    gt, _ := Make(gs)
-    st, _ :=Make(ss)
-    sst := st.SpeciesTree()
-    RefineGt(gt, sst, 1)
-    fmt.Println(gt)
+	gt, _ := Make(gs)
+	st, _ := Make(ss)
+	sst := st.SpeciesTree()
+	RefineGt(gt, sst, 1)
+	fmt.Println(gt)
 	fmt.Println(BinaryCost(gt, sst))
-    gt1, _ := Make(gs)
-    RefineGt(gt1, sst, 3, 3, 1)
-    fmt.Println(gt1)
+	gt1, _ := Make(gs)
+	RefineGt(gt1, sst, 3, 3, 1)
+	fmt.Println(gt1)
 	fmt.Println(BinaryCost(gt1, sst))
 }
 
 func Test_Weight(t *testing.T) {
-	niter := 100000
+	niter := 1000
 	crate := 0.8
 	ntaxon := 40
 	nleaves := 80
@@ -76,7 +76,7 @@ func Test_Weight(t *testing.T) {
 		gt := SimuTreeRandomTaxon(nleaves, ntaxon)
 		gt.RandomContract(crate)
 		//st := SimuTree(ntaxon)
-        st := LineTree2(ntaxon)
+		st := LineTree2(ntaxon)
 		gs := gt.String()
 		ss := st.String()
 		//fmt.Println(":")
@@ -108,21 +108,21 @@ func Test_Weight(t *testing.T) {
 			t.Log(err)
 		}
 		sst2 := st2.SpeciesTree()
-        //RefineGt(gt2, sst2, 3, 2001, 1000)
-        //RefineGt(gt2, sst2, 3, 3000, 1)
-        RefineGt(gt2, sst2, 3, 3, 1)
+		//RefineGt(gt2, sst2, 3, 2001, 1000)
+		//RefineGt(gt2, sst2, 3, 3000, 1)
+		RefineGt(gt2, sst2, 3, 3, 1)
 		d2, l2, dc2, err := BinaryCost(gt2, sst2)
 		if err != nil {
 			t.Log(err)
 		}
 
-        if d1+l1 != d2+l2 {
-        //if d1 != d2 || l1 != l2 {
+		if d1+l1 != d2+l2 {
+			//if d1 != d2 || l1 != l2 {
 			fmt.Println(gs)
 			fmt.Println(ss)
-		    fmt.Println(gt1)
-		    fmt.Println(gt2)
-            fmt.Println(d1, l1, dc1)
+			fmt.Println(gt1)
+			fmt.Println(gt2)
+			fmt.Println(d1, l1, dc1)
 			fmt.Println(d2, l2, dc2)
 			t.Fatal("Not equal, fail!")
 			//panic("Fail!!!")
@@ -130,12 +130,12 @@ func Test_Weight(t *testing.T) {
 	}
 
 	for i := 0; i < niter/100; i++ {
-        print("~")
-        for j:=0; j< 100; j++ {
-		testone()
-        }
+		print("~")
+		for j := 0; j < 100; j++ {
+			testone()
+		}
 	}
-    println()
+	println()
 }
 
 func test_Integer(t *testing.T) {
@@ -180,7 +180,7 @@ func test_Integer(t *testing.T) {
 		}
 		sst2 := st2.SpeciesTree()
 		//RefineGt(gt2, sst2, 3, 2001, 1000)
-        RefineGt(gt2, sst2, 3, 4, 1)
+		RefineGt(gt2, sst2, 3, 4, 1)
 		d2, l2, dc2, err := BinaryCost(gt2, sst2)
 		if err != nil {
 			t.Log(err)
@@ -196,36 +196,35 @@ func test_Integer(t *testing.T) {
 		}
 		sst3 := st3.SpeciesTree()
 		//RefineGt(gt2, sst2, 3, 2001, 1000)
-        RefineGt(gt3, sst3, 3, 4.1, 1)
+		RefineGt(gt3, sst3, 3, 4.1, 1)
 		d3, l3, dc3, err := BinaryCost(gt3, sst3)
 		if err != nil {
 			t.Log(err)
 		}
 
-
-        f := func(a,b int) float64{
-            return float64(a)*2.1+float64(b)
-        }
-        //if d1+l1 != d2+l2 {
-        //if d1 != d2 || l1 != l2 {
-        if f(d1,l1) != f(d3,l3) && f(d2,l2)!=f(d3,l3){
+		f := func(a, b int) float64 {
+			return float64(a)*2.1 + float64(b)
+		}
+		//if d1+l1 != d2+l2 {
+		//if d1 != d2 || l1 != l2 {
+		if f(d1, l1) != f(d3, l3) && f(d2, l2) != f(d3, l3) {
 			fmt.Println(gs)
 			fmt.Println(ss)
-		    fmt.Println(gt1)
-		    fmt.Println(gt2)
-		    fmt.Println(gt3)
-            fmt.Println(d1, l1, dc1)
+			fmt.Println(gt1)
+			fmt.Println(gt2)
+			fmt.Println(gt3)
+			fmt.Println(d1, l1, dc1)
 			fmt.Println(d2, l2, dc2)
 			fmt.Println(d3, l3, dc3)
 			//t.Log("Not equal, fail!")
 			//panic("Fail!!!")
-            t.Fatal("Not equal, fail!")
+			t.Fatal("Not equal, fail!")
 		}
 	}
 
 	for i := 0; i < niter; i++ {
-        //print("~")
+		//print("~")
 		testone()
 	}
-    println()
+	println()
 }

@@ -47,18 +47,18 @@ func SimuTree(size int) *Tree {
 
 // TODO Check this
 func YuleTree(size int) *Tree {
-    t := simuTree(size)
+	t := simuTree(size)
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 
-    p := r.Perm(size)
-    i := 0
-    for _, n:= range t.Nodes {
-        if n.IsLeaf() {
-            n.Name = strconv.Itoa(p[i])
-            i++
-        }
-    }
-    return t
+	p := r.Perm(size)
+	i := 0
+	for _, n := range t.Nodes {
+		if n.IsLeaf() {
+			n.Name = strconv.Itoa(p[i])
+			i++
+		}
+	}
+	return t
 }
 
 func SimuTreeRandomTaxon(size, ntaxon int) *Tree {
@@ -76,43 +76,43 @@ func SimuTreeRandomTaxon(size, ntaxon int) *Tree {
 }
 
 //func (t *Tree) RandomContract(rate float64) {
-	//r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	//d := make([]int, t.Size)
-	//for _, n := range t.Nodes {
-		//if n.IsInternal() {
-			//for j, c := range n.Children {
-				//d[c.Id] = j
-			//}
-		//}
-	//}
+//r := rand.New(rand.NewSource(time.Now().UnixNano()))
+//d := make([]int, t.Size)
+//for _, n := range t.Nodes {
+//if n.IsInternal() {
+//for j, c := range n.Children {
+//d[c.Id] = j
+//}
+//}
+//}
 
-	//removeChild := func(n *Node, i int) {
-		//a := n.Children
+//removeChild := func(n *Node, i int) {
+//a := n.Children
 
-		//// update the index of last child
-		//d[a[len(a)-1].Id] = i // important!
+//// update the index of last child
+//d[a[len(a)-1].Id] = i // important!
 
-		//a[len(a)-1], a[i], a = nil, a[len(a)-1], a[:len(a)-1]
-		//n.Children = a
-	//}
+//a[len(a)-1], a[i], a = nil, a[len(a)-1], a[:len(a)-1]
+//n.Children = a
+//}
 
-	//Contract := func(n *Node) {
-		//f := n.Father
-		//cn := n.Children
-		//removeChild(n.Father, d[n.Id])
-		//for _, c := range cn {
-			//f.AddChild(c)
-		//}
-	//}
+//Contract := func(n *Node) {
+//f := n.Father
+//cn := n.Children
+//removeChild(n.Father, d[n.Id])
+//for _, c := range cn {
+//f.AddChild(c)
+//}
+//}
 
-	//// avoid root
-	//for i := 0; i < t.Size-1; i++ {
-		//n := t.Nodes[i]
-		//if !n.IsLeaf() && r.Float64() < rate {
-			//Contract(n)
-		//}
-	//}
-	//t.Update()
+//// avoid root
+//for i := 0; i < t.Size-1; i++ {
+//n := t.Nodes[i]
+//if !n.IsLeaf() && r.Float64() < rate {
+//Contract(n)
+//}
+//}
+//t.Update()
 //}
 
 func (t *Tree) AssignLeafName() {
@@ -126,55 +126,55 @@ func (t *Tree) AssignLeafName() {
 }
 
 func lineTree(nodes []*Node) *Tree {
-    l := nodes[0]
-    for i:=1; i<len(nodes); i++ {
-        r := nodes[i]
-        n := newNode()
-        n.AddChild(l)
-        n.AddChild(r)
-        l = n
-    }
- 	t := new(Tree)
+	l := nodes[0]
+	for i := 1; i < len(nodes); i++ {
+		r := nodes[i]
+		n := newNode()
+		n.AddChild(l)
+		n.AddChild(r)
+		l = n
+	}
+	t := new(Tree)
 	t.Node = l
 	t.Update()
 	return t
 }
 
 func LineTree(nleaves int) *Tree {
-    nodes := make([]*Node, nleaves)
-    for i, _ := range nodes {
-        n := newNode()
-        n.Name = "a" + strconv.Itoa(i)
-        nodes[i] = n
-    }
-    return lineTree(nodes)
+	nodes := make([]*Node, nleaves)
+	for i, _ := range nodes {
+		n := newNode()
+		n.Name = "a" + strconv.Itoa(i)
+		nodes[i] = n
+	}
+	return lineTree(nodes)
 }
 
 func LineTree2(nleaves int) *Tree {
-    nodes := make([]*Node, nleaves)
-    for i, _ := range nodes {
-        n := newNode()
-        n.Name = strconv.Itoa(i)
-        nodes[i] = n
-    }
-    return lineTree(nodes)
+	nodes := make([]*Node, nleaves)
+	for i, _ := range nodes {
+		n := newNode()
+		n.Name = strconv.Itoa(i)
+		nodes[i] = n
+	}
+	return lineTree(nodes)
 }
 
 func ExampleTree(nleaves int) *Tree {
-    nodes := make([]*Node, nleaves)
-    for i, _ := range nodes {
-        n := newNode()
-        a := newNode()
-        b := newNode()
-        c := newNode()
-        a.Name = "a" + strconv.Itoa(0)
-        b.Name = "a" + strconv.Itoa(i)
-        c.Name = "a" + strconv.Itoa(nleaves-1)
-        n.AddChild(a)
-        n.AddChild(b)
-        n.AddChild(c)
+	nodes := make([]*Node, nleaves)
+	for i, _ := range nodes {
+		n := newNode()
+		a := newNode()
+		b := newNode()
+		c := newNode()
+		a.Name = "a" + strconv.Itoa(0)
+		b.Name = "a" + strconv.Itoa(i)
+		c.Name = "a" + strconv.Itoa(nleaves-1)
+		n.AddChild(a)
+		n.AddChild(b)
+		n.AddChild(c)
 
-        nodes[i] = n
-    }
-    return lineTree(nodes)
+		nodes[i] = n
+	}
+	return lineTree(nodes)
 }

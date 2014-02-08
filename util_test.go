@@ -46,9 +46,9 @@ func Test_Simu(t *testing.T) {
 }
 
 func Test_Linetree(t *testing.T) {
-    size := 5
-    tree := LineTree(size)
-    fmt.Println(tree)
-    tree2 := ExampleTree(size)
-    fmt.Println(tree2)
+	size := 5
+	tree := LineTree(size)
+	fmt.Println(tree)
+	tree2 := ExampleTree(size)
+	fmt.Println(tree2)
 }
