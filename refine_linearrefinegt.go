@@ -5,32 +5,41 @@ import (
 	"sort"
 )
 
+type InvalidMethodError struct {
+    Method string
+}
+
+func (err InvalidMethodError) Error () string {
+    return "Invalid method: " + err.Method
+}
+
 var (
-	NotEnoughWeights = errors.New("Not enough weight parameters.")
+	NotEnoughWeightsError = errors.New("Not enough weight parameters.")
 )
 
 // A dispatch function
-func RefineGt(gt *Tree, st *SpeciesTree, method int, weights ...float64) error {
+func RefineGt(gt *Tree, st *SpeciesTree, method string, weights ...float64) error {
 	var refine func(*Node)
 	switch method {
-	case 0:
+	case "duploss":
 		refine = minDupThenLoss
-	case 1:
+	case "mutation":
 		refine = minDupPlusLoss
-	case 2:
+	case "lossdup":
 		refine = minLossThenDup
-	case 3:
+	case "weighted":
 		if len(weights) < 2 {
-			return NotEnoughWeights
+			return NotEnoughWeightsError
 		}
 		refine = weightedCost(weights[0], weights[1])
-	case 4:
+	case "affine":
 		if len(weights) < 2 {
-			return NotEnoughWeights
+			return NotEnoughWeightsError
 		}
 		refine = affineCost(weights[0], weights[1])
 	default:
-		panic("Wrong method")
+        // This shouldn't happen.
+        return InvalidMethodError{method}
 	}
 	linearRefineGt(gt, st, refine)
 	return nil

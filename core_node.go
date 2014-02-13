@@ -41,7 +41,6 @@ func (n *Node) toByte(b *bytes.Buffer, showlength bool) {
 	writeNode := func(n *Node) {
 		b.WriteString(n.Name)
 		if showlength {
-			//b.WriteByte(byte(':'))
 			b.WriteRune(':')
 			length := strconv.FormatFloat(n.Length, 'f', -1, 64)
 			b.WriteString(length)
@@ -50,16 +49,12 @@ func (n *Node) toByte(b *bytes.Buffer, showlength bool) {
 
 	children := n.Children
 	if len(children) > 0 {
-		//b.WriteByte(byte('('))
 		b.WriteRune('(')
 		children[0].toByte(b, showlength)
 		for i := 1; i < len(children); i++ {
-			//b.WriteByte(byte(','))
 			b.WriteRune(',')
-			//writeNode(children[i])
 			children[i].toByte(b, showlength)
 		}
-		//b.WriteByte(byte(')'))
 		b.WriteRune(')')
 	}
 	writeNode(n)
@@ -86,7 +81,6 @@ func leftmost(node *Node) *Node {
 
 // Postorder iterate the tree and put nodes into a list
 func (node *Node) Post2List() []*Node {
-	//var nl []*Node
 	nl := make([]*Node, 0, 20)
 
 	// A function that appends node with its descandent to nl
