@@ -10,7 +10,7 @@ import (
     "os"
 )
 
-const version = "20131027"
+const version = "20140210"
 
 var (
 	gf     = flag.String("g", "", "gene tree file")
@@ -31,7 +31,7 @@ Options:
     -s      species tree file
     -m      method [mutation/duploss/lossdup/weighted/affine]
     -wdup   weight for duplication, only for weighted/affine
-    -wloss  weight for loss, only for affine
+    -wloss  weight for loss, only for weighted/affine
     -V      show version
 Example:
     %s -g gene_tree -s species_tree -m mutation
@@ -63,7 +63,8 @@ func main() {
 
 	ss := read(*sf)
 	gs := read(*gf)
-
+    _wdup := *wdup
+    _wloss := *wloss
 	var _m int
 	switch *m {
 	case "mutation":
@@ -78,9 +79,10 @@ func main() {
 	case "weighted":
         //println("got af")
 		_m = 3
+    	_wdup = *wdup + 2*(*wloss)
 	case "affine":
         //println("got af")
-		_m = 4
+		_m = 4	
 	default:
 		log.Fatal("Invalid method.")
 	}
@@ -93,8 +95,7 @@ func main() {
 		log.Fatal("wdup must be non-negative.")
 	}
 
-	_wdup := *wdup + 2*(*wloss)
-	_wdc := *wloss
+
 
 	gt, err := T.Make(gs)
 	if err != nil {
@@ -110,7 +111,7 @@ func main() {
     if !sst.IsBinary() {
         log.Fatal("Species must be binary.")
     }
-	T.RefineGt(gt, sst, _m, _wdup, _wdc)
+	T.RefineGt(gt, sst, _m, _wdup, _wloss)
 	dup, loss, _, err := binaryCost(gt, sst)
 	if err != nil {
 		log.Fatal(err)
