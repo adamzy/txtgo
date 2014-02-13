@@ -3,13 +3,13 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"io/ioutil"
+	"log"
 	"os"
 	T "txtgo/tree"
 )
 
-const version = "20140210"
+const version = "20140213"
 
 var (
 	gf          = flag.String("g", "", "gene tree file")
@@ -52,9 +52,9 @@ func read(fname string) string {
 }
 
 func checkerror(err error) {
-    if err != nil {
-        log.Fatal(err)
-    }
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func main() {
@@ -67,23 +67,12 @@ func main() {
 
 	ss := read(*sf)
 	gs := read(*gf)
+
 	_wdup := *wdup
 	_wloss := *wloss
-	var _m int
-	switch *m {
-	case "mutation":
-		_m = 1
-	case "duploss":
-		_m = 0
-	case "lossdup":
-		_m = 2
-	case "weighted":
-		_m = 3
+
+	if *m == "weighted" {
 		_wdup = *wdup + 2*(*wloss)
-	case "affine":
-		_m = 4
-	default:
-		log.Fatal("Invalid method.")
 	}
 
 	if *wdup <= 0 {
@@ -95,19 +84,20 @@ func main() {
 	}
 
 	gt, err := T.Make(gs)
-    checkerror(err)
-		st, err := T.Make(ss)
-        checkerror(err)
-	sst := st.SpeciesTree()
+	checkerror(err)
+	st, err := T.Make(ss)
+	checkerror(err)
+	sst, err := st.SpeciesTree()
+	checkerror(err)
 	if !sst.IsBinary() {
 		log.Fatal("Species must be binary.")
 	}
 
-    err = T.RefineGt(gt, sst, _m, _wdup, _wloss)
-    checkerror(err)
+	err = T.RefineGt(gt, sst, *m, _wdup, _wloss)
+	checkerror(err)
 
 	dup, loss, _, err := binaryCost(gt, sst)
-    checkerror(err)
+	checkerror(err)
 
 	fmt.Println("Refined Gene Tree:")
 	fmt.Println(gt)
@@ -131,6 +121,7 @@ func binaryCost(gt *T.Tree, st *T.SpeciesTree) (dup, loss, dc int, err error) {
 			dc += ld
 			if m == l || m == r {
 				dup++
+				// Append "*" to indicate the duplication node.
 				n.Name = n.Name + "*"
 			} else {
 				loss -= 2
