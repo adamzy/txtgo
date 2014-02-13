@@ -4,25 +4,24 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	T "txtgo/tree"
-	//"strings"
 	"io/ioutil"
-    "os"
+	"os"
+	T "txtgo/tree"
 )
 
 const version = "20140210"
 
 var (
-	gf     = flag.String("g", "", "gene tree file")
-	sf     = flag.String("s", "", "species tree file")
-	m = flag.String("m", "mutation", "method = mutation/duploss/lossdup/affine")
-	wdup   = flag.Float64("wdup", 1.0, "weight of duplication, if method=affine")
-	wloss  = flag.Float64("wloss", 1.0, "weight of loss, if method=affine")
-    showversion = flag.Bool("V", false, "show version")
+	gf          = flag.String("g", "", "gene tree file")
+	sf          = flag.String("s", "", "species tree file")
+	m           = flag.String("m", "mutation", "method = mutation/duploss/lossdup/affine")
+	wdup        = flag.Float64("wdup", 1.0, "weight of duplication, if method=affine")
+	wloss       = flag.Float64("wloss", 1.0, "weight of loss, if method=affine")
+	showversion = flag.Bool("V", false, "show version")
 )
 
 func usage() {
-    s := fmt.Sprintf(`TxT-RGT
+	s := fmt.Sprintf(`TxT-RGT
     version %s
 Usage:
     %s -g gene_tree -s species_tree -m method [-wdup a -wloss b]
@@ -37,52 +36,46 @@ Example:
     %s -g gene_tree -s species_tree -m mutation
     %s -g gene_tree -s species_tree -m affine -wdup 2 -wloss 1
 `, version, os.Args[0], os.Args[0], os.Args[0])
-    fmt.Print(s)
+	fmt.Print(s)
 }
 
 func read(fname string) string {
-    if fname == "" {
-        flag.Usage()
-        os.Exit(1)
-    }
+	if fname == "" {
+		flag.Usage()
+		os.Exit(1)
+	}
 	data, err := ioutil.ReadFile(fname)
 	if err != nil {
-		//println("Cannot open", fname)
 		log.Fatal(err)
 	}
 	return string(data)
 }
 
 func main() {
-    flag.Usage = usage
+	flag.Usage = usage
 	flag.Parse()
-    if *showversion {
-        fmt.Println("Version:", version)
-        return
-    }
+	if *showversion {
+		fmt.Println("Version:", version)
+		return
+	}
 
 	ss := read(*sf)
 	gs := read(*gf)
-    _wdup := *wdup
-    _wloss := *wloss
+	_wdup := *wdup
+	_wloss := *wloss
 	var _m int
 	switch *m {
 	case "mutation":
-        //println("got mu")
 		_m = 1
 	case "duploss":
-        //println("got dl")
 		_m = 0
 	case "lossdup":
-        //println("got ld")
 		_m = 2
 	case "weighted":
-        //println("got af")
 		_m = 3
-    	_wdup = *wdup + 2*(*wloss)
+		_wdup = *wdup + 2*(*wloss)
 	case "affine":
-        //println("got af")
-		_m = 4	
+		_m = 4
 	default:
 		log.Fatal("Invalid method.")
 	}
@@ -95,8 +88,6 @@ func main() {
 		log.Fatal("wdup must be non-negative.")
 	}
 
-
-
 	gt, err := T.Make(gs)
 	if err != nil {
 		log.Fatal(err)
@@ -105,12 +96,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//st.PruneFromTree(gt)
 	sst := st.SpeciesTree()
-	//_, err = T.LinearRefineGt(gt, st)
-    if !sst.IsBinary() {
-        log.Fatal("Species must be binary.")
-    }
+	if !sst.IsBinary() {
+		log.Fatal("Species must be binary.")
+	}
 	T.RefineGt(gt, sst, _m, _wdup, _wloss)
 	dup, loss, _, err := binaryCost(gt, sst)
 	if err != nil {
@@ -119,12 +108,11 @@ func main() {
 	fmt.Println("Refined Gene Tree:")
 	fmt.Println(gt)
 	fmt.Printf("\nDup: %d, Loss: %d\n", dup, loss)
-	//fmt.Println(method, wdup, wdc)
 }
 
 func binaryCost(gt *T.Tree, st *T.SpeciesTree) (dup, loss, dc int, err error) {
 	lm, err := T.LcaMap(gt, st)
-    
+
 	if err != nil {
 		return 0, 0, 0, err
 	}
@@ -134,11 +122,12 @@ func binaryCost(gt *T.Tree, st *T.SpeciesTree) (dup, loss, dc int, err error) {
 			m := lm.Map[n.Id]
 			l := lm.Map[n.Children[0].Id]
 			r := lm.Map[n.Children[1].Id]
-			loss += (l.Level + r.Level - 2*m.Level)
-			dc += (l.Level + r.Level - 2*m.Level)
+			ld := (l.Level + r.Level - 2*m.Level)
+			loss += ld
+			dc += ld
 			if m == l || m == r {
 				dup++
-                n.Name = n.Name + "*"
+				n.Name = n.Name + "*"
 			} else {
 				loss -= 2
 			}
