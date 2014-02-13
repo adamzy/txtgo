@@ -1,7 +1,6 @@
 package tree
 
 import (
-	"errors"
 	"regexp"
 	"strconv"
 	"strings"
@@ -10,26 +9,32 @@ import (
 type Tree struct {
 	*Node
 	Nodes []*Node
-	//Size  int
+}
+
+type InvalidTreeError struct {
+	TreeString string
+}
+
+func (err InvalidTreeError) Error() string {
+	return "Invalid tree: " + err.TreeString
+}
+
+type InvalidEdgeLengthError struct {
+	EdgeLength string
+}
+
+func (err InvalidEdgeLengthError) Error() string {
+	return "Invalid edge length: " + err.EdgeLength
 }
 
 // Maybe using regexp is not fast enough.
-// TODO Write a native one.
+//
+// **TODO** Write a native one.
 func tokenize3(s string) []string {
 	s = strings.Replace(s, " ", "", -1)
 	reg := `[\(\),;:]|[^\(\),;:]+`
 	re := regexp.MustCompile(reg)
 	return re.FindAllString(s, -1)
-}
-
-func tokenize2(s string) []string {
-	s = strings.Replace(s, " ", "", -1)
-	s = strings.Replace(s, ",", " , ", -1)
-	s = strings.Replace(s, "(", " ( ", -1)
-	s = strings.Replace(s, ")", " ) ", -1)
-	s = strings.Replace(s, ":", " : ", -1)
-	s = strings.Replace(s, ";", " ; ", -1)
-	return strings.Fields(s)
 }
 
 // This one seems faster.
@@ -43,13 +48,12 @@ func tokenize(s string) []string {
 func Make(s string) (*Tree, error) {
 	token := tokenize(s)
 	if len(token) == 0 {
-		return nil, errors.New("Invalid tree.")
+		return nil, InvalidTreeError{s}
 	}
 	t := new(Tree)
 	t.Node = newNode()
 
-	size := 1
-	flag := false
+	var flag bool
 	var n, c *Node
 	n = t.Node
 
@@ -57,7 +61,6 @@ func Make(s string) (*Tree, error) {
 		switch v {
 		case "(":
 			c = newNode()
-			size++
 			n.AddChild(c)
 			n = c
 			flag = false
@@ -66,7 +69,6 @@ func Make(s string) (*Tree, error) {
 			flag = false
 		case ",":
 			c = newNode()
-			size++
 			n.Father.AddChild(c)
 			n = c
 			flag = false
@@ -78,7 +80,7 @@ func Make(s string) (*Tree, error) {
 			if flag {
 				length, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return nil, errors.New("Invalid branch length.")
+					return nil, InvalidTreeError{v}
 				}
 				n.Length = length
 			} else {
@@ -89,17 +91,16 @@ func Make(s string) (*Tree, error) {
 	}
 
 	if t.Node != n {
-		return nil, errors.New("Invalid tree.")
+		return nil, InvalidTreeError{s}
 	}
 
-	//t.Size = size
 	// Update t.Nodes once the tree is successfully built.
 	t.Nodes = t.Post2List()
 	t.UpdateInfo()
 	return t, nil
 }
 
-// Update node.Level and node.Id for tree
+// Update node.Level and node.Id for tree `t`
 func (t *Tree) UpdateInfo() {
 	size := len(t.Nodes)
 	t.Node.Level = 0
@@ -111,17 +112,16 @@ func (t *Tree) UpdateInfo() {
 	}
 }
 
-// Update everything of a tree from tree.Node,
-// including tree.Nodes, size, node.id, level.
+// Update everything of a tree from `tree.Node`,
+// including `tree.Nodes, size, node.id, level`.
 // Useful after the tree was manually edited
 func (t *Tree) Update() {
 	t.Nodes = t.Node.Post2List()
-	//t.Size = len(t.Nodes)
 	t.UpdateInfo()
 }
 
 // A tree is binary tree <=> every internal node has two children.
-// Overwrite node.IsBinary method.
+// Overwrite `node.IsBinary` method.
 func (t *Tree) IsBinary() bool {
 	for i := range t.Nodes {
 		n := t.Nodes[i]
@@ -132,21 +132,21 @@ func (t *Tree) IsBinary() bool {
 	return true
 }
 
-// A map that maps taxa to the unique leaf node
+// A map that maps taxa to (one of) the corresponding leaf node
 type Taxonmap map[string]*Node
 
-// TaxonMap return the Taxonmap for a tree, and the uniqueness of its taxon.
+// `TaxonMap` return the `Taxonmap` for a tree, and the uniqueness of its taxon.
 func (t *Tree) TaxonMap() (taxon Taxonmap, unique bool) {
 	taxon = make(Taxonmap, len(t.Nodes))
-    i := 0
+	i := 0
 	for _, n := range t.Nodes {
 		if n.IsLeaf() {
 			taxon[n.Name] = n
-            i++
+			i++
 		}
 	}
-    if i == len(taxon) {
-        unique = true
-    }
-    return
+	if i == len(taxon) {
+		unique = true
+	}
+	return
 }

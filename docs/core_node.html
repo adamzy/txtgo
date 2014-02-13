@@ -1,465 +1,344 @@
-
 <!DOCTYPE html>
 
 <html>
 <head>
-    <title>core_node.go</title>
+  <title>core_node.go</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <link rel="stylesheet" media="all" href="gocco.css" />
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
 </head>
 <body>
   <div id="container">
     <div id="background"></div>
     
-      <div id="jump_to">
-        Jump To &hellip;
-        <div id="jump_wrapper">
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
           <div id="jump_page">
+            
               
               <a class="source" href="core_binaryreconcile.html">
-                  core_binaryreconcile.go
+                core_binaryreconcile.go
               </a>
+            
               
               <a class="source" href="core_genetree.html">
-                  core_genetree.go
+                core_genetree.go
               </a>
+            
               
               <a class="source" href="core_node.html">
-                  core_node.go
+                core_node.go
               </a>
+            
               
               <a class="source" href="core_rf.html">
-                  core_rf.go
+                core_rf.go
               </a>
+            
               
               <a class="source" href="core_speciestree.html">
-                  core_speciestree.go
+                core_speciestree.go
               </a>
+            
               
               <a class="source" href="core_test.html">
-                  core_test.go
+                core_test.go
               </a>
+            
               
               <a class="source" href="core_tree.html">
-                  core_tree.go
+                core_tree.go
               </a>
+            
               
               <a class="source" href="refine_linearrefinegt.html">
-                  refine_linearrefinegt.go
+                refine_linearrefinegt.go
               </a>
+            
+              
+              <a class="source" href="refine_misc.html">
+                refine_misc.go
+              </a>
+            
               
               <a class="source" href="refine_test.html">
-                  refine_test.go
+                refine_test.go
               </a>
+            
+              
+              <a class="source" href="refine_weightgt.html">
+                refine_weightgt.go
+              </a>
+            
+              
+              <a class="source" href="refine_weightgt_test.html">
+                refine_weightgt_test.go
+              </a>
+            
+              
+              <a class="source" href="test_misc.html">
+                test_misc.go
+              </a>
+            
               
               <a class="source" href="util_contract.html">
-                  util_contract.go
+                util_contract.go
               </a>
+            
               
               <a class="source" href="util_prune.html">
-                  util_prune.go
+                util_prune.go
               </a>
+            
               
               <a class="source" href="util_simu.html">
-                  util_simu.go
+                util_simu.go
               </a>
+            
               
               <a class="source" href="util_test.html">
-                  util_test.go
+                util_test.go
               </a>
-              
+            
           </div>
-        </div>
-      </div>
+        </li>
+      </ul>
     
-    <table cellpadding="0" cellspacing="0">
-      <thead>
-        <tr>
-          <th class="docs">
-            <h1>
-                core_node.go
-            </h1>
-          </th>
-          <th class="code">
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-          
-          <tr id="section-1">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-1">&#182;</a>
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>core_node.go</h1>
               </div>
-                
-            </td>
-            <td class="code">
-                <div class="highlight"><pre><span class="kn">package</span> <span class="nx">tree</span>
-
-<span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&quot;strconv&quot;</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-2">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-2">&#182;</a>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-                <p>&ldquo;strings&rdquo;
-&ldquo;errors&rdquo;</p>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">package</span> tree
 
-            </td>
-            <td class="code">
-                <div class="highlight"><pre>	<span class="s">&quot;bytes&quot;</span>
-<span class="p">)</span>
+<span class="hljs-keyword">import</span> (
+	<span class="hljs-string">"bytes"</span>
+	<span class="hljs-string">"strconv"</span>
+)
 
-<span class="kd">type</span> <span class="nx">data</span> <span class="kd">struct</span> <span class="p">{</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-3">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-3">&#182;</a>
+<span class="hljs-keyword">type</span> data <span class="hljs-keyword">struct</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-                <p>built-in values
+              <p>built-in values are
 enough for most cases</p>
 
-            </td>
-            <td class="code">
-                <div class="highlight"><pre>	<span class="nx">Name</span>   <span class="kt">string</span>
-	<span class="nx">Length</span> <span class="kt">float64</span>
-	<span class="nx">Id</span>     <span class="kt">int</span>
-	<span class="nx">Level</span>  <span class="kt">int</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-4">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-4">&#182;</a>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	Name   <span class="hljs-typename">string</span>
+	Length <span class="hljs-typename">float64</span>
+	Id     <span class="hljs-typename">int</span>
+	Level  <span class="hljs-typename">int</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-                <p>Ext: for any runtime extension.
-e.g. one can use node.Ext = []int{1,2,3},
+              <p><code>Ext</code>: for any runtime extension.
+e.g. one can use <code>node.Ext = []int{1,2,3}</code>,
 to bind extra data to that node.
-The data can be accessed by node.Ext.(type),
-e.g. a := node.Ext.([]int).</p>
+The data can be accessed by <code>node.Ext.(type)</code>,
+e.g. <code>node.Ext.([]int)</code>.</p>
 
-            </td>
-            <td class="code">
-                <div class="highlight"><pre>	<span class="nx">Ext</span> <span class="kd">interface</span><span class="p">{}</span>
-<span class="p">}</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	Ext <span class="hljs-keyword">interface</span>{}
+}
 
-<span class="kd">type</span> <span class="nx">Node</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="o">*</span><span class="nx">data</span>
-	<span class="nx">Father</span>   <span class="o">*</span><span class="nx">Node</span>
-	<span class="nx">Children</span> <span class="p">[]</span><span class="o">*</span><span class="nx">Node</span>
-<span class="p">}</span>
-
-<span class="cm">/*func newNode2() *Node{*/</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-5">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-5">&#182;</a>
+<span class="hljs-keyword">type</span> Node <span class="hljs-keyword">struct</span> {
+	*data
+	Father   *Node
+	Children []*Node
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-                <p>node := new(Node)
-node.data = new(data)
-return node</p>
+              <p><code>newNode</code> will allocate space for data while <code>new(Node)</code> not</p>
 
-            </td>
-            <td class="code">
-                <div class="highlight"><pre><span class="cm">/*}*/</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-6">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-6">&#182;</a>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">func</span> newNode() *Node {
+	<span class="hljs-keyword">return</span> &amp;Node{&amp;data{}, <span class="hljs-constant">nil</span>, <span class="hljs-constant">nil</span>}
+}
+
+<span class="hljs-keyword">func</span> (n *Node) AddChild(c *Node) {
+	n.Children = <span class="hljs-built_in">append</span>(n.Children, c)
+	c.Father = n
+}
+
+<span class="hljs-keyword">func</span> (n *Node) toByte(b *bytes.Buffer, showlength <span class="hljs-typename">bool</span>) {
+	writeNode := <span class="hljs-keyword">func</span>(n *Node) {
+		b.WriteString(n.Name)
+		<span class="hljs-keyword">if</span> showlength {
+			b.WriteRune(<span class="hljs-string">':'</span>)
+			length := strconv.FormatFloat(n.Length, <span class="hljs-string">'f'</span>,<span class="hljs-number"> -1</span>,<span class="hljs-number"> 64</span>)
+			b.WriteString(length)
+		}
+	}
+
+	children := n.Children
+	<span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(children) &gt;<span class="hljs-number"> 0</span> {
+		b.WriteRune(<span class="hljs-string">'('</span>)
+		children<span class="hljs-number">[0</span>].toByte(b, showlength)
+		<span class="hljs-keyword">for</span> i :=<span class="hljs-number"> 1</span>; i &lt; <span class="hljs-built_in">len</span>(children); i++ {
+			b.WriteRune(<span class="hljs-string">','</span>)
+			children[i].toByte(b, showlength)
+		}
+		b.WriteRune(<span class="hljs-string">')'</span>)
+	}
+	writeNode(n)
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-                <p>newNode will allocate space for data while new(Node) not</p>
+              <p>Represent the tree (rooted at <code>n</code>) in newick format.</p>
 
-            </td>
-            <td class="code">
-                <div class="highlight"><pre><span class="kd">func</span> <span class="nx">newNode</span><span class="p">()</span> <span class="o">*</span><span class="nx">Node</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="o">&amp;</span><span class="nx">Node</span><span class="p">{</span><span class="o">&amp;</span><span class="nx">data</span><span class="p">{},</span> <span class="kc">nil</span><span class="p">,</span> <span class="kc">nil</span><span class="p">}</span>
-<span class="p">}</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">func</span> (n *Node) String() <span class="hljs-typename">string</span> {
+	b := <span class="hljs-built_in">new</span>(bytes.Buffer)
+	n.toByte(b, <span class="hljs-constant">false</span>)
+	<span class="hljs-keyword">return</span> b.String()
+}
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">n</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="nx">AddChild</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">n</span><span class="p">.</span><span class="nx">Children</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">n</span><span class="p">.</span><span class="nx">Children</span><span class="p">,</span> <span class="nx">c</span><span class="p">)</span>
-	<span class="nx">c</span><span class="p">.</span><span class="nx">Father</span> <span class="p">=</span> <span class="nx">n</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="p">(</span><span class="nx">n</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="nx">toByte</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">bytes</span><span class="p">.</span><span class="nx">Buffer</span><span class="p">,</span> <span class="nx">showlength</span> <span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">writeNode</span> <span class="o">:=</span> <span class="kd">func</span><span class="p">(</span><span class="nx">n</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">b</span><span class="p">.</span><span class="nx">WriteString</span><span class="p">(</span><span class="nx">n</span><span class="p">.</span><span class="nx">Name</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">showlength</span> <span class="p">{</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-7">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-7">&#182;</a>
+<span class="hljs-keyword">func</span> (n *Node) toString(showlength <span class="hljs-typename">bool</span>) <span class="hljs-typename">string</span> {
+	b := <span class="hljs-built_in">new</span>(bytes.Buffer)
+	n.toByte(b, showlength)
+	<span class="hljs-keyword">return</span> b.String()
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-                <p>b.WriteByte(byte(&rsquo;:&lsquo;))</p>
+              <p>Find the most left node of the tree (rooted at <code>node</code>).
+It is useful for post-order-iteration.</p>
 
-            </td>
-            <td class="code">
-                <div class="highlight"><pre>			<span class="nx">b</span><span class="p">.</span><span class="nx">WriteRune</span><span class="p">(</span><span class="sc">&#39;:&#39;</span><span class="p">)</span>
-			<span class="nx">length</span> <span class="o">:=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nx">FormatFloat</span><span class="p">(</span><span class="nx">n</span><span class="p">.</span><span class="nx">Length</span><span class="p">,</span> <span class="sc">&#39;f&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
-			<span class="nx">b</span><span class="p">.</span><span class="nx">WriteString</span><span class="p">(</span><span class="nx">length</span><span class="p">)</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
-
-	<span class="nx">children</span> <span class="o">:=</span> <span class="nx">n</span><span class="p">.</span><span class="nx">Children</span>
-	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">children</span><span class="p">)</span> <span class="p">&gt;</span> <span class="mi">0</span> <span class="p">{</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-8">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-8">&#182;</a>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">func</span> leftmost(node *Node) *Node {
+	<span class="hljs-keyword">for</span> <span class="hljs-built_in">len</span>(node.Children) &gt;<span class="hljs-number"> 0</span> {
+		node = node.Children<span class="hljs-number">[0</span>]
+	}
+	<span class="hljs-keyword">return</span> node
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-                <p>b.WriteByte(byte(&lsquo;(&rsquo;))</p>
+              <p>Postorder iterate the tree and put nodes into a list</p>
 
-            </td>
-            <td class="code">
-                <div class="highlight"><pre>		<span class="nx">b</span><span class="p">.</span><span class="nx">WriteRune</span><span class="p">(</span><span class="sc">&#39;(&#39;</span><span class="p">)</span>
-		<span class="nx">children</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">toByte</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">showlength</span><span class="p">)</span>
-		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="nx">children</span><span class="p">);</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-9">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-9">&#182;</a>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">func</span> (node *Node) Post2List() []*Node {
+	nl := <span class="hljs-built_in">make</span>([]*Node,<span class="hljs-number"> 0</span>,<span class="hljs-number"> 20</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-                <p>b.WriteByte(byte(&lsquo;,&rsquo;))</p>
+              <p>A function that appends node with its descendent to <code>nl</code></p>
 
-            </td>
-            <td class="code">
-                <div class="highlight"><pre>			<span class="nx">b</span><span class="p">.</span><span class="nx">WriteRune</span><span class="p">(</span><span class="sc">&#39;,&#39;</span><span class="p">)</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-10">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-10">&#182;</a>
-              </div>
-                <p>writeNode(children[i])</p>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> ap <span class="hljs-keyword">func</span>(n *Node) <span class="hljs-comment">//necessary for making a recursive function here</span>
+	ap = <span class="hljs-keyword">func</span>(n *Node) {
+		<span class="hljs-keyword">for</span> _, c := <span class="hljs-keyword">range</span> n.Children {
+			ap(c)
+		}
+		nl = <span class="hljs-built_in">append</span>(nl, n)
+	}
 
-            </td>
-            <td class="code">
-                <div class="highlight"><pre>			<span class="nx">children</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">toByte</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">showlength</span><span class="p">)</span>
-		<span class="p">}</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-11">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-11">&#182;</a>
-              </div>
-                <p>b.WriteByte(byte(&lsquo;)&rsquo;))</p>
+	ap(node)
+	<span class="hljs-keyword">return</span> nl
+}
 
-            </td>
-            <td class="code">
-                <div class="highlight"><pre>		<span class="nx">b</span><span class="p">.</span><span class="nx">WriteRune</span><span class="p">(</span><span class="sc">&#39;)&#39;</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="nx">writeNode</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span>
-<span class="p">}</span>
+<span class="hljs-keyword">func</span> (node *Node) IsLeaf() <span class="hljs-typename">bool</span> {
+	<span class="hljs-keyword">return</span> <span class="hljs-built_in">len</span>(node.Children) ==<span class="hljs-number"> 0</span>
+}
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">n</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="nx">String</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
-	<span class="nx">b</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">bytes</span><span class="p">.</span><span class="nx">Buffer</span><span class="p">)</span>
-	<span class="nx">n</span><span class="p">.</span><span class="nx">toByte</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
-	<span class="k">return</span> <span class="nx">b</span><span class="p">.</span><span class="nx">String</span><span class="p">()</span>
-<span class="p">}</span>
+<span class="hljs-keyword">func</span> (node *Node) IsRoot() <span class="hljs-typename">bool</span> {
+	<span class="hljs-keyword">return</span> node.Father == <span class="hljs-constant">nil</span>
+}
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">n</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="nx">toString</span><span class="p">(</span><span class="nx">showlength</span> <span class="kt">bool</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
-	<span class="nx">b</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">bytes</span><span class="p">.</span><span class="nx">Buffer</span><span class="p">)</span>
-	<span class="nx">n</span><span class="p">.</span><span class="nx">toByte</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">showlength</span><span class="p">)</span>
-	<span class="k">return</span> <span class="nx">b</span><span class="p">.</span><span class="nx">String</span><span class="p">()</span>
-<span class="p">}</span>
+<span class="hljs-keyword">func</span> (node *Node) IsInternal() <span class="hljs-typename">bool</span> {
+	<span class="hljs-keyword">return</span> !node.IsLeaf()
+}
 
-<span class="kd">func</span> <span class="nx">leftmost</span><span class="p">(</span><span class="nx">node</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="o">*</span><span class="nx">Node</span> <span class="p">{</span>
-	<span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">Children</span><span class="p">)</span> <span class="p">&gt;</span> <span class="mi">0</span> <span class="p">{</span>
-		<span class="nx">node</span> <span class="p">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">Children</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-	<span class="p">}</span>
-	<span class="k">return</span> <span class="nx">node</span>
-<span class="p">}</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-12">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-12">&#182;</a>
-              </div>
-                <p>Postorder iterate the tree and put nodes into a list</p>
+<span class="hljs-keyword">func</span> (node *Node) IsBinary() <span class="hljs-typename">bool</span> {
+	<span class="hljs-keyword">return</span> <span class="hljs-built_in">len</span>(node.Children) ==<span class="hljs-number"> 2</span>
+}
 
-            </td>
-            <td class="code">
-                <div class="highlight"><pre><span class="kd">func</span> <span class="p">(</span><span class="nx">node</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="nx">Post2List</span><span class="p">()</span> <span class="p">[]</span><span class="o">*</span><span class="nx">Node</span> <span class="p">{</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-13">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-13">&#182;</a>
-              </div>
-                <p>var nl []*Node</p>
-
-            </td>
-            <td class="code">
-                <div class="highlight"><pre>	<span class="nx">nl</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="o">*</span><span class="nx">Node</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-14">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-14">&#182;</a>
-              </div>
-                <p>A function that appends node with its descandent to nl</p>
-
-            </td>
-            <td class="code">
-                <div class="highlight"><pre>	<span class="kd">var</span> <span class="nx">ap</span> <span class="kd">func</span><span class="p">(</span><span class="nx">n</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="c1">//necessary for making a recursive function here</span>
-	<span class="nx">ap</span> <span class="p">=</span> <span class="kd">func</span><span class="p">(</span><span class="nx">n</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="p">{</span>
-		<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">n</span><span class="p">.</span><span class="nx">Children</span> <span class="p">{</span>
-			<span class="nx">ap</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span>
-		<span class="p">}</span>
-		<span class="nx">nl</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">nl</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span>
-	<span class="p">}</span>
-
-	<span class="nx">ap</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span>
-	<span class="k">return</span> <span class="nx">nl</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="p">(</span><span class="nx">node</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="nx">IsLeaf</span><span class="p">()</span> <span class="kt">bool</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">Children</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="p">(</span><span class="nx">node</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="nx">IsRoot</span><span class="p">()</span> <span class="kt">bool</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="nx">node</span><span class="p">.</span><span class="nx">Father</span> <span class="o">==</span> <span class="kc">nil</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="p">(</span><span class="nx">node</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="nx">IsInternal</span><span class="p">()</span> <span class="kt">bool</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="p">!</span><span class="nx">node</span><span class="p">.</span><span class="nx">IsLeaf</span><span class="p">()</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="p">(</span><span class="nx">node</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="nx">IsBinary</span><span class="p">()</span> <span class="kt">bool</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">Children</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
-<span class="p">}</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-15">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-15">&#182;</a>
-              </div>
-                <p>Inorder iterate the tree and put nodes into a list.
-It&rsquo;s only defined for binary tree.
-It will cause panic for non-bianry tree.
-Note: Not finished yet.
-TODO Fix this. Morri&rsquo;s iteration?</p>
-
-            </td>
-            <td class="code">
-                <div class="highlight"><pre><span class="kd">func</span> <span class="p">(</span><span class="nx">node</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="nx">in2List</span><span class="p">()</span> <span class="p">[]</span><span class="o">*</span><span class="nx">Node</span> <span class="p">{</span>
-	<span class="nx">nl</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="o">*</span><span class="nx">Node</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-
-	<span class="nx">flag</span> <span class="o">:=</span> <span class="kc">false</span>
-	<span class="k">for</span> <span class="nx">n</span> <span class="o">:=</span> <span class="nx">leftmost</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span> <span class="nx">n</span><span class="p">.</span><span class="nx">Father</span> <span class="o">!=</span> <span class="kc">nil</span><span class="p">;</span> <span class="p">{</span>
-		<span class="k">if</span> <span class="nx">flag</span> <span class="p">{</span>
-			<span class="nx">n</span> <span class="p">=</span> <span class="nx">n</span><span class="p">.</span><span class="nx">Children</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-			<span class="nx">n</span> <span class="p">=</span> <span class="nx">n</span><span class="p">.</span><span class="nx">Father</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
-	<span class="nx">nl</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">nl</span><span class="p">,</span> <span class="nx">node</span><span class="p">)</span>
-	<span class="k">return</span> <span class="nx">nl</span>
-<span class="p">}</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-16">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-16">&#182;</a>
-              </div>
-                <p>Inorder iterate the tree and put nodes into a list.
-It&rsquo;s only defined for binary tree.
-It will cause panic for non-bianry tree.
-Ugly!</p>
-
-            </td>
-            <td class="code">
-                <div class="highlight"><pre><span class="kd">func</span> <span class="p">(</span><span class="nx">node</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="nx">In2List</span><span class="p">()</span> <span class="p">[]</span><span class="o">*</span><span class="nx">Node</span> <span class="p">{</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-17">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-17">&#182;</a>
-              </div>
-                <p>var nl []*Node</p>
-
-            </td>
-            <td class="code">
-                <div class="highlight"><pre>	<span class="nx">nl</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="o">*</span><span class="nx">Node</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-18">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-18">&#182;</a>
-              </div>
-                <p>A function that appends node with its descandent to nl</p>
-
-            </td>
-            <td class="code">
-                <div class="highlight"><pre>	<span class="kd">var</span> <span class="nx">ap</span> <span class="kd">func</span><span class="p">(</span><span class="nx">n</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="c1">//necessary for making a recursive function here</span>
-	<span class="nx">ap</span> <span class="p">=</span> <span class="kd">func</span><span class="p">(</span><span class="nx">n</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="p">{</span>
-		<span class="k">if</span> <span class="nx">n</span><span class="p">.</span><span class="nx">IsInternal</span><span class="p">()</span> <span class="p">{</span>
-			<span class="nx">ap</span><span class="p">(</span><span class="nx">n</span><span class="p">.</span><span class="nx">Children</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-		<span class="p">}</span>
-		<span class="nx">nl</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">nl</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">n</span><span class="p">.</span><span class="nx">IsInternal</span><span class="p">()</span> <span class="p">{</span>
-			<span class="nx">ap</span><span class="p">(</span><span class="nx">n</span><span class="p">.</span><span class="nx">Children</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
-
-	<span class="nx">ap</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span>
-	<span class="k">return</span> <span class="nx">nl</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="p">(</span><span class="nx">n</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="nx">replaceBy</span><span class="p">(</span><span class="nx">m</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">n</span><span class="p">.</span><span class="nx">Children</span> <span class="p">=</span> <span class="nx">m</span><span class="p">.</span><span class="nx">Children</span>
-	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">n</span><span class="p">.</span><span class="nx">Children</span> <span class="p">{</span>
-		<span class="nx">c</span><span class="p">.</span><span class="nx">Father</span> <span class="p">=</span> <span class="nx">n</span>
-	<span class="p">}</span>
-	<span class="nx">n</span><span class="p">.</span><span class="nx">Name</span> <span class="p">=</span> <span class="nx">m</span><span class="p">.</span><span class="nx">Name</span> <span class="c1">// necessary</span>
-<span class="p">}</span>
-
-</pre></div>
-            </td>
-          </tr>
-          
-      </tbody>
-    </table>
+<span class="hljs-keyword">func</span> (n *Node) replaceBy(m *Node) {
+	n.Children = m.Children
+	<span class="hljs-keyword">for</span> _, c := <span class="hljs-keyword">range</span> n.Children {
+		c.Father = n
+	}
+	n.Name = m.Name <span class="hljs-comment">// necessary</span>
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
   </div>
 </body>
 </html>

@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>core_binaryreconcile.go</title>
+  <title>test_misc.go</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -111,7 +111,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>core_binaryreconcile.go</h1>
+                  <h1>test_misc.go</h1>
               </div>
           </li>
         
@@ -126,45 +126,14 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">package</span> tree</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-2">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              <p>BinaryCost finds the duplication, loss, and deep coalescence cost
-for input binary gene tree and species tree.</p>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">package</span> tree
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">func</span> BinaryCost(gt *Tree, st *SpeciesTree) (dup, loss, dc <span class="hljs-typename">int</span>, err error) {
-	lm, err := LcaMap(gt, st)
+<span class="hljs-keyword">import</span> <span class="hljs-string">"testing"</span>
 
+<span class="hljs-keyword">func</span> checkerror(t *testing.T, err error) {
 	<span class="hljs-keyword">if</span> err != <span class="hljs-constant">nil</span> {
-		<span class="hljs-keyword">return</span><span class="hljs-number"> 0</span>,<span class="hljs-number"> 0</span>,<span class="hljs-number"> 0</span>, err
+		t.Fatal(err)
 	}
-
-	<span class="hljs-keyword">for</span> _, n := <span class="hljs-keyword">range</span> gt.Nodes {
-		<span class="hljs-keyword">if</span> !n.IsLeaf() {
-			m := lm.Map[n.Id]
-			l := lm.Map[n.Children<span class="hljs-number">[0</span>].Id]
-			r := lm.Map[n.Children<span class="hljs-number">[1</span>].Id]
-			loss += (l.Level + r.Level -<span class="hljs-number"> 2</span>*m.Level)
-			dc += (l.Level + r.Level -<span class="hljs-number"> 2</span>*m.Level)
-			<span class="hljs-keyword">if</span> m == l || m == r {
-				dup++
-			} <span class="hljs-keyword">else</span> {
-				loss -=<span class="hljs-number"> 2</span>
-			}
-		}
-	}
-	dc -= <span class="hljs-built_in">len</span>(st.Nodes) -<span class="hljs-number"> 1</span>
-	<span class="hljs-keyword">return</span>
 }</pre></div></div>
             
         </li>

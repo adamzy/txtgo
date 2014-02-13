@@ -1,278 +1,316 @@
-
 <!DOCTYPE html>
 
 <html>
 <head>
-    <title>core_test.go</title>
+  <title>core_test.go</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <link rel="stylesheet" media="all" href="gocco.css" />
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
 </head>
 <body>
   <div id="container">
     <div id="background"></div>
     
-      <div id="jump_to">
-        Jump To &hellip;
-        <div id="jump_wrapper">
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
           <div id="jump_page">
+            
               
               <a class="source" href="core_binaryreconcile.html">
-                  core_binaryreconcile.go
+                core_binaryreconcile.go
               </a>
+            
               
               <a class="source" href="core_genetree.html">
-                  core_genetree.go
+                core_genetree.go
               </a>
+            
               
               <a class="source" href="core_node.html">
-                  core_node.go
+                core_node.go
               </a>
+            
               
               <a class="source" href="core_rf.html">
-                  core_rf.go
+                core_rf.go
               </a>
+            
               
               <a class="source" href="core_speciestree.html">
-                  core_speciestree.go
+                core_speciestree.go
               </a>
+            
               
               <a class="source" href="core_test.html">
-                  core_test.go
+                core_test.go
               </a>
+            
               
               <a class="source" href="core_tree.html">
-                  core_tree.go
+                core_tree.go
               </a>
+            
               
               <a class="source" href="refine_linearrefinegt.html">
-                  refine_linearrefinegt.go
+                refine_linearrefinegt.go
               </a>
+            
+              
+              <a class="source" href="refine_misc.html">
+                refine_misc.go
+              </a>
+            
               
               <a class="source" href="refine_test.html">
-                  refine_test.go
+                refine_test.go
               </a>
+            
+              
+              <a class="source" href="refine_weightgt.html">
+                refine_weightgt.go
+              </a>
+            
+              
+              <a class="source" href="refine_weightgt_test.html">
+                refine_weightgt_test.go
+              </a>
+            
+              
+              <a class="source" href="test_misc.html">
+                test_misc.go
+              </a>
+            
               
               <a class="source" href="util_contract.html">
-                  util_contract.go
+                util_contract.go
               </a>
+            
               
               <a class="source" href="util_prune.html">
-                  util_prune.go
+                util_prune.go
               </a>
+            
               
               <a class="source" href="util_simu.html">
-                  util_simu.go
+                util_simu.go
               </a>
+            
               
               <a class="source" href="util_test.html">
-                  util_test.go
+                util_test.go
               </a>
-              
+            
           </div>
-        </div>
-      </div>
+        </li>
+      </ul>
     
-    <table cellpadding="0" cellspacing="0">
-      <thead>
-        <tr>
-          <th class="docs">
-            <h1>
-                core_test.go
-            </h1>
-          </th>
-          <th class="code">
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-          
-          <tr id="section-1">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-1">&#182;</a>
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>core_test.go</h1>
               </div>
-                
-            </td>
-            <td class="code">
-                <div class="highlight"><pre><span class="kn">package</span> <span class="nx">tree</span>
-
-<span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&quot;fmt&quot;</span>
-	<span class="s">&quot;testing&quot;</span>
-<span class="p">)</span>
-
-<span class="kd">func</span> <span class="nx">Test_Node</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">n</span> <span class="o">:=</span> <span class="nx">newNode</span><span class="p">()</span>
-	<span class="nx">n</span><span class="p">.</span><span class="nx">Name</span> <span class="p">=</span> <span class="s">&quot;hello&quot;</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="nx">Test_MakePrint</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-2">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-2">&#182;</a>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-                <p>s := &ldquo;((a,b ), ( c:3.2, (d , e , fff:-23 ) D ): 23 ) root&rdquo;</p>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">package</span> tree
 
-            </td>
-            <td class="code">
-                <div class="highlight"><pre>	<span class="nx">s</span> <span class="o">:=</span> <span class="s">&quot;((a,b )A, ( c:3.2, (d , eee :-23 ) D )C: 23 ) root&quot;</span>
-	<span class="nx">tree</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">tree</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="kc">true</span><span class="p">))</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;size:&quot;</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">Size</span><span class="p">)</span>
+<span class="hljs-keyword">import</span> (
+	<span class="hljs-string">"fmt"</span>
+	<span class="hljs-string">"testing"</span>
+)
 
-	<span class="nx">tree</span><span class="p">.</span><span class="nx">Nodes</span> <span class="p">=</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">Post2List</span><span class="p">()</span>
-	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">Nodes</span> <span class="p">{</span>
-		<span class="nx">n</span> <span class="o">:=</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">Nodes</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">n</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span> <span class="nx">n</span><span class="p">.</span><span class="nx">IsBinary</span><span class="p">())</span>
-	<span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">IsBinary</span><span class="p">())</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">IsRoot</span><span class="p">())</span>
-	<span class="nx">sss</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">Node</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">sss</span><span class="p">.</span><span class="nx">IsRoot</span><span class="p">())</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">sss</span><span class="p">.</span><span class="nx">IsLeaf</span><span class="p">())</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">sss</span><span class="p">.</span><span class="nx">IsBinary</span><span class="p">())</span>
-<span class="p">}</span>
+<span class="hljs-keyword">func</span> Test_Node(t *testing.T) {
+	n := newNode()
+	n.Name = <span class="hljs-string">"hello"</span>
+}
 
-<span class="kd">func</span> <span class="nx">Test_In2List</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">s</span> <span class="o">:=</span> <span class="s">&quot;((a,b )A, ( c:3.2, (d , eee :-23 ) D )C: 23 ) root&quot;</span>
-	<span class="nx">tree</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">tree</span><span class="p">)</span>
-	<span class="nx">il</span> <span class="o">:=</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">In2List</span><span class="p">()</span>
-	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">il</span> <span class="p">{</span>
-		<span class="nx">n</span> <span class="o">:=</span> <span class="nx">il</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">n</span><span class="p">.</span><span class="nx">Name</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">Name</span><span class="p">)</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="nx">Test_LcaMap</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">gs</span> <span class="o">:=</span> <span class="s">&quot;((a,b)A,(c,(c,d)D)D)R;&quot;</span>
-	<span class="nx">ss</span> <span class="o">:=</span> <span class="s">&quot;((a,b)A,(c,d)D)R;&quot;</span>
-	<span class="nx">gt</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">gs</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="nx">st</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">ss</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
-
-	<span class="nx">sst</span> <span class="o">:=</span> <span class="nx">st</span><span class="p">.</span><span class="nx">SpeciesTree</span><span class="p">()</span>
-	<span class="nx">lm</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">LcaMap</span><span class="p">(</span><span class="nx">gt</span><span class="p">,</span> <span class="nx">sst</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="k">for</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">sn</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">lm</span><span class="p">.</span><span class="nx">Map</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">gt</span><span class="p">.</span><span class="nx">Nodes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">Name</span><span class="p">,</span> <span class="nx">sn</span><span class="p">.</span><span class="nx">Name</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">gt</span><span class="p">.</span><span class="nx">Nodes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">Name</span> <span class="o">!=</span> <span class="nx">sn</span><span class="p">.</span><span class="nx">Name</span> <span class="p">{</span>
-			<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="s">&quot;Incorrect LCA!&quot;</span><span class="p">)</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
-
-	<span class="nx">dup</span><span class="p">,</span> <span class="nx">loss</span><span class="p">,</span> <span class="nx">dc</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">BinaryCost</span><span class="p">(</span><span class="nx">gt</span><span class="p">,</span> <span class="nx">sst</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">dup</span><span class="p">,</span> <span class="nx">loss</span><span class="p">,</span> <span class="nx">dc</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">dup</span> <span class="o">!=</span> <span class="mi">1</span> <span class="o">||</span> <span class="nx">loss</span> <span class="o">!=</span> <span class="mi">1</span> <span class="o">||</span> <span class="nx">dc</span> <span class="o">!=</span> <span class="mi">1</span> <span class="p">{</span>
-		<span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="s">&quot;Incorrect binry cost.&quot;</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="cm">/*fmt.Println(st.Size)*/</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-3">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-3">&#182;</a>
+<span class="hljs-keyword">func</span> Test_MakePrint(t *testing.T) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-                <p>for i, n := range st.Nodes {
+              <p>s := “((a,b ), ( c:3.2, (d , e , fff:-23 ) D ): 23 ) root”</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	s := <span class="hljs-string">"((a,b )A, ( c:3.2, (d , eee :-23 ) D )C: 23 ) root"</span>
+	tree, err := Make(s)
+	<span class="hljs-keyword">if</span> err != <span class="hljs-constant">nil</span> {
+		fmt.Println(err)
+	}
+	fmt.Println(tree)
+	fmt.Println(tree.toString(<span class="hljs-constant">true</span>))
+
+	tree.Nodes = tree.Post2List()
+	<span class="hljs-keyword">for</span> i := <span class="hljs-keyword">range</span> tree.Nodes {
+		n := tree.Nodes[i]
+		fmt.Println(i, n.Name, n.IsBinary())
+	}
+	fmt.Println(tree.IsBinary())
+	fmt.Println(tree.IsRoot())
+	sss := <span class="hljs-built_in">new</span>(Node)
+	fmt.Println(sss.IsRoot())
+	fmt.Println(sss.IsLeaf())
+	fmt.Println(sss.IsBinary())
+}
+
+<span class="hljs-keyword">func</span> Test_LcaMap(t *testing.T) {
+	gs := <span class="hljs-string">"((a,b)A,(c,(c,d)D)D)R;"</span>
+	ss := <span class="hljs-string">"((a,b)A,(c,d)D)R;"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>ss = “((a,(b,d))A,(c,d)D)R;”</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	gt, err := Make(gs)
+	<span class="hljs-keyword">if</span> err != <span class="hljs-constant">nil</span> {
+		t.Log(err)
+	}
+	st, err := Make(ss)
+	<span class="hljs-keyword">if</span> err != <span class="hljs-constant">nil</span> {
+		t.Log(err)
+	}
+
+	sst, err := st.SpeciesTree()
+	<span class="hljs-keyword">if</span> err != <span class="hljs-constant">nil</span> {
+		t.Fatal(err)
+	}
+	lm, err := LcaMap(gt, sst)
+	<span class="hljs-keyword">if</span> err != <span class="hljs-constant">nil</span> {
+		t.Log(err)
+	}
+	<span class="hljs-keyword">for</span> i, sn := <span class="hljs-keyword">range</span> lm.Map {
+		fmt.Println(i, gt.Nodes[i].Name, sn.Name)
+		<span class="hljs-keyword">if</span> gt.Nodes[i].Name != sn.Name {
+			t.Log(<span class="hljs-string">"Incorrect LCA!"</span>)
+		}
+	}
+
+	dup, loss, dc, err := BinaryCost(gt, sst)
+	<span class="hljs-keyword">if</span> err != <span class="hljs-constant">nil</span> {
+		t.Log(err)
+	}
+	fmt.Println(dup, loss, dc)
+	<span class="hljs-keyword">if</span> dup !=<span class="hljs-number"> 1</span> || loss !=<span class="hljs-number"> 1</span> || dc !=<span class="hljs-number"> 1</span> {
+		t.Log(<span class="hljs-string">"Incorrect binry cost."</span>)
+	}
+	<span class="hljs-comment">/*fmt.Println(st.Size)*/</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>for i, n := range st.Nodes {
 fmt.Println(i, n.Name, n.Id)</p>
 
-            </td>
-            <td class="code">
-                <div class="highlight"><pre>	<span class="cm">/*}*/</span>
-<span class="p">}</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-comment">/*}*/</span>
+}
 
-<span class="kd">func</span> <span class="nx">Test_Nodeex</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">n</span> <span class="o">:=</span> <span class="nx">newNode</span><span class="p">()</span>
-	<span class="nx">pre</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-	<span class="nx">pre</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="mi">11</span>
-	<span class="nx">pre</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="mi">21</span>
-	<span class="nx">n</span><span class="p">.</span><span class="nx">Ext</span> <span class="p">=</span> <span class="nx">pre</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-4">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-4">&#182;</a>
+<span class="hljs-keyword">func</span> Test_Nodeex(t *testing.T) {
+	n := newNode()
+	pre := <span class="hljs-built_in">make</span>([]<span class="hljs-typename">int</span>,<span class="hljs-number"> 2</span>)
+	pre<span class="hljs-number">[0</span>] =<span class="hljs-number"> 11</span>
+	pre<span class="hljs-number">[1</span>] =<span class="hljs-number"> 21</span>
+	n.Ext = pre</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-                <p>n.Ext = append(n.Ext, 31) // doesn&rsquo;t work</p>
+              <p>n.Ext = append(n.Ext, 31) // doesn’t work</p>
 
-            </td>
-            <td class="code">
-                <div class="highlight"><pre>	<span class="nx">p</span> <span class="o">:=</span> <span class="nx">n</span><span class="p">.</span><span class="nx">Ext</span><span class="p">.([]</span><span class="kt">int</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span>
-<span class="p">}</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	p := n.Ext.([]<span class="hljs-typename">int</span>)
+	fmt.Println(p)
+}
 
-<span class="kd">func</span> <span class="nx">Test_RF</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">gs</span> <span class="o">:=</span> <span class="s">&quot;(((1,2),(3,4)),(5,6))&quot;</span>
-    <span class="nx">ss</span> <span class="o">:=</span> <span class="s">&quot;(((1,3),(2,6)),(4,5))&quot;</span>
-    <span class="nx">gt</span><span class="p">,</span><span class="nx">err</span>  <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">gs</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
-    <span class="nx">st</span><span class="p">,</span><span class="nx">err</span>  <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">ss</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
-    <span class="nx">rf</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">RF</span><span class="p">(</span><span class="nx">gt</span><span class="p">,</span> <span class="nx">st</span><span class="p">.</span><span class="nx">SpeciesTree</span><span class="p">())</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
-    <span class="k">if</span> <span class="nx">rf</span> <span class="o">!=</span> <span class="mi">4</span> <span class="p">{</span>
-        <span class="nx">t</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="s">&quot;Incorrect RF&quot;</span><span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="hljs-keyword">func</span> Test_RF(t *testing.T) {
+	gs := <span class="hljs-string">"(((1,2),(3,4)),(5,6))"</span>
+	ss := <span class="hljs-string">"(((1,3),(2,6)),(4,5))"</span>
+	gt, err := Make(gs)
+	<span class="hljs-keyword">if</span> err != <span class="hljs-constant">nil</span> {
+		fmt.Println(err)
+	}
+	st, err := Make(ss)
+	<span class="hljs-keyword">if</span> err != <span class="hljs-constant">nil</span> {
+		fmt.Println(err)
+	}
+	sst, _ := st.SpeciesTree()
+	rf, err := RF(gt, sst)
+	<span class="hljs-keyword">if</span> err != <span class="hljs-constant">nil</span> {
+		fmt.Println(err)
+	}
+	<span class="hljs-keyword">if</span> rf !=<span class="hljs-number"> 4</span> {
+		t.Fatal(<span class="hljs-string">"Incorrect RF"</span>)
+	}
+}
 
-<span class="kd">func</span> <span class="nx">Test_RF2</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">gs</span> <span class="o">:=</span> <span class="s">&quot;(((1,2),(3,4)),(5,6))&quot;</span>
-    <span class="nx">ss</span> <span class="o">:=</span> <span class="s">&quot;(((1,3),(2,4)),(6,5))&quot;</span>
-    <span class="nx">gt</span><span class="p">,</span><span class="nx">err</span>  <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">gs</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
-    <span class="nx">st</span><span class="p">,</span><span class="nx">err</span>  <span class="o">:=</span> <span class="nx">Make</span><span class="p">(</span><span class="nx">ss</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
-    <span class="nx">rf</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">RF</span><span class="p">(</span><span class="nx">gt</span><span class="p">,</span> <span class="nx">st</span><span class="p">.</span><span class="nx">SpeciesTree</span><span class="p">())</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
-    <span class="k">if</span> <span class="nx">rf</span> <span class="o">!=</span> <span class="mi">2</span> <span class="p">{</span>
-        <span class="nx">t</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="s">&quot;Incorrect RF&quot;</span><span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-</pre></div>
-            </td>
-          </tr>
-          
-      </tbody>
-    </table>
+<span class="hljs-keyword">func</span> Test_RF2(t *testing.T) {
+	gs := <span class="hljs-string">"(((1,2),(3,4)),(5,6))"</span>
+	ss := <span class="hljs-string">"(((1,3),(2,4)),(6,5))"</span>
+	gt, err := Make(gs)
+	<span class="hljs-keyword">if</span> err != <span class="hljs-constant">nil</span> {
+		fmt.Println(err)
+	}
+	st, err := Make(ss)
+	<span class="hljs-keyword">if</span> err != <span class="hljs-constant">nil</span> {
+		fmt.Println(err)
+	}
+	sst, _ := st.SpeciesTree()
+	rf, err := RF(gt, sst)
+	<span class="hljs-keyword">if</span> err != <span class="hljs-constant">nil</span> {
+		fmt.Println(err)
+	}
+	<span class="hljs-keyword">if</span> rf !=<span class="hljs-number"> 2</span> {
+		t.Fatal(<span class="hljs-string">"Incorrect RF"</span>)
+	}
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
   </div>
 </body>
 </html>

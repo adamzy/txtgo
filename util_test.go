@@ -21,8 +21,8 @@ func Test_Prune(t *testing.T) {
 	// for i, n := range st.Nodes {
 	// 	fmt.Println(i, n.Name, len(n.Children))
 	// }
-	sst,err := st.SpeciesTree()
-    checkerror(t, err)
+	sst, err := st.SpeciesTree()
+	checkerror(t, err)
 	_, err = LcaMap(gt, sst)
 	if err != nil {
 		t.Log(err)

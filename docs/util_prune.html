@@ -1,235 +1,264 @@
-
 <!DOCTYPE html>
 
 <html>
 <head>
-    <title>util_prune.go</title>
+  <title>util_prune.go</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <link rel="stylesheet" media="all" href="gocco.css" />
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
 </head>
 <body>
   <div id="container">
     <div id="background"></div>
     
-      <div id="jump_to">
-        Jump To &hellip;
-        <div id="jump_wrapper">
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
           <div id="jump_page">
+            
               
               <a class="source" href="core_binaryreconcile.html">
-                  core_binaryreconcile.go
+                core_binaryreconcile.go
               </a>
+            
               
               <a class="source" href="core_genetree.html">
-                  core_genetree.go
+                core_genetree.go
               </a>
+            
               
               <a class="source" href="core_node.html">
-                  core_node.go
+                core_node.go
               </a>
+            
               
               <a class="source" href="core_rf.html">
-                  core_rf.go
+                core_rf.go
               </a>
+            
               
               <a class="source" href="core_speciestree.html">
-                  core_speciestree.go
+                core_speciestree.go
               </a>
+            
               
               <a class="source" href="core_test.html">
-                  core_test.go
+                core_test.go
               </a>
+            
               
               <a class="source" href="core_tree.html">
-                  core_tree.go
+                core_tree.go
               </a>
+            
               
               <a class="source" href="refine_linearrefinegt.html">
-                  refine_linearrefinegt.go
+                refine_linearrefinegt.go
               </a>
+            
+              
+              <a class="source" href="refine_misc.html">
+                refine_misc.go
+              </a>
+            
               
               <a class="source" href="refine_test.html">
-                  refine_test.go
+                refine_test.go
               </a>
+            
+              
+              <a class="source" href="refine_weightgt.html">
+                refine_weightgt.go
+              </a>
+            
+              
+              <a class="source" href="refine_weightgt_test.html">
+                refine_weightgt_test.go
+              </a>
+            
+              
+              <a class="source" href="test_misc.html">
+                test_misc.go
+              </a>
+            
               
               <a class="source" href="util_contract.html">
-                  util_contract.go
+                util_contract.go
               </a>
+            
               
               <a class="source" href="util_prune.html">
-                  util_prune.go
+                util_prune.go
               </a>
+            
               
               <a class="source" href="util_simu.html">
-                  util_simu.go
+                util_simu.go
               </a>
+            
               
               <a class="source" href="util_test.html">
-                  util_test.go
+                util_test.go
               </a>
-              
+            
           </div>
-        </div>
-      </div>
+        </li>
+      </ul>
     
-    <table cellpadding="0" cellspacing="0">
-      <thead>
-        <tr>
-          <th class="docs">
-            <h1>
-                util_prune.go
-            </h1>
-          </th>
-          <th class="code">
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-          
-          <tr id="section-1">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-1">&#182;</a>
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>util_prune.go</h1>
               </div>
-                
-            </td>
-            <td class="code">
-                <div class="highlight"><pre><span class="kn">package</span> <span class="nx">tree</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-2">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-2">&#182;</a>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-                <p>Prune tree according to the taxonmap</p>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">package</span> tree</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Prune tree according to the taxonmap</p>
 
-            </td>
-            <td class="code">
-                <div class="highlight"><pre><span class="kd">func</span> <span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">Tree</span><span class="p">)</span> <span class="nx">PruneFromTaxon</span><span class="p">(</span><span class="nx">taxon</span> <span class="nx">Taxonmap</span><span class="p">)</span> <span class="p">{</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-3">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-3">&#182;</a>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">func</span> (t *Tree) PruneFromTaxon(taxon Taxonmap) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-                <p>the node with m[node.Id] = true is marked
+              <p>The node with <code>m[node.Id] = true</code> is marked
 as leaf in original tree.</p>
 
-            </td>
-            <td class="code">
-                <div class="highlight"><pre>	<span class="nx">m</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">bool</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">Nodes</span><span class="p">))</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-4">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-4">&#182;</a>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	m := <span class="hljs-built_in">make</span>([]<span class="hljs-typename">bool</span>, <span class="hljs-built_in">len</span>(t.Nodes))</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-                <p>the index of each node
-node.Father.Children[node.Index] = node</p>
+              <p>The index of each node, i.e.
+<code>node.Father.Children[node.Index] = node</code></p>
 
-            </td>
-            <td class="code">
-                <div class="highlight"><pre>	<span class="nx">d</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">Nodes</span><span class="p">))</span>
-	<span class="k">for</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">n</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Nodes</span> <span class="p">{</span>
-		<span class="k">if</span> <span class="nx">n</span><span class="p">.</span><span class="nx">IsLeaf</span><span class="p">()</span> <span class="p">{</span>
-			<span class="nx">m</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">=</span> <span class="kc">true</span>
-		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-			<span class="k">for</span> <span class="nx">j</span><span class="p">,</span> <span class="nx">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">n</span><span class="p">.</span><span class="nx">Children</span> <span class="p">{</span>
-				<span class="nx">d</span><span class="p">[</span><span class="nx">c</span><span class="p">.</span><span class="nx">Id</span><span class="p">]</span> <span class="p">=</span> <span class="nx">j</span>
-			<span class="p">}</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	d := <span class="hljs-built_in">make</span>([]<span class="hljs-typename">int</span>, <span class="hljs-built_in">len</span>(t.Nodes))
+	<span class="hljs-keyword">for</span> i, n := <span class="hljs-keyword">range</span> t.Nodes {
+		<span class="hljs-keyword">if</span> n.IsLeaf() {
+			m[i] = <span class="hljs-constant">true</span>
+		} <span class="hljs-keyword">else</span> {
+			<span class="hljs-keyword">for</span> j, c := <span class="hljs-keyword">range</span> n.Children {
+				d[c.Id] = j
+			}
+		}
+	}
 
-	<span class="nx">removeChild</span> <span class="o">:=</span> <span class="kd">func</span><span class="p">(</span><span class="nx">n</span> <span class="o">*</span><span class="nx">Node</span><span class="p">,</span> <span class="nx">i</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">a</span> <span class="o">:=</span> <span class="nx">n</span><span class="p">.</span><span class="nx">Children</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-5">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-5">&#182;</a>
+	removeChild := <span class="hljs-keyword">func</span>(n *Node, i <span class="hljs-typename">int</span>) {
+		a := n.Children</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-                <p>update the index of last child</p>
+              <p>Update the index of last child</p>
 
-            </td>
-            <td class="code">
-                <div class="highlight"><pre>		<span class="nx">d</span><span class="p">[</span><span class="nx">a</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">Id</span><span class="p">]</span> <span class="p">=</span> <span class="nx">i</span> <span class="c1">// important!</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		d[a[<span class="hljs-built_in">len</span>(a<span class="hljs-number">)-1</span>].Id] = i <span class="hljs-comment">// important!</span>
 
-		<span class="nx">a</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="nx">a</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">a</span> <span class="p">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">a</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="nx">a</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-		<span class="nx">n</span><span class="p">.</span><span class="nx">Children</span> <span class="p">=</span> <span class="nx">a</span>
-	<span class="p">}</span>
+		a[<span class="hljs-built_in">len</span>(a<span class="hljs-number">)-1</span>], a[i], a = <span class="hljs-constant">nil</span>, a[<span class="hljs-built_in">len</span>(a<span class="hljs-number">)-1</span>], a[:<span class="hljs-built_in">len</span>(a<span class="hljs-number">)-1</span>]
+		n.Children = a
+	}
 
-	<span class="k">for</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">n</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Nodes</span> <span class="p">{</span>
-		<span class="k">if</span> <span class="nx">m</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">{</span>
-			<span class="k">if</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">taxon</span><span class="p">[</span><span class="nx">n</span><span class="p">.</span><span class="nx">Name</span><span class="p">];</span> <span class="p">!</span><span class="nx">ok</span> <span class="p">{</span>
-				<span class="nx">removeChild</span><span class="p">(</span><span class="nx">n</span><span class="p">.</span><span class="nx">Father</span><span class="p">,</span> <span class="nx">d</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span>
-			<span class="p">}</span>
-		<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">n</span><span class="p">.</span><span class="nx">Children</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-6">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-6">&#182;</a>
+	<span class="hljs-keyword">for</span> i, n := <span class="hljs-keyword">range</span> t.Nodes {
+		<span class="hljs-keyword">if</span> m[i] {
+			<span class="hljs-keyword">if</span> _, ok := taxon[n.Name]; !ok {
+				removeChild(n.Father, d[i])
+			}
+		} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(n.Children) ==<span class="hljs-number"> 1</span> {
+			n.replaceBy(n.Children<span class="hljs-number">[0</span>])
+		} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(n.Children) ==<span class="hljs-number"> 0</span> {
+			<span class="hljs-keyword">if</span> n.IsRoot() {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-                <p>contractNode(n)</p>
-
-            </td>
-            <td class="code">
-                <div class="highlight"><pre>			<span class="nx">n</span><span class="p">.</span><span class="nx">replaceBy</span><span class="p">(</span><span class="nx">n</span><span class="p">.</span><span class="nx">Children</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-		<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">n</span><span class="p">.</span><span class="nx">Children</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
-			<span class="k">if</span> <span class="nx">n</span><span class="p">.</span><span class="nx">IsRoot</span><span class="p">()</span> <span class="p">{</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-7">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-7">&#182;</a>
-              </div>
-                <p>if all leaves are pruned
+              <p>If all leaves are pruned
 the result tree will be empty.</p>
 
-            </td>
-            <td class="code">
-                <div class="highlight"><pre>				<span class="nx">t</span><span class="p">.</span><span class="nx">Node</span> <span class="p">=</span> <span class="kc">nil</span>
-			<span class="p">}</span>
-			<span class="nx">removeChild</span><span class="p">(</span><span class="nx">n</span><span class="p">.</span><span class="nx">Father</span><span class="p">,</span> <span class="nx">d</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
-	<span class="nx">t</span><span class="p">.</span><span class="nx">Update</span><span class="p">()</span>
-<span class="p">}</span></pre></div>
-            </td>
-          </tr>
-          
-          <tr id="section-8">
-            <td class="docs">
-              <div class="pilwrap">
-                  <a class="pilcrow" href="#section-8">&#182;</a>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				t.Node = <span class="hljs-constant">nil</span>
+			}
+			removeChild(n.Father, d[i])
+		}
+	}
+	t.Update()
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-                <p>Prune tree according to another tree</p>
+              <p>Prune tree according to another tree</p>
 
-            </td>
-            <td class="code">
-                <div class="highlight"><pre><span class="kd">func</span> <span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">Tree</span><span class="p">)</span> <span class="nx">PruneFromTree</span><span class="p">(</span><span class="nx">gt</span> <span class="o">*</span><span class="nx">Tree</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">taxon</span> <span class="o">:=</span> <span class="nx">gt</span><span class="p">.</span><span class="nx">TaxonMap</span><span class="p">()</span>
-	<span class="nx">t</span><span class="p">.</span><span class="nx">PruneFromTaxon</span><span class="p">(</span><span class="nx">taxon</span><span class="p">)</span>
-<span class="p">}</span>
-
-</pre></div>
-            </td>
-          </tr>
-          
-      </tbody>
-    </table>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">func</span> (t *Tree) PruneFromTree(gt *Tree) {
+	taxon, _ := gt.TaxonMap()
+	t.PruneFromTaxon(taxon)
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
   </div>
 </body>
 </html>

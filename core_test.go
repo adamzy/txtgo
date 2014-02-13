@@ -97,7 +97,7 @@ func Test_RF(t *testing.T) {
 	if err != nil {
 		fmt.Println(err)
 	}
-    sst, _ := st.SpeciesTree()
+	sst, _ := st.SpeciesTree()
 	rf, err := RF(gt, sst)
 	if err != nil {
 		fmt.Println(err)
@@ -118,7 +118,7 @@ func Test_RF2(t *testing.T) {
 	if err != nil {
 		fmt.Println(err)
 	}
-    sst, _ := st.SpeciesTree()
+	sst, _ := st.SpeciesTree()
 	rf, err := RF(gt, sst)
 	if err != nil {
 		fmt.Println(err)

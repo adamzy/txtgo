@@ -6,18 +6,18 @@ import (
 )
 
 type data struct {
-	// built-in values
+	// built-in values are
 	// enough for most cases
 	Name   string
 	Length float64
 	Id     int
 	Level  int
 
-	// Ext: for any runtime extension.
-	// e.g. one can use node.Ext = []int{1,2,3},
+	// `Ext`: for any runtime extension.
+	// e.g. one can use `node.Ext = []int{1,2,3}`,
 	// to bind extra data to that node.
-	// The data can be accessed by node.Ext.(type),
-	// e.g. a := node.Ext.([]int).
+	// The data can be accessed by `node.Ext.(type)`,
+	// e.g. `node.Ext.([]int)`.
 	Ext interface{}
 }
 
@@ -27,7 +27,7 @@ type Node struct {
 	Children []*Node
 }
 
-// newNode will allocate space for data while new(Node) not
+// `newNode` will allocate space for data while `new(Node)` not
 func newNode() *Node {
 	return &Node{&data{}, nil, nil}
 }
@@ -60,6 +60,7 @@ func (n *Node) toByte(b *bytes.Buffer, showlength bool) {
 	writeNode(n)
 }
 
+// Represent the tree (rooted at `n`) in newick format.
 func (n *Node) String() string {
 	b := new(bytes.Buffer)
 	n.toByte(b, false)
@@ -72,6 +73,8 @@ func (n *Node) toString(showlength bool) string {
 	return b.String()
 }
 
+// Find the most left node of the tree (rooted at `node`).
+// It is useful for post-order-iteration.
 func leftmost(node *Node) *Node {
 	for len(node.Children) > 0 {
 		node = node.Children[0]
@@ -83,7 +86,7 @@ func leftmost(node *Node) *Node {
 func (node *Node) Post2List() []*Node {
 	nl := make([]*Node, 0, 20)
 
-	// A function that appends node with its descandent to nl
+	// A function that appends node with its descendent to `nl`
 	var ap func(n *Node) //necessary for making a recursive function here
 	ap = func(n *Node) {
 		for _, c := range n.Children {

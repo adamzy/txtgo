@@ -42,9 +42,9 @@ func Test_Lineartimegt(t *testing.T) {
 	}
 	//st.PruneFromTree(gt)
 	sst, err := st.SpeciesTree()
-    if err != nil {
-        t.Fatal(err)
-    }
+	if err != nil {
+		t.Fatal(err)
+	}
 	fmt.Println(sst.IsBinary())
 	fmt.Println(gt)
 	fmt.Println(sst)
@@ -63,7 +63,7 @@ func Test_Mutation1(t *testing.T) {
 	gt, _ := Make(gs)
 	st, _ := Make(ss)
 	sst, err := st.SpeciesTree()
-    checkerror(t, err)
+	checkerror(t, err)
 
 	RefineGt(gt, sst, "mutation")
 	fmt.Println(gt)
@@ -100,7 +100,7 @@ func Test_Weight(t *testing.T) {
 			t.Log(err)
 		}
 		sst1, err := st1.SpeciesTree()
-        checkerror(t, err)
+		checkerror(t, err)
 		RefineGt(gt1, sst1, "mutation")
 		//fmt.Println(gt1)
 		d1, l1, dc1, err := BinaryCost(gt1, sst1)
@@ -117,7 +117,7 @@ func Test_Weight(t *testing.T) {
 			t.Log(err)
 		}
 		sst2, err := st2.SpeciesTree()
-        checkerror(t, err)
+		checkerror(t, err)
 
 		//RefineGt(gt2, sst2, 3, 2001, 1000)
 		//RefineGt(gt2, sst2, 3, 3000, 1)
@@ -174,7 +174,7 @@ func test_Integer(t *testing.T) {
 			t.Log(err)
 		}
 		sst1, err := st1.SpeciesTree()
-        checkerror(t, err)
+		checkerror(t, err)
 		RefineGt(gt1, sst1, "weighted", 5, 1)
 		//fmt.Println(gt1)
 		d1, l1, dc1, err := BinaryCost(gt1, sst1)
@@ -191,7 +191,7 @@ func test_Integer(t *testing.T) {
 			t.Log(err)
 		}
 		sst2, err := st2.SpeciesTree()
-        checkerror(t, err)
+		checkerror(t, err)
 		//RefineGt(gt2, sst2, 3, 2001, 1000)
 		RefineGt(gt2, sst2, "weighted", 4, 1)
 		d2, l2, dc2, err := BinaryCost(gt2, sst2)
@@ -207,8 +207,8 @@ func test_Integer(t *testing.T) {
 		if err != nil {
 			t.Log(err)
 		}
-		sst3,err := st3.SpeciesTree()
-        checkerror(t, err)
+		sst3, err := st3.SpeciesTree()
+		checkerror(t, err)
 		//RefineGt(gt2, sst2, 3, 2001, 1000)
 		RefineGt(gt3, sst3, "weighted", 4.1, 1)
 		d3, l3, dc3, err := BinaryCost(gt3, sst3)

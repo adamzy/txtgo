@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>refine_weightgt_test.go</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="core_binaryreconcile.html">
+                core_binaryreconcile.go
+              </a>
+            
+              
+              <a class="source" href="core_genetree.html">
+                core_genetree.go
+              </a>
+            
+              
+              <a class="source" href="core_node.html">
+                core_node.go
+              </a>
+            
+              
+              <a class="source" href="core_rf.html">
+                core_rf.go
+              </a>
+            
+              
+              <a class="source" href="core_speciestree.html">
+                core_speciestree.go
+              </a>
+            
+              
+              <a class="source" href="core_test.html">
+                core_test.go
+              </a>
+            
+              
+              <a class="source" href="core_tree.html">
+                core_tree.go
+              </a>
+            
+              
+              <a class="source" href="refine_linearrefinegt.html">
+                refine_linearrefinegt.go
+              </a>
+            
+              
+              <a class="source" href="refine_misc.html">
+                refine_misc.go
+              </a>
+            
+              
+              <a class="source" href="refine_test.html">
+                refine_test.go
+              </a>
+            
+              
+              <a class="source" href="refine_weightgt.html">
+                refine_weightgt.go
+              </a>
+            
+              
+              <a class="source" href="refine_weightgt_test.html">
+                refine_weightgt_test.go
+              </a>
+            
+              
+              <a class="source" href="test_misc.html">
+                test_misc.go
+              </a>
+            
+              
+              <a class="source" href="util_contract.html">
+                util_contract.go
+              </a>
+            
+              
+              <a class="source" href="util_prune.html">
+                util_prune.go
+              </a>
+            
+              
+              <a class="source" href="util_simu.html">
+                util_simu.go
+              </a>
+            
+              
+              <a class="source" href="util_test.html">
+                util_test.go
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>refine_weightgt_test.go</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">package</span> tree
+
+<span class="hljs-keyword">import</span> (
+	<span class="hljs-string">"fmt"</span>
+	<span class="hljs-string">"testing"</span>
+)
+
+<span class="hljs-keyword">func</span> Test_restrict(t *testing.T) {
+	f1 := &amp;f{[]<span class="hljs-typename">int</span><span class="hljs-number">{1</span>,<span class="hljs-number"> 2</span>,<span class="hljs-number"> 3</span>}, []<span class="hljs-typename">float64</span><span class="hljs-number">{-3</span>,<span class="hljs-number"> -1</span>,<span class="hljs-number"> 1</span>,<span class="hljs-number"> 2</span>}}
+	fmt.Println(f1)
+
+	restrictF(f1,<span class="hljs-number"> 3</span>,<span class="hljs-number"> 2</span>)
+	fmt.Println(f1)
+
+	f2 := &amp;f{[]<span class="hljs-typename">int</span><span class="hljs-number">{2</span>}, []<span class="hljs-typename">float64</span><span class="hljs-number">{-3</span>,<span class="hljs-number"> 2</span>}}
+	fmt.Println(f2)
+
+	restrictF(f2,<span class="hljs-number"> 3</span>,<span class="hljs-number"> 2</span>)
+	fmt.Println(f2)
+}
+
+<span class="hljs-keyword">func</span> Test_MergeAndRestrict(t *testing.T) {
+	f1 := &amp;f{[]<span class="hljs-typename">int</span><span class="hljs-number">{1</span>,<span class="hljs-number"> 3</span>,<span class="hljs-number"> 5</span>}, []<span class="hljs-typename">float64</span><span class="hljs-number">{-3</span>,<span class="hljs-number"> -1</span>,<span class="hljs-number"> 1</span>,<span class="hljs-number"> 2</span>}}
+	f2 := &amp;f{[]<span class="hljs-typename">int</span><span class="hljs-number">{2</span>,<span class="hljs-number"> 4</span>,<span class="hljs-number"> 5</span>}, []<span class="hljs-typename">float64</span><span class="hljs-number">{-1</span>,<span class="hljs-number"> 0</span>,<span class="hljs-number"> 1</span>,<span class="hljs-number"> 2</span>}}
+	fmt.Println(f1, f2)
+
+	f := mergeF(f1, f2)
+	fmt.Println(f)
+}
+
+<span class="hljs-keyword">func</span> Test_affineCost(t *testing.T) {
+	wdup :=<span class="hljs-number"> 3.0</span>
+	wloss :=<span class="hljs-number"> 1.0</span>
+	gs := <span class="hljs-string">"(1,1,7,7,8,8)"</span>
+	ss := <span class="hljs-string">"(((((((1,2),3),4),5),6),7),8);"</span>
+
+	gs = <span class="hljs-string">"((3,3,0),0,1)"</span>
+	ss = <span class="hljs-string">"(((0,1),2),3)"</span>
+
+	gs = <span class="hljs-string">"(((1,2),2),(2,3))"</span>
+	ss = <span class="hljs-string">"(((0,1),2),3)"</span>
+
+	gs = <span class="hljs-string">"((2,1),2,2,3,3)"</span>
+	ss = <span class="hljs-string">"(((0,1),2),3)"</span>
+
+	gs = <span class="hljs-string">"(((7,1,5),2),0,0,7,6,(0,6,3),3,7,6,7)"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>gs = “(0,0,7,6,(0,6,3),3,7,6,7)”
+gs = “(0,0,6,3,7,6,7)”</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	ss = <span class="hljs-string">"(((((((0,1),2),3),4),5),6),7)"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>gs = “(1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12)”
+ss = “((((((((((((0,1),2),3),4),5),6),7),8),9),10),11),12)”</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>gs = “((1,2),1,1)”
+ss = “((0,1),2)”</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+	st, _ := Make(ss)
+	sst, err := st.SpeciesTree()
+	checkerror(t, err)
+
+	gt, _ := Make(gs)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>affine := affineCost(wdup, wloss)
+linearRefineGt(gt, sst, affine)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	RefineGt(gt, sst, <span class="hljs-string">"affine"</span>, wdup, wloss)
+	fmt.Println(gt)
+	fmt.Println(BinaryCost(gt, sst))
+
+	gt1, _ := Make(gs)
+	RefineGt(gt1, sst, <span class="hljs-string">"weighted"</span>,<span class="hljs-number"> 2</span>*wloss+wdup, wloss)
+	fmt.Println(gt1)
+	fmt.Println(BinaryCost(gt1, sst))
+}
+
+<span class="hljs-keyword">func</span> Test_AffineCorrect(t *testing.T) {
+	niter :=<span class="hljs-number"> 10000</span>
+	crate :=<span class="hljs-number"> 0.7</span>
+	ntaxon :=<span class="hljs-number"> 50</span>
+	nleaves :=<span class="hljs-number"> 100</span>
+
+	wdup :=<span class="hljs-number"> 7.0</span>
+	wloss :=<span class="hljs-number"> 1.5</span>
+
+	testone := <span class="hljs-keyword">func</span>() {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>fmt.Println()</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		gt := SimuTreeRandomTaxon(nleaves, ntaxon)
+		gt.RandomContract(crate)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>st := SimuTree(ntaxon)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		st := LineTree2(ntaxon)
+		gs := gt.String()
+		ss := st.String()
+
+		gt1, err := Make(gs)
+		<span class="hljs-keyword">if</span> err != <span class="hljs-constant">nil</span> {
+			t.Log(err)
+		}
+		st1, err := Make(ss)
+		<span class="hljs-keyword">if</span> err != <span class="hljs-constant">nil</span> {
+			t.Log(err)
+		}
+		sst1, err := st1.SpeciesTree()
+		checkerror(t, err)
+		RefineGt(gt1, sst1, <span class="hljs-string">"affine"</span>, wdup, wloss)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>fmt.Println(gt1)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		d1, l1, dc1, err := BinaryCost(gt1, sst1)
+		<span class="hljs-keyword">if</span> err != <span class="hljs-constant">nil</span> {
+			fmt.Println()
+			fmt.Println(gs)
+			fmt.Println()
+			fmt.Println(ss)
+			fmt.Println()
+			fmt.Println(gt1)
+			t.Fatal(err)
+		}
+
+		gt2, err := Make(gs)
+		<span class="hljs-keyword">if</span> err != <span class="hljs-constant">nil</span> {
+			t.Log(err)
+		}
+		st2, err := Make(ss)
+		<span class="hljs-keyword">if</span> err != <span class="hljs-constant">nil</span> {
+			t.Log(err)
+		}
+		sst2, err := st2.SpeciesTree()
+		checkerror(t, err)
+		RefineGt(gt2, sst2, <span class="hljs-string">"weighted"</span>,<span class="hljs-number"> 2</span>*wloss+wdup, wloss)
+		d2, l2, dc2, err := BinaryCost(gt2, sst2)
+		<span class="hljs-keyword">if</span> err != <span class="hljs-constant">nil</span> {
+			fmt.Println(gt2)
+			t.Fatal(err)
+		}
+
+		<span class="hljs-keyword">if</span> wdup*<span class="hljs-typename">float64</span>(d1)+wloss*<span class="hljs-typename">float64</span>(l1) != wdup*<span class="hljs-typename">float64</span>(d2)+wloss*<span class="hljs-typename">float64</span>(l2) {
+			fmt.Println()
+			fmt.Println(gs)
+			fmt.Println()
+			fmt.Println(ss)
+			fmt.Println()
+			fmt.Println(gt1)
+			fmt.Println()
+			fmt.Println(gt2)
+			fmt.Println()
+			fmt.Println(d1, l1, dc1)
+			fmt.Println(d2, l2, dc2)
+			t.Fatal(<span class="hljs-string">"Not equal, fail!"</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>panic(“Fail!!!”)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		}
+	}
+
+	<span class="hljs-keyword">for</span> i :=<span class="hljs-number"> 0</span>; i &lt; niter<span class="hljs-number">/100</span>; i++ {
+		<span class="hljs-built_in">print</span>(<span class="hljs-string">"~"</span>)
+		<span class="hljs-keyword">for</span> j :=<span class="hljs-number"> 0</span>; j &lt;<span class="hljs-number"> 100</span>; j++ {
+			testone()
+		}
+	}
+	<span class="hljs-built_in">println</span>()
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

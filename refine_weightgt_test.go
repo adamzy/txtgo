@@ -55,8 +55,8 @@ func Test_affineCost(t *testing.T) {
 	//ss = "((0,1),2)"
 
 	st, _ := Make(ss)
-	sst,err := st.SpeciesTree()
-        checkerror(t, err)
+	sst, err := st.SpeciesTree()
+	checkerror(t, err)
 
 	gt, _ := Make(gs)
 	//affine := affineCost(wdup, wloss)
@@ -97,8 +97,8 @@ func Test_AffineCorrect(t *testing.T) {
 		if err != nil {
 			t.Log(err)
 		}
-		sst1,err := st1.SpeciesTree()
-        checkerror(t, err)
+		sst1, err := st1.SpeciesTree()
+		checkerror(t, err)
 		RefineGt(gt1, sst1, "affine", wdup, wloss)
 		//fmt.Println(gt1)
 		d1, l1, dc1, err := BinaryCost(gt1, sst1)
@@ -120,8 +120,8 @@ func Test_AffineCorrect(t *testing.T) {
 		if err != nil {
 			t.Log(err)
 		}
-		sst2,err := st2.SpeciesTree()
-        checkerror(t, err)
+		sst2, err := st2.SpeciesTree()
+		checkerror(t, err)
 		RefineGt(gt2, sst2, "weighted", 2*wloss+wdup, wloss)
 		d2, l2, dc2, err := BinaryCost(gt2, sst2)
 		if err != nil {

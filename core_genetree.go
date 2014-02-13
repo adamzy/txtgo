@@ -14,7 +14,7 @@ type Lcamap struct {
 	Map []*Node
 }
 
-// Generate Lcamap for gene tree and species tree.
+// Generate `Lcamap` for gene tree and species tree.
 // Assume that every internal genetree node has at least two children
 func LcaMap(t *Tree, st *SpeciesTree) (*Lcamap, error) {
 	maps, err := genLcaMap(t, st)
