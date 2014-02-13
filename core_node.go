@@ -1,10 +1,8 @@
 package tree
 
 import (
-	"strconv"
-	//"strings"
-	//"errors"
 	"bytes"
+	"strconv"
 )
 
 type data struct {
@@ -28,12 +26,6 @@ type Node struct {
 	Father   *Node
 	Children []*Node
 }
-
-/*func newNode2() *Node{*/
-//node := new(Node)
-//node.data = new(data)
-//return node
-/*}*/
 
 // newNode will allocate space for data while new(Node) not
 func newNode() *Node {

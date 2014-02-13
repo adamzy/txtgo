@@ -150,17 +150,6 @@ func affineCost(wdup, wloss float64) func(*Node) {
 			return nc
 		}
 
-		// Project in onto interval [a,b].
-		project := func(i, a, b int) int {
-			switch {
-			case i <= a:
-				return a
-			case i >= b:
-				return b
-			default:
-				return i
-			}
-		}
 		nl := root.Post2List()
 		// Number of nodes in the gene tree.
 		size := len(nl)
@@ -199,7 +188,6 @@ func affineCost(wdup, wloss float64) func(*Node) {
 				//fmt.Println(" child:", rc.Id, fb)
 
 				F[i] = shiftF(restrictF(mergeF(fa, fb), wdup, wloss), W[i])
-
 				//fmt.Println("inte:", i, F[i])
 
 			default:

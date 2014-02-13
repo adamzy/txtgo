@@ -71,13 +71,13 @@ func Test_affineCost(t *testing.T) {
 }
 
 func Test_AffineCorrect(t *testing.T) {
-	niter := 100000
-	crate := 0.8
-	ntaxon := 20
+	niter := 10000
+	crate := 0.7
+	ntaxon := 50
 	nleaves := 100
 
-	wdup := 1.0
-	wloss := 10.0
+	wdup := 7.0
+	wloss := 1.5
 
 	testone := func() {
 		//fmt.Println()

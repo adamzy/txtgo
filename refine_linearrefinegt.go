@@ -1,42 +1,47 @@
 package tree
 
 import (
-	//	. "txtgo/tree"
 	"errors"
 	"sort"
 )
 
+var (
+	NotEnoughWeights = errors.New("Not enough weight parameters.")
+)
+
 // A dispatch function
-func RefineGt(gt *Tree, st *SpeciesTree, method int, weights ...float64) {
-	//refine := minDupPlusLoss
+func RefineGt(gt *Tree, st *SpeciesTree, method int, weights ...float64) error {
 	var refine func(*Node)
 	switch method {
 	case 0:
-		//println("dl")
 		refine = minDupThenLoss
 	case 1:
-		//println("mu")
 		refine = minDupPlusLoss
 	case 2:
-		//println("ld")
 		refine = minLossThenDup
 	case 3:
-		//println("weight")
+		if len(weights) < 2 {
+			return NotEnoughWeights
+		}
 		refine = weightedCost(weights[0], weights[1])
 	case 4:
+		if len(weights) < 2 {
+			return NotEnoughWeights
+		}
 		refine = affineCost(weights[0], weights[1])
 	default:
 		panic("Wrong method")
 	}
 	linearRefineGt(gt, st, refine)
+	return nil
 }
 
-func linearRefineGt(gt *Tree, st *SpeciesTree, refine func(*Node)) ([][]*Node, error) {
+func linearRefineGt(gt *Tree, st *SpeciesTree, refine func(*Node)) error {
 	if !st.IsBinary() {
-		return nil, errors.New("Species tree is not binary.")
+		return errors.New("Species tree is not binary.")
 	}
 	if gt.IsBinary() {
-		return nil, nil
+		return nil
 	}
 
 	sl := st.Nodes
@@ -45,7 +50,7 @@ func linearRefineGt(gt *Tree, st *SpeciesTree, refine func(*Node)) ([][]*Node, e
 	lm, err := LcaMap(gt, st)
 	lca := st.Lca
 	if err != nil {
-		return nil, err
+		return err
 	}
 	M := lm.Map
 
@@ -72,7 +77,6 @@ func linearRefineGt(gt *Tree, st *SpeciesTree, refine func(*Node)) ([][]*Node, e
 	//------------------------------------------------------
 	// 2) reorder the children of every non-binary
 	// gene tree node swap the children i and j
-
 	swap := func(children []*Node, i, j int) {
 		children[i], children[j] = children[j], children[i]
 		d[children[i].Id] = i
@@ -138,9 +142,7 @@ func linearRefineGt(gt *Tree, st *SpeciesTree, refine func(*Node)) ([][]*Node, e
 	var i, tid int
 
 	for _, gn := range gl {
-
 		if !gn.IsBinary() && !gn.IsLeaf() {
-
 			for i = 0; i < len(gn.Children)-1; i++ {
 				tn = M[gn.Children[i].Id]
 				//println(">> ", gn.Children[i].Name, tn.Name)
@@ -162,7 +164,6 @@ func linearRefineGt(gt *Tree, st *SpeciesTree, refine func(*Node)) ([][]*Node, e
 	// 4) Using Euler Tour of species tree to find
 	// the corresponding Euler Tour a[g] (a[g.Id] in fact)
 	// of every I^*(g).
-
 	visit := make([]bool, len(sl))
 	a := make([][]*Node, len(gl))
 	var gn, sn *Node
@@ -230,10 +231,8 @@ func linearRefineGt(gt *Tree, st *SpeciesTree, refine func(*Node)) ([][]*Node, e
 			}
 			//println()
 			reconstruct(a[i])
-
-			//fmt.Println(": ", a[i][0])
 			refine(a[i][0])
-			//minDupPlusLoss(a[i][0])
+			// replace the original subtree by the refined one.
 			gn.replaceBy(a[i][0])
 		}
 	}
@@ -254,9 +253,7 @@ func linearRefineGt(gt *Tree, st *SpeciesTree, refine func(*Node)) ([][]*Node, e
 	}
 	gt.Update()
 	//println("Step 5 done.")
-	//fmt.Println(gt)
-
-	return a, nil
+	return nil
 }
 
 func minDupThenLoss(root *Node) {
@@ -307,25 +304,14 @@ func minDupThenLoss(root *Node) {
 		Fid[i] = nl[i].Father.Id
 	}
 
-	getk := func(a, b, t int) int {
-		switch {
-		case t >= b:
-			return b
-		case t <= a:
-			return a
-		default:
-			return t
-		}
-	}
-
 	T := make([]int, size)
 	K := make([]int, size)
 	T[size-1] = 0
-	K[size-1] = getk(A[size-1], B[size-1], 0)
+	K[size-1] = project(0, A[size-1], B[size-1])
 	for i := size - 2; i >= 0; i-- {
 		n := nl[i]
 		T[i] = K[n.Father.Id] - W[n.Father.Id]
-		K[i] = getk(A[i], B[i], T[i])
+		K[i] = project(T[i], A[i], B[i])
 	}
 
 	simpleConstruct(nl, K, T, W, Fid, P)
@@ -350,9 +336,6 @@ func minLossThenDup(root *Node) {
 			K[i] = W[i] - 1
 		case 1:
 			K[i] = W[i]
-			//if n.Children[0].Level - n.Level == 1 {
-			//K[i] += K[n.Children[0].Id]
-			//}
 		case 2:
 			var v1, v2 int
 			if n.Children[0].Level-n.Level == 1 {
@@ -408,21 +391,8 @@ func minDupPlusLoss(root *Node) {
 		return w + args[1], w + args[2]
 	}
 
-	//top down, get k from t, a, b
-	getk := func(a, b, t int) int {
-		switch {
-		case t >= b:
-			return b
-		case t <= a:
-			return a
-		default:
-			return t
-		}
-	}
-
 	// don't update level!
 	// keep the level value from original species tree!
-
 	nl := root.Post2List()
 	size := len(nl)
 	A := make([]int, size)
@@ -447,31 +417,13 @@ func minDupPlusLoss(root *Node) {
 		if node.Ext != nil {
 			P[i] = node.Ext.([]*Node)
 			node.Ext = nil
-		} // else {
-		// 	P[i] = nil
-		// }
+		}
 
 		W[i] = len(P[i])
 		if node.IsLeaf() {
 			A[i] = W[i] - 1 // remove background tree
 			B[i] = A[i]
 		} else {
-			//nchild = len(node.Children)
-			//var a1,b1,a2,b2,d1,d2 int
-			//var lchild, rchild *Node
-			//switch len(node.Children){
-			////case nchild > 2 || nchild == 0:
-			//////fmt.Println(node)
-			////panic("Incorrect number of children.")
-			//case 2:
-			//rchild := node.Children[1]
-			//a2, b2 := A[rchild.Id], B[rchild.Id]
-			//d2 := rchild.Level - node.Level
-			//a2, b2 = update(a2, b2, d2)
-			//case 1:
-			//a2, b2 := 0, 0
-			//}
-
 			if len(node.Children) == 2 {
 				rchild = node.Children[1]
 				a2, b2 = A[rchild.Id], B[rchild.Id]
@@ -488,7 +440,6 @@ func minDupPlusLoss(root *Node) {
 
 			A[i], B[i] = getab(W[i], a1, b1, a2, b2)
 		}
-		//fmt.Println(A[i], B[i], W[i], a1, b1, d1, a2, b2, d2, node.Name)
 	}
 
 	// K[i]: the number of gene lineages entering the
@@ -506,7 +457,7 @@ func minDupPlusLoss(root *Node) {
 
 	// There is no extra lineage at root, thus t = 0
 	T[size-1] = 0
-	K[size-1] = getk(A[size-1], B[size-1], 0)
+	K[size-1] = project(0, A[size-1], B[size-1])
 	// the number of incoming extra lineages at node
 	for i = size - 2; i >= 0; i-- {
 		node = nl[i]
@@ -520,12 +471,13 @@ func minDupPlusLoss(root *Node) {
 			t = 0
 		}
 		T[i] = t
-		K[i] = getk(A[i], B[i], t)
-		//println(i, node.Name, K[i])
+		K[i] = project(t, A[i], B[i])
 	}
 	simpleConstruct(nl, K, T, W, Fid, P)
 }
 
+// DP + C
+// Now should be replaced by Affine method, which is faster in extreme case.
 func weightedCost(wdup, wdc float64) func(*Node) {
 	return func(root *Node) {
 		nl := root.Post2List()
@@ -533,7 +485,6 @@ func weightedCost(wdup, wdc float64) func(*Node) {
 		M := make([]int, size)
 		W := make([]int, size)
 		P := make([][]*Node, size)
-		//C := make([][]float64, size)
 		U := make([][]float64, size)
 		I := make([][]int, size)
 		for i, n := range nl {
@@ -596,24 +547,21 @@ func weightedCost(wdup, wdc float64) func(*Node) {
 		}
 
 		getMin := func(ind, in, d int) {
-			w := W[ind] // multiplicity
-			//l := C[ind] // list of cost
+			// multiplicity
+			w := W[ind]
+			// list of cost
 			l := C
 			// (p, m): the cost m with p outgoing lineages
 			// in branch ind with in incoming lineages.
 			p, m := w, getCost(in, w, d)+l[w]
-			//println(nl[ind].Name, int(m), in, p, int(l[w]))
-			//for out := w + 1; out <= mul; out++ {
 			for out := w + 1; out <= M[ind]; out++ {
 				t := getCost(in, out, d) + l[out]
-				//println(nl[ind].Name, int(t), in, out, int(l[out]))
 				if t < m {
 					p, m = out, t
 				}
 			}
 			U[ind][in] = m
 			I[ind][in] = p
-			//println("->", nl[ind].Name, int(m), in, p)
 		}
 
 		getC := func(i, w int) {
@@ -621,18 +569,13 @@ func weightedCost(wdup, wdc float64) func(*Node) {
 			switch {
 			case len(n.Children) == 1:
 				lu := U[n.Children[0].Id]
-				//for j := w; j <= mul; j++ {
 				for j := w; j <= M[i]; j++ {
-					//C[i][j] = lu[j-w]
 					C[j] = lu[j-w]
-					//println("C", n.Name, j, int(C[i][j]))
 				}
 			case len(n.Children) == 2:
 				lu := U[n.Children[0].Id]
 				ru := U[n.Children[1].Id]
-				//for j := w; j <= mul; j++ {
 				for j := w; j <= M[i]; j++ {
-					//C[i][j] = lu[j-w] + ru[j-w]
 					C[j] = lu[j-w] + ru[j-w]
 				}
 			}
@@ -643,43 +586,27 @@ func weightedCost(wdup, wdc float64) func(*Node) {
 			Fid[i] = nl[i].Father.Id
 		}
 
-		//println("--")
 		for i, n := range nl {
-			//C[i] = make([]float64, mul+1)
-			//U[i] = make([]float64, mul+1)
-			//I[i] = make([]int, mul+1)
-
 			w := W[i]
-			//println(n.Name, w)
 			switch {
 			case n.IsLeaf():
-				//U[i] = U[i][0:M[Fid[i]]- W[Fid[i]]+1]
-				//I[i] = I[i][0:M[Fid[i]]- W[Fid[i]]+1]
 				U[i] = make([]float64, M[Fid[i]]-W[Fid[i]]+1)
 				I[i] = make([]int, M[Fid[i]]-W[Fid[i]]+1)
 				d := n.Level - n.Father.Level
-				//for j := 0; j <= mul; j++ {
-				//for j := 0; j <= N[i]; j++ {
 				for j := 0; j <= M[Fid[i]]-W[Fid[i]]; j++ {
 					U[i][j] = getCost(j, w-1, d)
 					I[i][j] = w - 1
 				}
 			case n.IsRoot():
-				//U[i] = U[i][0:1]
-				//I[i] = I[i][0:1]
 				U[i] = make([]float64, 1)
 				I[i] = make([]int, 1)
 				getC(i, w)
 				getMin(i, 0, 0)
-			default: // internal not root
-				//U[i] = U[i][0:M[Fid[i]]- W[Fid[i]]+1]
-				//I[i] = I[i][0:M[Fid[i]]- W[Fid[i]]+1]
+			default: // internal but not root
 				U[i] = make([]float64, M[Fid[i]]-W[Fid[i]]+1)
 				I[i] = make([]int, M[Fid[i]]-W[Fid[i]]+1)
 				getC(i, w)
 				d := n.Level - n.Father.Level
-				//for j := 0; j <= mul; j++ {
-				//for j := 0; j <= N[i]; j++ {
 				for j := 0; j <= M[Fid[i]]-W[Fid[i]]; j++ {
 					getMin(i, j, d)
 				}
@@ -690,12 +617,9 @@ func weightedCost(wdup, wdc float64) func(*Node) {
 		T := make([]int, size)
 		T[size-1] = 0
 		K[size-1] = I[size-1][0]
-		//println("size: ", size)
 		for i := size - 2; i >= 0; i-- {
 			n := nl[i]
 			T[i] = K[n.Father.Id] - W[n.Father.Id]
-			//println(T[i])
-			//println(i, T[i], len(I[i]), n.IsLeaf())
 
 			// Important!
 			d := n.Level - n.Father.Level
@@ -713,14 +637,12 @@ func weightedCost(wdup, wdc float64) func(*Node) {
 // the information on I^*(g).
 // All duplication occurs on the background tree.
 func simpleConstruct(nl []*Node, K, T, W, Fid []int, P [][]*Node) {
-
 	// insert nodes onto the edge (node.Father, node)
 	insertNode := func(node *Node, nodes []*Node) {
 		if len(nodes) == 0 {
 			return
 		}
 		lchild := newNode()
-		//replaceNode(lchild, node)
 		lchild.replaceBy(node)
 		node.Children = nil
 		for i := 0; i < len(nodes)-1; i++ {
@@ -751,7 +673,6 @@ func simpleConstruct(nl []*Node, K, T, W, Fid []int, P [][]*Node) {
 		// children of non-binary gene tree node,
 		// such that we can embed the refined tree into
 		// the original gene tree.
-
 		if W[i] > 0 {
 			if node.IsLeaf() && K[i] != W[i]-1 {
 				panic("Something wrong.")
@@ -772,17 +693,9 @@ func simpleConstruct(nl []*Node, K, T, W, Fid []int, P [][]*Node) {
 
 		if node.Father != nil {
 			fid := Fid[i]
-			// connect extra nodes at n to the nodes
-			// at n.Father as much as possible
-
-			//extra := nodes[fid][0 : K[fid]-W[fid]]
-
-			// there are T[i] lineages inherited from n.father
-			//extra := nodes[fid][0:T[i]]
-			//length = len(extra)
-			//fmt.Println(length, K[i])
-			//for j:=0; j<length && j<K[i]; j++{
-			//for j, n := range nodes[fid][0:T[i]] {
+			// Connect extra nodes at n to the nodes
+			// at n.Father as much as possible.
+			// There are T[i] lineages inherited from n.father
 			for j := 0; j < T[i] && j < K[i]; j++ {
 				nodes[fid][j].AddChild(nodes[i][j])
 			}
@@ -792,13 +705,10 @@ func simpleConstruct(nl []*Node, K, T, W, Fid []int, P [][]*Node) {
 		if T[i] < K[i] {
 			insertNode(node, nodes[i][T[i]:K[i]])
 		}
-
-		//fmt.Println("out ", root)
 	}
 
 	for _, n := range nl {
 		if len(n.Children) == 1 {
-			//replaceNode(n, n.Children[0])
 			n.replaceBy(n.Children[0])
 		}
 	}
