@@ -6,11 +6,11 @@ import (
 )
 
 type InvalidMethodError struct {
-    Method string
+	Method string
 }
 
-func (err InvalidMethodError) Error () string {
-    return "Invalid method: " + err.Method
+func (err InvalidMethodError) Error() string {
+	return "Invalid method: " + err.Method
 }
 
 var (
@@ -38,10 +38,13 @@ func RefineGt(gt *Tree, st *SpeciesTree, method string, weights ...float64) erro
 		}
 		refine = affineCost(weights[0], weights[1])
 	default:
-        // This shouldn't happen.
-        return InvalidMethodError{method}
+		// This shouldn't happen.
+		return InvalidMethodError{method}
 	}
-	linearRefineGt(gt, st, refine)
+	err := linearRefineGt(gt, st, refine)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

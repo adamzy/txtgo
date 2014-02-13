@@ -41,11 +41,17 @@ func Test_Lineartimegt(t *testing.T) {
 		t.Log(err)
 	}
 	//st.PruneFromTree(gt)
-	sst := st.SpeciesTree()
+	sst, err := st.SpeciesTree()
+    if err != nil {
+        t.Fatal(err)
+    }
 	fmt.Println(sst.IsBinary())
 	fmt.Println(gt)
 	fmt.Println(sst)
-	RefineGt(gt, sst, "mutation", 3, 1)
+	err = RefineGt(gt, sst, "mutation", 3, 1)
+	if err != nil {
+		t.Fatal(err)
+	}
 	fmt.Println(gt)
 	fmt.Println(BinaryCost(gt, sst))
 }
@@ -56,7 +62,9 @@ func Test_Mutation1(t *testing.T) {
 
 	gt, _ := Make(gs)
 	st, _ := Make(ss)
-	sst := st.SpeciesTree()
+	sst, err := st.SpeciesTree()
+    checkerror(t, err)
+
 	RefineGt(gt, sst, "mutation")
 	fmt.Println(gt)
 	fmt.Println(BinaryCost(gt, sst))
@@ -91,7 +99,8 @@ func Test_Weight(t *testing.T) {
 		if err != nil {
 			t.Log(err)
 		}
-		sst1 := st1.SpeciesTree()
+		sst1, err := st1.SpeciesTree()
+        checkerror(t, err)
 		RefineGt(gt1, sst1, "mutation")
 		//fmt.Println(gt1)
 		d1, l1, dc1, err := BinaryCost(gt1, sst1)
@@ -107,7 +116,9 @@ func Test_Weight(t *testing.T) {
 		if err != nil {
 			t.Log(err)
 		}
-		sst2 := st2.SpeciesTree()
+		sst2, err := st2.SpeciesTree()
+        checkerror(t, err)
+
 		//RefineGt(gt2, sst2, 3, 2001, 1000)
 		//RefineGt(gt2, sst2, 3, 3000, 1)
 		RefineGt(gt2, sst2, "weighted", 3, 1)
@@ -162,7 +173,8 @@ func test_Integer(t *testing.T) {
 		if err != nil {
 			t.Log(err)
 		}
-		sst1 := st1.SpeciesTree()
+		sst1, err := st1.SpeciesTree()
+        checkerror(t, err)
 		RefineGt(gt1, sst1, "weighted", 5, 1)
 		//fmt.Println(gt1)
 		d1, l1, dc1, err := BinaryCost(gt1, sst1)
@@ -178,7 +190,8 @@ func test_Integer(t *testing.T) {
 		if err != nil {
 			t.Log(err)
 		}
-		sst2 := st2.SpeciesTree()
+		sst2, err := st2.SpeciesTree()
+        checkerror(t, err)
 		//RefineGt(gt2, sst2, 3, 2001, 1000)
 		RefineGt(gt2, sst2, "weighted", 4, 1)
 		d2, l2, dc2, err := BinaryCost(gt2, sst2)
@@ -194,7 +207,8 @@ func test_Integer(t *testing.T) {
 		if err != nil {
 			t.Log(err)
 		}
-		sst3 := st3.SpeciesTree()
+		sst3,err := st3.SpeciesTree()
+        checkerror(t, err)
 		//RefineGt(gt2, sst2, 3, 2001, 1000)
 		RefineGt(gt3, sst3, "weighted", 4.1, 1)
 		d3, l3, dc3, err := BinaryCost(gt3, sst3)

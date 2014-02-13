@@ -51,6 +51,6 @@ func (t *Tree) PruneFromTaxon(taxon Taxonmap) {
 
 // Prune tree according to another tree
 func (t *Tree) PruneFromTree(gt *Tree) {
-	taxon := gt.TaxonMap()
+	taxon, _ := gt.TaxonMap()
 	t.PruneFromTaxon(taxon)
 }

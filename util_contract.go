@@ -6,7 +6,8 @@ import (
 )
 
 func (t *Tree) ContractByLength(length float64) {
-	d := make([]int, t.Size)
+	size := len(t.Nodes)
+	d := make([]int, size)
 	for _, n := range t.Nodes {
 		if n.IsInternal() {
 			for j, c := range n.Children {
@@ -35,7 +36,7 @@ func (t *Tree) ContractByLength(length float64) {
 	}
 
 	// avoid root
-	for i := 0; i < t.Size-1; i++ {
+	for i := 0; i < size-1; i++ {
 		n := t.Nodes[i]
 		if !n.IsLeaf() && n.Length < length {
 			Contract(n)
@@ -45,8 +46,9 @@ func (t *Tree) ContractByLength(length float64) {
 }
 
 func (t *Tree) RandomContract(rate float64) {
+	size := len(t.Nodes)
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	d := make([]int, t.Size)
+	d := make([]int, size)
 	for _, n := range t.Nodes {
 		if n.IsInternal() {
 			for j, c := range n.Children {
@@ -75,7 +77,7 @@ func (t *Tree) RandomContract(rate float64) {
 	}
 
 	// avoid root
-	for i := 0; i < t.Size-1; i++ {
+	for i := 0; i < size-1; i++ {
 		n := t.Nodes[i]
 		if !n.IsLeaf() && r.Float64() < rate {
 			Contract(n)

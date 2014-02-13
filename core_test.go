@@ -19,7 +19,6 @@ func Test_MakePrint(t *testing.T) {
 	}
 	fmt.Println(tree)
 	fmt.Println(tree.toString(true))
-	fmt.Println("size:", tree.Size)
 
 	tree.Nodes = tree.Post2List()
 	for i := range tree.Nodes {
@@ -52,6 +51,7 @@ func Test_In2List(t *testing.T) {
 func Test_LcaMap(t *testing.T) {
 	gs := "((a,b)A,(c,(c,d)D)D)R;"
 	ss := "((a,b)A,(c,d)D)R;"
+	//ss = "((a,(b,d))A,(c,d)D)R;"
 	gt, err := Make(gs)
 	if err != nil {
 		t.Log(err)
@@ -61,7 +61,10 @@ func Test_LcaMap(t *testing.T) {
 		t.Log(err)
 	}
 
-	sst := st.SpeciesTree()
+	sst, err := st.SpeciesTree()
+	if err != nil {
+		t.Fatal(err)
+	}
 	lm, err := LcaMap(gt, sst)
 	if err != nil {
 		t.Log(err)
@@ -109,7 +112,8 @@ func Test_RF(t *testing.T) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	rf, err := RF(gt, st.SpeciesTree())
+    sst, _ := st.SpeciesTree()
+	rf, err := RF(gt, sst)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -129,7 +133,8 @@ func Test_RF2(t *testing.T) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	rf, err := RF(gt, st.SpeciesTree())
+    sst, _ := st.SpeciesTree()
+	rf, err := RF(gt, sst)
 	if err != nil {
 		fmt.Println(err)
 	}

@@ -10,10 +10,8 @@ import (
 type Tree struct {
 	*Node
 	Nodes []*Node
-	Size  int
+	//Size  int
 }
-
-type Taxonmap map[string]*Node
 
 // Maybe using regexp is not fast enough.
 // TODO Write a native one.
@@ -94,7 +92,7 @@ func Make(s string) (*Tree, error) {
 		return nil, errors.New("Invalid tree.")
 	}
 
-	t.Size = size
+	//t.Size = size
 	// Update t.Nodes once the tree is successfully built.
 	t.Nodes = t.Post2List()
 	t.UpdateInfo()
@@ -103,9 +101,10 @@ func Make(s string) (*Tree, error) {
 
 // Update node.Level and node.Id for tree
 func (t *Tree) UpdateInfo() {
+	size := len(t.Nodes)
 	t.Node.Level = 0
-	t.Node.Id = len(t.Nodes) - 1
-	for i := len(t.Nodes) - 2; i >= 0; i-- {
+	t.Node.Id = size - 1
+	for i := size - 2; i >= 0; i-- {
 		n := t.Nodes[i]
 		n.Level = n.Father.Level + 1
 		n.Id = i
@@ -117,7 +116,7 @@ func (t *Tree) UpdateInfo() {
 // Useful after the tree was manually edited
 func (t *Tree) Update() {
 	t.Nodes = t.Node.Post2List()
-	t.Size = len(t.Nodes)
+	//t.Size = len(t.Nodes)
 	t.UpdateInfo()
 }
 
@@ -133,58 +132,68 @@ func (t *Tree) IsBinary() bool {
 	return true
 }
 
-// The following is unnecessary.
+// A map that maps taxa to the unique leaf node
+type Taxonmap map[string]*Node
 
-// Post-Order iterate the tree and put nodes into a list
-// Rewrite method of node.Post2List, because the size is known for tree.
-func (tree *Tree) Post2List() []*Node {
-	//var nl []*Node
-	nl := make([]*Node, 0, tree.Size)
-
-	// A function that appends node with its descendent to nl
-	var ap func(n *Node) //necessary for making a recursive function here
-	ap = func(n *Node) {
-		for _, c := range n.Children {
-			ap(c)
-		}
-		nl = append(nl, n)
-	}
-
-	ap(tree.Node)
-	return nl
-}
-
-// In-Order iterate the tree and put nodes into a list.
-// It's only defined for binary tree.
-// It will cause panic for non-binary tree.
-// Rewrite method of node.In2List, because the size is known for tree.
-// Ugly!
-func (tree *Tree) In2List() []*Node {
-	//var nl []*Node
-	nl := make([]*Node, 0, tree.Size)
-
-	// A function that appends node with its descendent to nl
-	var ap func(n *Node) //necessary for making a recursive function here
-	ap = func(n *Node) {
-		if n.IsInternal() {
-			ap(n.Children[0])
-		}
-		nl = append(nl, n)
-		if n.IsInternal() {
-			ap(n.Children[1])
-		}
-	}
-
-	ap(tree.Node)
-	return nl
-}
-
-func (t *Tree) TaxonMap() Taxonmap {
-	taxon := make(Taxonmap, t.Size)
+// TaxonMap return the Taxonmap for a tree, and the uniqueness of its taxon.
+func (t *Tree) TaxonMap() (taxon Taxonmap, unique bool) {
+	taxon = make(Taxonmap, len(t.Nodes))
+    i := 0
 	for _, n := range t.Nodes {
 		if n.IsLeaf() {
 			taxon[n.Name] = n
+            i++
 		}
 	}
-	return taxon
+    if i == len(taxon) {
+        unique = true
+    }
+    return
 }
+
+
+/*// The following is unnecessary.*/
+
+//// Post-Order iterate the tree and put nodes into a list
+//// Rewrite method of node.Post2List, because the size is known for tree.
+//func (tree *Tree) Post2List() []*Node {
+////var nl []*Node
+//nl := make([]*Node, 0, tree.Size)
+
+//// A function that appends node with its descendent to nl
+//var ap func(n *Node) //necessary for making a recursive function here
+//ap = func(n *Node) {
+//for _, c := range n.Children {
+//ap(c)
+//}
+//nl = append(nl, n)
+//}
+
+//ap(tree.Node)
+//return nl
+//}
+
+//// In-Order iterate the tree and put nodes into a list.
+//// It's only defined for binary tree.
+//// It will cause panic for non-binary tree.
+//// Rewrite method of node.In2List, because the size is known for tree.
+//// Ugly!
+//func (tree *Tree) In2List() []*Node {
+////var nl []*Node
+//nl := make([]*Node, 0, tree.Size)
+
+//// A function that appends node with its descendent to nl
+//var ap func(n *Node) //necessary for making a recursive function here
+//ap = func(n *Node) {
+//if n.IsInternal() {
+//ap(n.Children[0])
+//}
+//nl = append(nl, n)
+//if n.IsInternal() {
+//ap(n.Children[1])
+//}
+//}
+
+//ap(tree.Node)
+//return nl
+/*}*/

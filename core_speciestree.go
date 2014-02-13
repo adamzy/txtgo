@@ -1,22 +1,30 @@
 package tree
 
 import (
+    "errors"
 	"txtgo/rmq"
+)
+
+var (
+    SpeciesTreeNotUniquelyLabeledError = errors.New("Species tree is not uniquely labeled.")
 )
 
 type SpeciesTree struct {
 	*Tree
-	//Taxon map[string]*Node // a map that maps taxa to the unique leaf node
 	Taxon Taxonmap
 	Lca   func(a, b *Node) *Node
 }
 
-func (t *Tree) SpeciesTree() *SpeciesTree {
-	st := new(SpeciesTree)
+func (t *Tree) SpeciesTree() (*SpeciesTree, error) {
+    st := new(SpeciesTree)
 	st.Tree = t
-	st.Taxon = t.TaxonMap()
+    var unique bool
+    st.Taxon, unique = t.TaxonMap()
+    if !unique {
+        return nil, SpeciesTreeNotUniquelyLabeledError
+    }
 	st.Lca = t.LCAer()
-	return st
+	return st, nil
 }
 
 // Make a LCAer function for species tree t.
@@ -24,30 +32,29 @@ func (t *Tree) SpeciesTree() *SpeciesTree {
 //      Lca := st.LCAer()
 //      Lca(a, b)
 func (t *Tree) LCAer() func(a, b *Node) *Node {
+    size := len(t.Nodes)
 	// Euler tour visit each internal node 3 times,
 	// and leaf node once, thus the total length is at most
 	// len(nodes)*3.
-	array := make([]int64, t.Size*3)
+	array := make([]int64, size*3)
 
 	// each node in t has an id in the rmq array
-	mapid := make([]int64, t.Size)
+	mapid := make([]int64, size)
 
 	// each id in rmq array also associate a node
-	nodes := make([]*Node, t.Size*3)
-	visit := make([]int, t.Size)
+	nodes := make([]*Node, size*3)
+	visit := make([]int, size)
 
-	//fmt.Println("rmq")
 	var index int64
 	n := t.Node
 	for n != nil {
 		array[index] = int64(n.Level)
 		nodes[index] = n
-
 		id := n.Id
-		mapid[id] = index //mapid[id] may update 3 times, it's fine
 
-		//visit[id] = true
-		//fmt.Println(index, n.Name, n)
+        //mapid[id] may update 3 times, it's fine
+		mapid[id] = index 
+
 		index++
 
 		switch {
@@ -62,65 +69,12 @@ func (t *Tree) LCAer() func(a, b *Node) *Node {
 	}
 	array = array[:index]
 
-	//fmt.Println(array)
 	rmqer := rmq.ResRMQ(array)
 	return func(a, b *Node) *Node {
 		aid := mapid[a.Id]
 		bid := mapid[b.Id]
 		p, _ := rmqer(aid, bid)
 		//println(a.Name, aid, b.Name, bid, p, len(array))
-		return nodes[p]
-	}
-}
-
-// This one only works for binary tree, has been replaced by LCAer().
-// Make a LCAer function for species tree t.
-// Usage:
-//      Lca := st.LCAer()
-//      Lca(a, b)
-func (t *Tree) lCAerOld() func(a, b *Node) *Node {
-	// Euler tour visit each internal node 3 times,
-	// and leaf node once, thus the total length is at most
-	// len(nodes)*3.
-	array := make([]int64, t.Size*3)
-
-	// each node in t has an id in the rmq array
-	mapid := make([]int64, t.Size)
-
-	// each id in rmq array also associate a node
-	nodes := make([]*Node, t.Size*3)
-	visit := make([]bool, t.Size)
-
-	var index int64
-	n := t.Node
-	for n != nil {
-		array[index] = int64(n.Level)
-		nodes[index] = n
-
-		id := n.Id
-		mapid[id] = index //mapid[id] may update 3 times, it's fine
-
-		visit[id] = true
-		index++
-
-		switch {
-		case n.IsLeaf():
-			n = n.Father
-		case !visit[n.Children[0].Id]:
-			n = n.Children[0]
-		case !visit[n.Children[1].Id]:
-			n = n.Children[1]
-		default:
-			n = n.Father
-		}
-	}
-	array = array[:index]
-
-	rmqer := rmq.ResRMQ(array)
-	return func(a, b *Node) *Node {
-		aid := mapid[a.Id]
-		bid := mapid[b.Id]
-		p, _ := rmqer(aid, bid)
 		return nodes[p]
 	}
 }
