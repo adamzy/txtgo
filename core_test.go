@@ -33,21 +33,6 @@ func Test_MakePrint(t *testing.T) {
 	fmt.Println(sss.IsBinary())
 }
 
-func Test_In2List(t *testing.T) {
-	s := "((a,b )A, ( c:3.2, (d , eee :-23 ) D )C: 23 ) root"
-	tree, err := Make(s)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(tree)
-	il := tree.In2List()
-	for i := range il {
-		n := il[i]
-		fmt.Println(i, n.Name)
-	}
-	fmt.Println(tree.Name)
-}
-
 func Test_LcaMap(t *testing.T) {
 	gs := "((a,b)A,(c,(c,d)D)D)R;"
 	ss := "((a,b)A,(c,d)D)R;"

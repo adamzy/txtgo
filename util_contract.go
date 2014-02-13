@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// Contract tree branches whose lengthes are less than the given one.
 func (t *Tree) ContractByLength(length float64) {
 	size := len(t.Nodes)
 	d := make([]int, size)
@@ -45,6 +46,7 @@ func (t *Tree) ContractByLength(length float64) {
 	t.Update()
 }
 
+// Randomly contract tree branches according to the given rate.
 func (t *Tree) RandomContract(rate float64) {
 	size := len(t.Nodes)
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))

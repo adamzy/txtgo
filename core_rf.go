@@ -1,7 +1,7 @@
 package tree
 
 // RF finds the Robinson-Folds distance for uniquely
-// labeled input binary gene tree and species tree.
+// labeled binary gene tree and species tree.
 func RF(gt *Tree, st *SpeciesTree) (rf int, err error) {
 	lm, err := LcaMap(gt, st)
 

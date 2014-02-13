@@ -112,50 +112,6 @@ func (node *Node) IsBinary() bool {
 	return len(node.Children) == 2
 }
 
-// Inorder iterate the tree and put nodes into a list.
-// It's only defined for binary tree.
-// It will cause panic for non-bianry tree.
-// Note: Not finished yet.
-// TODO Fix this. Morri's iteration?
-func (node *Node) in2List() []*Node {
-	nl := make([]*Node, 0, 20)
-
-	flag := false
-	for n := leftmost(node); n.Father != nil; {
-		if flag {
-			n = n.Children[1]
-		} else {
-			n = n.Father
-		}
-	}
-	nl = append(nl, node)
-	return nl
-}
-
-// Inorder iterate the tree and put nodes into a list.
-// It's only defined for binary tree.
-// It will cause panic for non-bianry tree.
-// Ugly!
-func (node *Node) In2List() []*Node {
-	//var nl []*Node
-	nl := make([]*Node, 0, 20)
-
-	// A function that appends node with its descandent to nl
-	var ap func(n *Node) //necessary for making a recursive function here
-	ap = func(n *Node) {
-		if n.IsInternal() {
-			ap(n.Children[0])
-		}
-		nl = append(nl, n)
-		if n.IsInternal() {
-			ap(n.Children[1])
-		}
-	}
-
-	ap(node)
-	return nl
-}
-
 func (n *Node) replaceBy(m *Node) {
 	n.Children = m.Children
 	for _, c := range n.Children {
