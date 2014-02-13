@@ -51,6 +51,12 @@ func read(fname string) string {
 	return string(data)
 }
 
+func checkerror(err error) {
+    if err != nil {
+        log.Fatal(err)
+    }
+}
+
 func main() {
 	flag.Usage = usage
 	flag.Parse()
@@ -89,22 +95,20 @@ func main() {
 	}
 
 	gt, err := T.Make(gs)
-	if err != nil {
-		log.Fatal(err)
-	}
-	st, err := T.Make(ss)
-	if err != nil {
-		log.Fatal(err)
-	}
+    checkerror(err)
+		st, err := T.Make(ss)
+        checkerror(err)
 	sst := st.SpeciesTree()
 	if !sst.IsBinary() {
 		log.Fatal("Species must be binary.")
 	}
-	T.RefineGt(gt, sst, _m, _wdup, _wloss)
+
+    err = T.RefineGt(gt, sst, _m, _wdup, _wloss)
+    checkerror(err)
+
 	dup, loss, _, err := binaryCost(gt, sst)
-	if err != nil {
-		log.Fatal(err)
-	}
+    checkerror(err)
+
 	fmt.Println("Refined Gene Tree:")
 	fmt.Println(gt)
 	fmt.Printf("\nDup: %d, Loss: %d\n", dup, loss)
