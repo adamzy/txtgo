@@ -28,9 +28,9 @@ Usage:
 Options:
     -g      gene tree file    
     -s      species tree file
-    -m      method [mutation/duploss/lossdup/weighted/affine]
-    -wdup   weight for duplication, only for weighted/affine
-    -wloss  weight for loss, only for weighted/affine
+    -m      method [mutation/duploss/lossdup/affine]
+    -wdup   weight for duplication, only for affine
+    -wloss  weight for loss, only for affine
     -V      show version
 Example:
     %s -g gene_tree -s species_tree -m mutation
@@ -75,12 +75,12 @@ func main() {
 		_wdup = *wdup + 2*(*wloss)
 	}
 
-	if *wdup <= 0 {
+	if *wdup < 0 {
 		log.Fatal("wdup must be non-negative.")
 	}
 
-	if *wloss <= 0 {
-		log.Fatal("wdup must be non-negative.")
+	if *wloss < 0 {
+		log.Fatal("wloss must be non-negative.")
 	}
 
 	gt, err := T.Make(gs)
