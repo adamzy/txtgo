@@ -73,15 +73,14 @@ func power2(size int64) []int64 {
 	return pow
 }
 
-// log2(size) return a list log[]
-// log[x] return n s.t. 2^n <= x < 2^(n+1), i.e. log[x] = floor(log_2(x))
+// log2(size) return a list log[] which length size+1,
+// where log[x] return n s.t. 2^n <= x < 2^(n+1),
+// i.e. log[x] = floor(log_2(x)) for x > 0.
 func log2(size int64) []int64 {
 	log := make([]int64, size+1)
-	log[0] = 0
-	i := int64(1)
-	j := int64(2)
-	k := int64(0)
-	for j <= size+1 {
+    var i,j,k int64
+    i, j = 1, 2
+	for j <= size {
 		for i < j {
 			log[i] = k
 			i++
