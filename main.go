@@ -85,6 +85,7 @@ func main() {
 
 	gt, err := T.Make(gs)
 	checkerror(err)
+    gt.ContractSingleChild()
 	st, err := T.Make(ss)
 	checkerror(err)
 	sst, err := st.SpeciesTree()
