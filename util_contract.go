@@ -5,6 +5,16 @@ import (
 	"time"
 )
 
+// Contract tree branches which have only one child.
+func (t *Tree) ContractSingleChild() {
+    for _, n := range t.Nodes {
+        if len(n.Children) == 1 {
+            n.replaceBy(n.Children[0])
+        }
+    }
+    t.Update()
+}
+
 // Contract tree branches whose lengthes are less than the given one.
 func (t *Tree) ContractByLength(length float64) {
 	size := len(t.Nodes)

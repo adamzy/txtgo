@@ -72,13 +72,13 @@ func Test_affineCost(t *testing.T) {
 }
 
 func Test_AffineCorrect(t *testing.T) {
-	niter := 10000
-	crate := 0.7
+	niter := 1000
+	crate := 0.8
 	ntaxon := 50
 	nleaves := 100
 
-	wdup := 7.0
-	wloss := 1.5
+	wdup := 1.0
+	wloss := 1.0
 
 	testone := func() {
 		//fmt.Println()
@@ -122,7 +122,7 @@ func Test_AffineCorrect(t *testing.T) {
 		}
 		sst2, err := st2.SpeciesTree()
 		checkerror(t, err)
-		RefineGt(gt2, sst2, "weighted", 2*wloss+wdup, wloss)
+		RefineGt(gt2, sst2, "mutation", 2*wloss+wdup, wloss)
 		d2, l2, dc2, err := BinaryCost(gt2, sst2)
 		if err != nil {
 			fmt.Println(gt2)
