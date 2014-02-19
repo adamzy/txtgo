@@ -8,6 +8,8 @@
 //   Springer Berlin Heidelberg, 2000. 88-94.
 package rmq
 
+import "math"
+
 func make2dslice(row, col int64) [][]int64 {
     S := make([][]int64, row)
     for i := range S {
@@ -105,22 +107,7 @@ func ResRMQ(A []int64) func(x, y int64) (p, v int64) {
 		}
     }
 
-	// n is ceil(log(2))
-	n := int64(0)
-	for x := length; x != 0; x >>= 1 {
-		n++
-	}
-    // taken from http://graphics.stanford.edu/~seander/bithacks.html
-	// check if length is a power of 2
-	if (length & (length - 1)) == 0 {
-		n--
-	}
-
-	// size is the size of each block
-	size := n / 2
-	if n%2 != 0 {
-		size++
-	}
+    size := int64(math.Ceil(math.Log2(float64(2*length))))
 
 	// num is the number of blocks
 	num := length / size
@@ -233,9 +220,7 @@ func processBlock(size int64) func([]int64) [][]int64 {
     // number of all possible +-1 sequence begin with 0
 	num := int64(1 << uint64(size))
 	a := make([][][]int64, num)
-	//for i := int64(0); i < num; i++ {
-		//a[i] = dynamic(i, size)
-	//}
+
 	return func(A []int64) [][]int64 {
 		v := arraytoint(A)
         // if a[v] hasn't been computed before, then compute it.
