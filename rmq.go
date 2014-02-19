@@ -1,63 +1,66 @@
-// Assume size of input array <= 2*64-1
+// Package `rmq` implements Bender-Farach Algorithm 
+// for RMQ (Range Mininum Query) problem.
+// Assume size of input array <= 2*64-1.
+// This should be OK for almost all cases.
+// For the algorithm details, check 
+//   Bender, Michael A., and Martin Farach-Colton. 
+//   "The LCA problem revisited." LATIN 2000: Theoretical Informatics. 
+//   Springer Berlin Heidelberg, 2000. 88-94.
 package rmq
 
-//func log2(x int64) int64 {
-//n := 0
-//for ;x!=0;x>>=1 {
-//n++
-//}
-//return n
-//}
+func make2dslice(row, col int64) [][]int64 {
+    S := make([][]int64, row)
+    for i := range S {
+        S[i] = make([]int64, col)
+    }
+    return S
+}
 
 // Sparse Table algorithm (time complexity O(n*log(n))
-func st(A []int64) func(x, y int64) (posi, min int64) {
-	size := int64(len(A))
-	log := log2(size) // log_2
-	s := log[len(A)]
-	pow := power2(s) // pow_2
+// Given a list `A`, `st(A)` return a function `f`,
+// where `f(x,y)` return the position and value of the
+// item with minimal value between location `x` and `y`.
+func st(A []int64) func(x, y int64) (loci, value int64) {
+    size := int64(len(A))
+    _log := log2(size)
+    s := _log[size]
+    _pow := power2(s)
+    
+    M := make2dslice(size, s+1)
+    N := make2dslice(size, s+1)
 
-	M := make([][]int64, size)
-	N := make([][]int64, size)
-	for i := range M {
-		M[i] = make([]int64, s+1)
-		N[i] = make([]int64, s+1)
-	}
+    for i:=int64(0); i< size; i++ {
+        M[i][0] = A[i]
+        N[i][0] = i
+    }
+    for j:=int64(1); j<=s; j++ {
+        for i:=int64(0); i<=size-_pow[j]; i++ {
+            k := i+_pow[j-1]
+            if M[i][j-1] <= M[k][j-1] {
+                M[i][j] = M[i][j-1]
+                N[i][j] = N[i][j-1]
+            } else {
+                M[i][j] = M[k][j-1]
+                N[i][j] = N[k][j-1]
+            }
+        }
+    }
 
-	for i := int64(0); i < size-1; i++ {
-		if A[i] <= A[i+1] {
-			M[i][0] = A[i]
-			N[i][0] = i
-		} else {
-			M[i][0] = A[i+1]
-			N[i][0] = i + 1
-		}
-	}
-
-	for j := int64(1); j <= s; j++ {
-		for i := int64(0); i < size-pow[j]; i++ {
-			if M[i][j-1] <= M[i+pow[j-1]][j-1] {
-				M[i][j] = M[i][j-1]
-				N[i][j] = N[i][j-1]
-			} else {
-				M[i][j] = M[i+pow[j-1]][j-1]
-				N[i][j] = N[i+pow[j-1]][j-1]
-			}
-		}
-	}
-
-	return func(x, y int64) (int64, int64) {
-		//fmt.Println(len(log), x, y)
-		if x == y { // if y-x == 0, don't use log and pow
-			return N[x][0], M[x][0]
-		}
-
-		r := log[y-x]
-		if M[x][r] > M[y-pow[r]][r] {
-			return N[y-pow[r]][r], M[y-pow[r]][r]
-		} else {
-			return N[x][r], M[x][r]
-		}
-	}
+    return func (x, y int64) (posi, value int64) {
+        if x==y {
+            return x, A[x]
+        }
+        if x > y {
+            x,y = y,x
+        }
+        r := _log[y-x] 
+        k := y-_pow[r]+1
+        if M[x][r] <= M[k][r] {
+            return N[x][r], M[x][r]
+        } else {
+            return N[k][r], M[k][r]
+        }
+    }
 }
 
 func power2(size int64) []int64 {
@@ -70,6 +73,7 @@ func power2(size int64) []int64 {
 	return pow
 }
 
+// log2(size) return a list log[]
 // log[x] return n s.t. 2^n <= x < 2^(n+1), i.e. log[x] = floor(log_2(x))
 func log2(size int64) []int64 {
 	log := make([]int64, size+1)
@@ -94,6 +98,7 @@ func log2(size int64) []int64 {
 
 // +-RMQ, the restricted RMQ
 func ResRMQ(A []int64) func(x, y int64) (p, v int64) {
+    // if `A` has length less than 2, do nothing.
 	if len(A) < 2 {
 		return func(x, y int64) (int64, int64) {
 			return 0, 0
@@ -129,7 +134,7 @@ func ResRMQ(A []int64) func(x, y int64) (p, v int64) {
 	// res[i] is the offset of i in block loc[i].
 	res := make([]int64, length)
 
-	// rre[i] is the position of the first element in block i.
+	// pre[i] is the position of the first element in block i.
 	pre := make([]int64, num)
 
 	// B[i][j][k] is the optimal position in block i, from position j to k.
@@ -182,11 +187,14 @@ func ResRMQ(A []int64) func(x, y int64) (p, v int64) {
 
 	return func(x, y int64) (int64, int64) {
 		// always assume 0 <= x <= y < length
+        if x > y {
+            x, y = y, x
+        }
 		u, v := loc[x], loc[y]
 		ur, vr := res[x], res[y]
 		up, vp := pre[u], pre[v]
 
-		//fmt.Println("~", x, y, ":", u, v, ur, vr, up, vp)
+        //println("~", x, y, ":", u, v, ur, vr, up, vp)
 		if u == v {
 			//return B[u][ur][vr], E[u][ur][vr]
 			pos := up + B[u][ur][vr]
@@ -200,6 +208,7 @@ func ResRMQ(A []int64) func(x, y int64) (p, v int64) {
 			//v2 := E[v][0][vr]
 			v2 := A[p2]
 
+            //println("v1, p1, v2, p2: ", v1, p1, v2, p2)
 			var vv, pp int64
 			if v1 <= v2 {
 				vv = v1
@@ -211,6 +220,8 @@ func ResRMQ(A []int64) func(x, y int64) (p, v int64) {
 
 			if v-u > 1 {
 				p3, v3 := tabler(u+1, v-1)
+                //fmt.Println(D)
+                //println("v3, p3: ", v3, p3)
 				if v3 < vv {
 					vv = v3
 					pp = C[p3]
@@ -306,29 +317,6 @@ func dynamic(n, size int64) [][]int64 {
 			/*}*/
 			t[i][j] = pos
 			m[i][j] = opt
-		}
-	}
-	return t
-}
-
-func dynamicArray(A []int64) [][]int64 {
-	size := int64(len(A))
-	t := make([][]int64, size) //t[i][j] = position with min value in A[i,j]
-	m := make([][]int64, size) //m[i][j] = min value in A[i,j]
-
-	for i := int64(0); i < size; i++ {
-		t[i] = make([]int64, size)
-		m[i] = make([]int64, size)
-		t[i][i] = i
-		m[i][i] = A[i]
-		for j := i + 1; j < size; j++ {
-			if A[j] < m[i][j-1] {
-				t[i][j] = j
-				m[i][j] = A[j]
-			} else {
-				t[i][j] = t[i][j-1]
-				m[i][j] = m[i][j-1]
-			}
 		}
 	}
 	return t
