@@ -4,7 +4,7 @@ A tool for phylogeny reconciliation
 
 ## Installation
 
-With a healthy `Go` environment, run `go get github.com/adamzy/txtgo/`.
+With a healthy `Go` environment, run `go get github.com/adamzy/txtgo/txtrgt`.
 
 ## Example
 
