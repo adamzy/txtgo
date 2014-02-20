@@ -249,13 +249,13 @@ linearRefineGt(gt, sst, affine)</p>
 }
 
 <span class="hljs-keyword">func</span> Test_AffineCorrect(t *testing.T) {
-	niter :=<span class="hljs-number"> 10000</span>
-	crate :=<span class="hljs-number"> 0.7</span>
+	niter :=<span class="hljs-number"> 1000</span>
+	crate :=<span class="hljs-number"> 0.8</span>
 	ntaxon :=<span class="hljs-number"> 50</span>
 	nleaves :=<span class="hljs-number"> 100</span>
 
-	wdup :=<span class="hljs-number"> 7.0</span>
-	wloss :=<span class="hljs-number"> 1.5</span>
+	wdup :=<span class="hljs-number"> 1.0</span>
+	wloss :=<span class="hljs-number"> 1.0</span>
 
 	testone := <span class="hljs-keyword">func</span>() {</pre></div></div>
             
@@ -338,7 +338,7 @@ linearRefineGt(gt, sst, affine)</p>
 		}
 		sst2, err := st2.SpeciesTree()
 		checkerror(t, err)
-		RefineGt(gt2, sst2, <span class="hljs-string">"weighted"</span>,<span class="hljs-number"> 2</span>*wloss+wdup, wloss)
+		RefineGt(gt2, sst2, <span class="hljs-string">"mutation"</span>,<span class="hljs-number"> 2</span>*wloss+wdup, wloss)
 		d2, l2, dc2, err := BinaryCost(gt2, sst2)
 		<span class="hljs-keyword">if</span> err != <span class="hljs-constant">nil</span> {
 			fmt.Println(gt2)

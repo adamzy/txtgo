@@ -217,3 +217,164 @@ func affineCost(wdup, wloss float64) func(*Node) {
 		simpleConstruct(nl, K, T, W, Fid, P)
 	}
 }
+
+// ........................................................................
+
+// DP + C
+// Now should be replaced by Affine method, which is faster in extreme case.
+func weightedCost(wdup, wdc float64) func(*Node) {
+	return func(root *Node) {
+		nl := root.Post2List()
+		size := len(nl)
+		M := make([]int, size)
+		W := make([]int, size)
+		P := make([][]*Node, size)
+		U := make([][]float64, size)
+		I := make([][]int, size)
+		for i, n := range nl {
+			n.Id = i
+			if n.Ext != nil {
+				P[i] = n.Ext.([]*Node)
+				n.Ext = nil
+			}
+			W[i] = len(P[i])
+			switch {
+			case len(n.Children) == 0:
+				M[i] = W[i] - 1
+			case len(n.Children) == 1:
+				M[i] = M[n.Children[0].Id] + W[i]
+			case len(n.Children) == 2:
+				v1 := M[n.Children[0].Id]
+				v2 := M[n.Children[1].Id]
+				if v1 > v2 {
+					M[i] = v1
+				} else {
+					M[i] = v2
+				}
+				M[i] += W[i]
+			default:
+				panic("Not a binary node!")
+			}
+		}
+
+		// A special case is that there is
+		// only one node in I^*(g).
+		if size == 1 {
+			K := make([]int, size)
+			T := make([]int, size)
+			T[0] = 0
+			K[0] = W[0] - 1
+			simpleConstruct(nl, K, T, W, nil, P)
+			return
+		}
+
+		mul := M[size-1]
+		C := make([]float64, mul+1)
+
+		min := func(args ...float64) float64 {
+			m := args[0]
+			for i := 1; i < len(args); i++ {
+				if args[i] < m {
+					m = args[i]
+				}
+			}
+			return m
+		}
+
+		getCost := func(in, out, d int) float64 {
+			m := min(float64(d)*wdc, wdup)
+			if in >= out {
+				return m * float64(out)
+			} else {
+				return m*float64(in) + wdup*float64(out-in)
+			}
+		}
+
+		getMin := func(ind, in, d int) {
+			// multiplicity
+			w := W[ind]
+			// list of cost
+			l := C
+			// (p, m): the cost m with p outgoing lineages
+			// in branch ind with in incoming lineages.
+			p, m := w, getCost(in, w, d)+l[w]
+			for out := w + 1; out <= M[ind]; out++ {
+				t := getCost(in, out, d) + l[out]
+				if t < m {
+					p, m = out, t
+				}
+			}
+			U[ind][in] = m
+			I[ind][in] = p
+		}
+
+		getC := func(i, w int) {
+			n := nl[i]
+			switch {
+			case len(n.Children) == 1:
+				lu := U[n.Children[0].Id]
+				for j := w; j <= M[i]; j++ {
+					C[j] = lu[j-w]
+				}
+			case len(n.Children) == 2:
+				lu := U[n.Children[0].Id]
+				ru := U[n.Children[1].Id]
+				for j := w; j <= M[i]; j++ {
+					C[j] = lu[j-w] + ru[j-w]
+				}
+			}
+		}
+
+		Fid := make([]int, size)
+		for i := 0; i < size-1; i++ {
+			Fid[i] = nl[i].Father.Id
+		}
+
+		for i, n := range nl {
+			w := W[i]
+			switch {
+			case n.IsLeaf():
+				U[i] = make([]float64, M[Fid[i]]-W[Fid[i]]+1)
+				I[i] = make([]int, M[Fid[i]]-W[Fid[i]]+1)
+				d := n.Level - n.Father.Level
+				for j := 0; j <= M[Fid[i]]-W[Fid[i]]; j++ {
+					U[i][j] = getCost(j, w-1, d)
+					I[i][j] = w - 1
+				}
+			case n.IsRoot():
+				U[i] = make([]float64, 1)
+				I[i] = make([]int, 1)
+				getC(i, w)
+				getMin(i, 0, 0)
+			default: // internal but not root
+				U[i] = make([]float64, M[Fid[i]]-W[Fid[i]]+1)
+				I[i] = make([]int, M[Fid[i]]-W[Fid[i]]+1)
+				getC(i, w)
+				d := n.Level - n.Father.Level
+				for j := 0; j <= M[Fid[i]]-W[Fid[i]]; j++ {
+					getMin(i, j, d)
+				}
+			}
+		}
+
+		K := make([]int, size)
+		T := make([]int, size)
+		T[size-1] = 0
+		K[size-1] = I[size-1][0]
+		for i := size - 2; i >= 0; i-- {
+			n := nl[i]
+			T[i] = K[n.Father.Id] - W[n.Father.Id]
+
+			// Important!
+			d := n.Level - n.Father.Level
+			if float64(d)*wdc > wdup {
+				T[i] = 0
+			}
+			K[i] = I[i][T[i]]
+		}
+
+		simpleConstruct(nl, K, T, W, Fid, P)
+	}
+}
+
+
