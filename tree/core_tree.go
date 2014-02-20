@@ -65,10 +65,16 @@ func Make(s string) (*Tree, error) {
 			n = c
 			flag = false
 		case ")":
+            if n.Father == nil {
+                return nil, InvalidTreeError{s}
+            }
 			n = n.Father
 			flag = false
 		case ",":
 			c = newNode()
+            if n.Father == nil {
+                return nil, InvalidTreeError{s}
+            }
 			n.Father.AddChild(c)
 			n = c
 			flag = false
@@ -80,7 +86,7 @@ func Make(s string) (*Tree, error) {
 			if flag {
 				length, err := strconv.ParseFloat(v, 64)
 				if err != nil {
-					return nil, InvalidTreeError{v}
+					return nil, InvalidEdgeLengthError{v}
 				}
 				n.Length = length
 			} else {
