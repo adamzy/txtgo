@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
+	T "github.com/adamzy/txtgo/tree"
 	"io/ioutil"
 	"log"
 	"os"
-	T "github.com/adamzy/txtgo/tree"
 )
 
 const version = "20140220"
