@@ -376,5 +376,3 @@ func weightedCost(wdup, wdc float64) func(*Node) {
 		simpleConstruct(nl, K, T, W, Fid, P)
 	}
 }
-
-

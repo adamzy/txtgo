@@ -29,7 +29,7 @@ func RefineGt(gt *Tree, st *SpeciesTree, method string, weights ...float64) erro
 	case "lossdup":
 		refine = minLossThenDup
 
-    // deprecated, use `affine` instead.
+		// deprecated, use `affine` instead.
 	case "weighted":
 		if len(weights) < 2 {
 			return NotEnoughWeightsError
