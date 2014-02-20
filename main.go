@@ -9,7 +9,7 @@ import (
 	T "txtgo/tree"
 )
 
-const version = "20140213"
+const version = "20140220"
 
 var (
 	gf          = flag.String("g", "", "gene tree file")
@@ -85,7 +85,7 @@ func main() {
 
 	gt, err := T.Make(gs)
 	checkerror(err)
-    gt.ContractSingleChild()
+	gt.ContractSingleChild()
 	st, err := T.Make(ss)
 	checkerror(err)
 	sst, err := st.SpeciesTree()
