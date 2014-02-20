@@ -3,7 +3,7 @@ package tree
 import (
 	"errors"
 	//Use `rmq` package which inplements the linear-time algorithm for solving RMQ problem.
-	"txtgo/rmq"
+	"github.com/adamzy/txtgo/rmq"
 )
 
 var (
