@@ -1,21 +1,21 @@
-// Package `rmq` implements Bender-Farach Algorithm 
+// Package `rmq` implements Bender-Farach Algorithm
 // for RMQ (Range Minimum Query) problem.
 // Assume size of input array <= 2^63-1, since we use int64.
 // This should be OK for almost all cases.
-// For the algorithm details, check 
-//   Bender, Michael A., and Martin Farach-Colton. 
-//   "The LCA problem revisited." LATIN 2000: Theoretical Informatics. 
+// For the algorithm details, check
+//   Bender, Michael A., and Martin Farach-Colton.
+//   "The LCA problem revisited." LATIN 2000: Theoretical Informatics.
 //   Springer Berlin Heidelberg, 2000. 88-94.
 package rmq
 
 import "math"
 
 func make2dslice(row, col int64) [][]int64 {
-    S := make([][]int64, row)
-    for i := range S {
-        S[i] = make([]int64, col)
-    }
-    return S
+	S := make([][]int64, row)
+	for i := range S {
+		S[i] = make([]int64, col)
+	}
+	return S
 }
 
 // Sparse Table algorithm (time complexity O(n*log(n))
@@ -23,46 +23,46 @@ func make2dslice(row, col int64) [][]int64 {
 // where `f(x,y)` return the position and value of the
 // item with minimal value between location `x` and `y`.
 func st(A []int64) func(x, y int64) (loci, value int64) {
-    size := int64(len(A))
-    _log := log2(size)
-    s := _log[size]
-    _pow := power2(s)
-    
-    M := make2dslice(size, s+1)
-    N := make2dslice(size, s+1)
+	size := int64(len(A))
+	_log := log2(size)
+	s := _log[size]
+	_pow := power2(s)
 
-    for i:=int64(0); i< size; i++ {
-        M[i][0] = A[i]
-        N[i][0] = i
-    }
-    for j:=int64(1); j<=s; j++ {
-        for i:=int64(0); i<=size-_pow[j]; i++ {
-            k := i+_pow[j-1]
-            if M[i][j-1] <= M[k][j-1] {
-                M[i][j] = M[i][j-1]
-                N[i][j] = N[i][j-1]
-            } else {
-                M[i][j] = M[k][j-1]
-                N[i][j] = N[k][j-1]
-            }
-        }
-    }
+	M := make2dslice(size, s+1)
+	N := make2dslice(size, s+1)
 
-    return func (x, y int64) (posi, value int64) {
-        if x==y {
-            return x, A[x]
-        }
-        if x > y {
-            x,y = y,x
-        }
-        r := _log[y-x] 
-        k := y-_pow[r]+1
-        if M[x][r] <= M[k][r] {
-            return N[x][r], M[x][r]
-        } else {
-            return N[k][r], M[k][r]
-        }
-    }
+	for i := int64(0); i < size; i++ {
+		M[i][0] = A[i]
+		N[i][0] = i
+	}
+	for j := int64(1); j <= s; j++ {
+		for i := int64(0); i <= size-_pow[j]; i++ {
+			k := i + _pow[j-1]
+			if M[i][j-1] <= M[k][j-1] {
+				M[i][j] = M[i][j-1]
+				N[i][j] = N[i][j-1]
+			} else {
+				M[i][j] = M[k][j-1]
+				N[i][j] = N[k][j-1]
+			}
+		}
+	}
+
+	return func(x, y int64) (posi, value int64) {
+		if x == y {
+			return x, A[x]
+		}
+		if x > y {
+			x, y = y, x
+		}
+		r := _log[y-x]
+		k := y - _pow[r] + 1
+		if M[x][r] <= M[k][r] {
+			return N[x][r], M[x][r]
+		} else {
+			return N[k][r], M[k][r]
+		}
+	}
 }
 
 func power2(size int64) []int64 {
@@ -80,8 +80,8 @@ func power2(size int64) []int64 {
 // i.e. log[x] = floor(log_2(x)) for x > 0.
 func log2(size int64) []int64 {
 	log := make([]int64, size+1)
-    var i,j,k int64
-    i, j = 1, 2
+	var i, j, k int64
+	i, j = 1, 2
 	for j <= size {
 		for i < j {
 			log[i] = k
@@ -100,15 +100,15 @@ func log2(size int64) []int64 {
 // +-1 RMQ, the restricted RMQ
 func ResRMQ(A []int64) func(x, y int64) (p, v int64) {
 	length := int64(len(A))
-    // if `A` has length less than 2, do nothing.
+	// if `A` has length less than 2, do nothing.
 	if length < 2 {
 		return func(x, y int64) (int64, int64) {
 			return 0, 0
 		}
-    }
+	}
 
-    // size of each block
-    size := int64(math.Ceil(math.Log2(float64(2*length))))
+	// size of each block
+	size := int64(math.Ceil(math.Log2(float64(2 * length))))
 
 	// num is the number of blocks
 	num := length / size
@@ -124,7 +124,7 @@ func ResRMQ(A []int64) func(x, y int64) (p, v int64) {
 	pre := make([]int64, num)
 
 	// B[i][j][k] is the optimal position in block i,
-    // between position j and  k.
+	// between position j and  k.
 	B := make([][][]int64, num)
 
 	// for sparse table algorithm
@@ -161,9 +161,9 @@ func ResRMQ(A []int64) func(x, y int64) (p, v int64) {
 
 	return func(x, y int64) (int64, int64) {
 		// always assume 0 <= x <= y < length
-        if x > y {
-            x, y = y, x
-        }
+		if x > y {
+			x, y = y, x
+		}
 		u, v := loc[x], loc[y]
 		ur, vr := res[x], res[y]
 		up, vp := pre[u], pre[v]
@@ -218,7 +218,7 @@ func arraytoint(A []int64) int64 {
 }
 
 func processBlock(size int64) func([]int64) [][]int64 {
-    // number of all possible +-1 sequence begin with 0
+	// number of all possible +-1 sequence begin with 0
 	if size > 63 {
 		panic("We cannot handle such long sequence")
 	}
@@ -227,11 +227,11 @@ func processBlock(size int64) func([]int64) [][]int64 {
 
 	return func(A []int64) [][]int64 {
 		v := arraytoint(A)
-        // if a[v] hasn't been computed before, then compute it.
-        // otherwise, use the cached result.
-        if a[v] == nil {
-            a[v] = dynamic(v, size)
-        }
+		// if a[v] hasn't been computed before, then compute it.
+		// otherwise, use the cached result.
+		if a[v] == nil {
+			a[v] = dynamic(v, size)
+		}
 		return a[v]
 	}
 }

@@ -179,7 +179,7 @@ func Test_ResRMQ(t *testing.T) {
 }
 
 func Test_ResRMQ2(t *testing.T) {
-	var a = []int64{0,1,2,3,4,3,4,3,2,3,2,1,2,1,0,1,0}
+	var a = []int64{0, 1, 2, 3, 4, 3, 4, 3, 2, 3, 2, 1, 2, 1, 0, 1, 0}
 	ster := ResRMQ(a)
 
 	if p, v := ster(6, 12); p != 11 || v != 1 {
