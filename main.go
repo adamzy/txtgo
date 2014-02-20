@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	T "txtgo/tree"
+	T "github.com/adamzy/txtgo/tree"
 )
 
 const version = "20140220"
