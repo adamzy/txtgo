@@ -153,8 +153,8 @@ func ResRMQ(A []int64) func(x, y int64) (p, v int64) {
 		}
 		pre[i] = pos
 		B[i] = processer(A[pos:length])
-		C[i] = B[num-1][0][length-pos-1] + pos
-		D[i] = A[C[num-1]]
+		C[i] = B[i][0][length-pos-1] + pos
+		D[i] = A[C[i]]
 	}
 	tabler := st(D)
 
@@ -218,6 +218,9 @@ func arraytoint(A []int64) int64 {
 
 func processBlock(size int64) func([]int64) [][]int64 {
     // number of all possible +-1 sequence begin with 0
+	if size > 63 {
+		panic("We cannot handle such long sequence")
+	}
 	num := int64(1 << uint64(size))
 	a := make([][][]int64, num)
 
@@ -233,11 +236,8 @@ func processBlock(size int64) func([]int64) [][]int64 {
 }
 
 func dynamic(n, size int64) [][]int64 {
-	if size > 63 {
-		panic("We cannot handle such long sequence")
-	}
+
 	t := make([][]int64, size) //t[i][j] = position with min value in A[i,j]
-	m := make([][]int64, size) //m[i][j] = min value in A[i,j]
 	var a, b int64             // temp int(array)
 	var u, v int64             // temp vaule
 	var d int64                // direction
@@ -246,7 +246,6 @@ func dynamic(n, size int64) [][]int64 {
 	u = 0
 	for i := int64(0); i < size; i++ {
 		t[i] = make([]int64, size)
-		m[i] = make([]int64, size)
 
 		d = a & 1
 		a >>= 1
@@ -256,17 +255,12 @@ func dynamic(n, size int64) [][]int64 {
 			u++
 		}
 		t[i][i] = i
-		m[i][i] = u
 
 		b = a
 		v = u
 		pos = i
 		opt = v
 
-		//println("+")
-		//if i==0 {
-		//println("-", 0, v)
-		/*}*/
 		for j := i + 1; j < size; j++ {
 			d = b & 1
 			b >>= 1
@@ -275,18 +269,11 @@ func dynamic(n, size int64) [][]int64 {
 			} else {
 				v--
 				if v < opt {
-					/*               if i==0 {*/
-					//println(":", v, opt)
-					/*}*/
 					pos = j
 					opt = v
 				}
 			}
-			/* if i==0 {*/
-			//println("-", j, v, pos, opt)
-			/*}*/
 			t[i][j] = pos
-			m[i][j] = opt
 		}
 	}
 	return t
