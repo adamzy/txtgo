@@ -97,7 +97,7 @@ func log2(size int64) []int64 {
 	return log
 }
 
-// +-RMQ, the restricted RMQ
+// +-1 RMQ, the restricted RMQ
 func ResRMQ(A []int64) func(x, y int64) (p, v int64) {
 	length := int64(len(A))
     // if `A` has length less than 2, do nothing.
@@ -107,6 +107,7 @@ func ResRMQ(A []int64) func(x, y int64) (p, v int64) {
 		}
     }
 
+    // size of each block
     size := int64(math.Ceil(math.Log2(float64(2*length))))
 
 	// num is the number of blocks
@@ -236,7 +237,6 @@ func processBlock(size int64) func([]int64) [][]int64 {
 }
 
 func dynamic(n, size int64) [][]int64 {
-
 	t := make([][]int64, size) //t[i][j] = position with min value in A[i,j]
 	var a, b int64             // temp int(array)
 	var u, v int64             // temp vaule
