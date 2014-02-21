@@ -39,7 +39,7 @@ func tokenize3(s string) []string {
 
 // This one seems faster.
 func tokenize(s string) []string {
-    //s = strings.Replace(s, " ", "", -1)
+	//s = strings.Replace(s, " ", "", -1)
 	r := strings.NewReplacer("(", " ( ", ")", " ) ", ":", " : ", ";", " ; ", ",", " , ")
 	return strings.Fields(r.Replace(s))
 }

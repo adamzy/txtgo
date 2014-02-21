@@ -73,15 +73,6 @@ func (n *Node) toString(showlength bool) string {
 	return b.String()
 }
 
-// Find the most left node of the tree (rooted at `node`).
-// It is useful for post-order-iteration.
-func leftmost(node *Node) *Node {
-	for len(node.Children) > 0 {
-		node = node.Children[0]
-	}
-	return node
-}
-
 // Postorder iterate the tree and put nodes into a list
 func (node *Node) Post2List() []*Node {
 	nl := make([]*Node, 0, 20)
