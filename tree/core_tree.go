@@ -53,31 +53,21 @@ func Make(s string) (*Tree, error) {
 	t := new(Tree)
 	t.Node = newNode()
 
-	var flag bool
-	var n, c *Node
-	n = t.Node
-
+	n, flag := t.Node, false
 	for _, v := range token {
 		switch v {
 		case "(":
-			c = newNode()
-			n.AddChild(c)
-			n = c
-			flag = false
+			n, flag = n.NewChild(), false
 		case ")":
 			if n.Father == nil {
 				return nil, InvalidTreeError{s}
 			}
-			n = n.Father
-			flag = false
+			n, flag = n.Father, false
 		case ",":
-			c = newNode()
 			if n.Father == nil {
 				return nil, InvalidTreeError{s}
 			}
-			n.Father.AddChild(c)
-			n = c
-			flag = false
+			n, flag = n.Father.NewChild(), false
 		case ":":
 			flag = true
 		case ";":

@@ -37,6 +37,12 @@ func (n *Node) AddChild(c *Node) {
 	c.Father = n
 }
 
+func (n *Node) NewChild() (child *Node) {
+	child = newNode()
+	n.AddChild(child)
+	return
+}
+
 func (n *Node) toByte(b *bytes.Buffer, showlength bool) {
 	writeNode := func(n *Node) {
 		b.WriteString(n.Name)
