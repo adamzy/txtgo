@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	T "github.com/adamzy/txtgo/tree"
 	"io/ioutil"
 	"log"
 	"os"
+	T "github.com/adamzy/txtgo/tree"
 )
 
 const version = "20140220"
@@ -75,12 +75,12 @@ func main() {
 		_wdup = *wdup + 2*(*wloss)
 	}
 
-	if *wdup < 0 {
-		log.Fatal("wdup must be non-negative.")
+	if *wdup <= 0 {
+		log.Fatal("wdup must be positive.")
 	}
 
-	if *wloss < 0 {
-		log.Fatal("wloss must be non-negative.")
+	if *wloss <= 0 {
+		log.Fatal("wloss must be positive.")
 	}
 
 	gt, err := T.Make(gs)
