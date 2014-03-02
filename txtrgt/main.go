@@ -9,7 +9,7 @@ import (
 	T "github.com/adamzy/txtgo/tree"
 )
 
-const version = "20140220"
+const version = "20140302"
 
 var (
 	gf          = flag.String("g", "", "gene tree file")
