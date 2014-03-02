@@ -99,6 +99,11 @@
               </a>
             
               
+              <a class="source" href="util_contract_test.html">
+                util_contract_test.go
+              </a>
+            
+              
               <a class="source" href="util_prune.html">
                 util_prune.go
               </a>
@@ -184,18 +189,8 @@
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">func</span> (t *Tree) ContractByLength(length <span class="hljs-typename">float64</span>) {
-	size := <span class="hljs-built_in">len</span>(t.Nodes)
-	d := <span class="hljs-built_in">make</span>([]<span class="hljs-typename">int</span>, size)
-	<span class="hljs-keyword">for</span> _, n := <span class="hljs-keyword">range</span> t.Nodes {
-		<span class="hljs-keyword">if</span> n.IsInternal() {
-			<span class="hljs-keyword">for</span> j, c := <span class="hljs-keyword">range</span> n.Children {
-				d[c.Id] = j
-			}
-		}
-	}
-
-	removeChild := <span class="hljs-keyword">func</span>(n *Node, i <span class="hljs-typename">int</span>) {
-		a := n.Children</pre></div></div>
+	contracter(t, checkByLength(length))
+}</pre></div></div>
             
         </li>
         
@@ -206,63 +201,35 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>update the index of last child</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>		d[a[<span class="hljs-built_in">len</span>(a<span class="hljs-number">)-1</span>].Id] = i <span class="hljs-comment">// important!</span>
-
-		a[<span class="hljs-built_in">len</span>(a<span class="hljs-number">)-1</span>], a[i], a = <span class="hljs-constant">nil</span>, a[<span class="hljs-built_in">len</span>(a<span class="hljs-number">)-1</span>], a[:<span class="hljs-built_in">len</span>(a<span class="hljs-number">)-1</span>]
-		n.Children = a
-	}
-
-	Contract := <span class="hljs-keyword">func</span>(n *Node) {
-		f := n.Father
-		cn := n.Children
-		removeChild(n.Father, d[n.Id])
-		<span class="hljs-keyword">for</span> _, c := <span class="hljs-keyword">range</span> cn {
-			f.AddChild(c)
-		}
-	}</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-5">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
-              </div>
-              <p>avoid root</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">for</span> i :=<span class="hljs-number"> 0</span>; i &lt; size<span class="hljs-number">-1</span>; i++ {
-		n := t.Nodes[i]
-		<span class="hljs-keyword">if</span> !n.IsLeaf() &amp;&amp; n.Length &lt; length {
-			Contract(n)
-		}
-	}
-	t.Update()
-}</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-6">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
-              </div>
               <p>Randomly contract tree branches according to the given rate.</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">func</span> (t *Tree) RandomContract(rate <span class="hljs-typename">float64</span>) {
-	size := <span class="hljs-built_in">len</span>(t.Nodes)
+	contracter(t, checkRandom(rate))
+}
+
+<span class="hljs-keyword">func</span> checkByLength(length <span class="hljs-typename">float64</span>) <span class="hljs-keyword">func</span>(*Node) <span class="hljs-typename">bool</span> {
+	<span class="hljs-keyword">return</span> <span class="hljs-keyword">func</span>(n *Node) <span class="hljs-typename">bool</span> {
+		<span class="hljs-keyword">if</span> n.Length &lt; length {
+			<span class="hljs-keyword">return</span> <span class="hljs-constant">true</span>
+		}
+		<span class="hljs-keyword">return</span> <span class="hljs-constant">false</span>
+	}
+}
+
+<span class="hljs-keyword">func</span> checkRandom(rate <span class="hljs-typename">float64</span>) <span class="hljs-keyword">func</span>(*Node) <span class="hljs-typename">bool</span> {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	<span class="hljs-keyword">return</span> <span class="hljs-keyword">func</span>(n *Node) <span class="hljs-typename">bool</span> {
+		<span class="hljs-keyword">if</span> r.Float64() &lt; rate {
+			<span class="hljs-keyword">return</span> <span class="hljs-constant">true</span>
+		}
+		<span class="hljs-keyword">return</span> <span class="hljs-constant">false</span>
+	}
+}
+
+<span class="hljs-keyword">func</span> contracter(t *Tree, checker <span class="hljs-keyword">func</span>(*Node) <span class="hljs-typename">bool</span>) {
+	size := <span class="hljs-built_in">len</span>(t.Nodes)
 	d := <span class="hljs-built_in">make</span>([]<span class="hljs-typename">int</span>, size)
 	<span class="hljs-keyword">for</span> _, n := <span class="hljs-keyword">range</span> t.Nodes {
 		<span class="hljs-keyword">if</span> n.IsInternal() {
@@ -278,11 +245,11 @@
         </li>
         
         
-        <li id="section-7">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>update the index of last child</p>
 
@@ -306,11 +273,11 @@
         </li>
         
         
-        <li id="section-8">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>avoid root</p>
 
@@ -318,7 +285,7 @@
             
             <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">for</span> i :=<span class="hljs-number"> 0</span>; i &lt; size<span class="hljs-number">-1</span>; i++ {
 		n := t.Nodes[i]
-		<span class="hljs-keyword">if</span> !n.IsLeaf() &amp;&amp; r.Float64() &lt; rate {
+		<span class="hljs-keyword">if</span> !n.IsLeaf() &amp;&amp; checker(n) {
 			Contract(n)
 		}
 	}

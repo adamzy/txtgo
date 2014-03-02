@@ -99,6 +99,11 @@
               </a>
             
               
+              <a class="source" href="util_contract_test.html">
+                util_contract_test.go
+              </a>
+            
+              
               <a class="source" href="util_prune.html">
                 util_prune.go
               </a>
@@ -217,6 +222,12 @@ e.g. <code>node.Ext.([]int)</code>.</p>
 	c.Father = n
 }
 
+<span class="hljs-keyword">func</span> (n *Node) NewChild() (child *Node) {
+	child = newNode()
+	n.AddChild(child)
+	<span class="hljs-keyword">return</span>
+}
+
 <span class="hljs-keyword">func</span> (n *Node) toByte(b *bytes.Buffer, showlength <span class="hljs-typename">bool</span>) {
 	writeNode := <span class="hljs-keyword">func</span>(n *Node) {
 		b.WriteString(n.Name)
@@ -274,27 +285,6 @@ e.g. <code>node.Ext.([]int)</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>Find the most left node of the tree (rooted at <code>node</code>).
-It is useful for post-order-iteration.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">func</span> leftmost(node *Node) *Node {
-	<span class="hljs-keyword">for</span> <span class="hljs-built_in">len</span>(node.Children) &gt;<span class="hljs-number"> 0</span> {
-		node = node.Children<span class="hljs-number">[0</span>]
-	}
-	<span class="hljs-keyword">return</span> node
-}</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-7">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
-              </div>
               <p>Postorder iterate the tree and put nodes into a list</p>
 
             </div>
@@ -305,11 +295,11 @@ It is useful for post-order-iteration.</p>
         </li>
         
         
-        <li id="section-8">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>A function that appends node with its descendent to <code>nl</code></p>
 

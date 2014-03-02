@@ -99,6 +99,11 @@
               </a>
             
               
+              <a class="source" href="util_contract_test.html">
+                util_contract_test.go
+              </a>
+            
+              
               <a class="source" href="util_prune.html">
                 util_prune.go
               </a>
@@ -146,13 +151,13 @@
 <span class="hljs-keyword">import</span> (
 	<span class="hljs-string">"flag"</span>
 	<span class="hljs-string">"fmt"</span>
-	T <span class="hljs-string">"github.com/adamzy/txtgo/tree"</span>
 	<span class="hljs-string">"io/ioutil"</span>
 	<span class="hljs-string">"log"</span>
 	<span class="hljs-string">"os"</span>
+	T <span class="hljs-string">"github.com/adamzy/txtgo/tree"</span>
 )
 
-<span class="hljs-keyword">const</span> version = <span class="hljs-string">"20140220"</span>
+<span class="hljs-keyword">const</span> version = <span class="hljs-string">"20140302"</span>
 
 <span class="hljs-keyword">var</span> (
 	gf          = flag.String(<span class="hljs-string">"g"</span>, <span class="hljs-string">""</span>, <span class="hljs-string">"gene tree file"</span>)
@@ -218,12 +223,12 @@ Example:
 		_wdup = *wdup +<span class="hljs-number"> 2</span>*(*wloss)
 	}
 
-	<span class="hljs-keyword">if</span> *wdup &lt;<span class="hljs-number"> 0</span> {
-		log.Fatal(<span class="hljs-string">"wdup must be non-negative."</span>)
+	<span class="hljs-keyword">if</span> *wdup &lt;=<span class="hljs-number"> 0</span> {
+		log.Fatal(<span class="hljs-string">"wdup must be positive."</span>)
 	}
 
-	<span class="hljs-keyword">if</span> *wloss &lt;<span class="hljs-number"> 0</span> {
-		log.Fatal(<span class="hljs-string">"wloss must be non-negative."</span>)
+	<span class="hljs-keyword">if</span> *wloss &lt;=<span class="hljs-number"> 0</span> {
+		log.Fatal(<span class="hljs-string">"wloss must be positive."</span>)
 	}
 
 	gt, err := T.Make(gs)

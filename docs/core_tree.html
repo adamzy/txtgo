@@ -99,6 +99,11 @@
               </a>
             
               
+              <a class="source" href="util_contract_test.html">
+                util_contract_test.go
+              </a>
+            
+              
               <a class="source" href="util_prune.html">
                 util_prune.go
               </a>
@@ -184,12 +189,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">func</span> tokenize3(s <span class="hljs-typename">string</span>) []<span class="hljs-typename">string</span> {
-	s = strings.Replace(s, <span class="hljs-string">" "</span>, <span class="hljs-string">""</span>,<span class="hljs-number"> -1</span>)
-	reg := <span class="hljs-string">`[\(\),;:]|[^\(\),;:]+`</span>
-	re := regexp.MustCompile(reg)
-	<span class="hljs-keyword">return</span> re.FindAllString(s,<span class="hljs-number"> -1</span>)
-}</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">func</span> tokenize3(s <span class="hljs-typename">string</span>) []<span class="hljs-typename">string</span> {</pre></div></div>
             
         </li>
         
@@ -200,14 +200,13 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>This one seems faster.</p>
+              <p>s = strings.Replace(s, “ “, “”, -1)</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">func</span> tokenize(s <span class="hljs-typename">string</span>) []<span class="hljs-typename">string</span> {
-	s = strings.Replace(s, <span class="hljs-string">" "</span>, <span class="hljs-string">""</span>,<span class="hljs-number"> -1</span>)
-	r := strings.NewReplacer(<span class="hljs-string">"("</span>, <span class="hljs-string">" ( "</span>, <span class="hljs-string">")"</span>, <span class="hljs-string">" ) "</span>, <span class="hljs-string">":"</span>, <span class="hljs-string">" : "</span>, <span class="hljs-string">";"</span>, <span class="hljs-string">" ; "</span>, <span class="hljs-string">","</span>, <span class="hljs-string">" , "</span>)
-	<span class="hljs-keyword">return</span> strings.Fields(r.Replace(s))
+            <div class="content"><div class='highlight'><pre>	reg := <span class="hljs-string">`[\(\),;:]|[^\(\),;:\s]+`</span>
+	re := regexp.MustCompile(reg)
+	<span class="hljs-keyword">return</span> re.FindAllString(s,<span class="hljs-number"> -1</span>)
 }</pre></div></div>
             
         </li>
@@ -218,6 +217,38 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>This one seems faster.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">func</span> tokenize(s <span class="hljs-typename">string</span>) []<span class="hljs-typename">string</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>s = strings.Replace(s, “ “, “”, -1)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	r := strings.NewReplacer(<span class="hljs-string">"("</span>, <span class="hljs-string">" ( "</span>, <span class="hljs-string">")"</span>, <span class="hljs-string">" ) "</span>, <span class="hljs-string">":"</span>, <span class="hljs-string">" : "</span>, <span class="hljs-string">";"</span>, <span class="hljs-string">" ; "</span>, <span class="hljs-string">","</span>, <span class="hljs-string">" , "</span>)
+	<span class="hljs-keyword">return</span> strings.Fields(r.Replace(s))
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>Make a tree from a string</p>
 
@@ -231,31 +262,21 @@
 	t := <span class="hljs-built_in">new</span>(Tree)
 	t.Node = newNode()
 
-	<span class="hljs-keyword">var</span> flag <span class="hljs-typename">bool</span>
-	<span class="hljs-keyword">var</span> n, c *Node
-	n = t.Node
-
+	n, flag := t.Node, <span class="hljs-constant">false</span>
 	<span class="hljs-keyword">for</span> _, v := <span class="hljs-keyword">range</span> token {
 		<span class="hljs-keyword">switch</span> v {
 		<span class="hljs-keyword">case</span> <span class="hljs-string">"("</span>:
-			c = newNode()
-			n.AddChild(c)
-			n = c
-			flag = <span class="hljs-constant">false</span>
+			n, flag = n.NewChild(), <span class="hljs-constant">false</span>
 		<span class="hljs-keyword">case</span> <span class="hljs-string">")"</span>:
 			<span class="hljs-keyword">if</span> n.Father == <span class="hljs-constant">nil</span> {
 				<span class="hljs-keyword">return</span> <span class="hljs-constant">nil</span>, InvalidTreeError{s}
 			}
-			n = n.Father
-			flag = <span class="hljs-constant">false</span>
+			n, flag = n.Father, <span class="hljs-constant">false</span>
 		<span class="hljs-keyword">case</span> <span class="hljs-string">","</span>:
-			c = newNode()
 			<span class="hljs-keyword">if</span> n.Father == <span class="hljs-constant">nil</span> {
 				<span class="hljs-keyword">return</span> <span class="hljs-constant">nil</span>, InvalidTreeError{s}
 			}
-			n.Father.AddChild(c)
-			n = c
-			flag = <span class="hljs-constant">false</span>
+			n, flag = n.Father.NewChild(), <span class="hljs-constant">false</span>
 		<span class="hljs-keyword">case</span> <span class="hljs-string">":"</span>:
 			flag = <span class="hljs-constant">true</span>
 		<span class="hljs-keyword">case</span> <span class="hljs-string">";"</span>:
@@ -281,11 +302,11 @@
         </li>
         
         
-        <li id="section-5">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>Update t.Nodes once the tree is successfully built.</p>
 
@@ -299,11 +320,11 @@
         </li>
         
         
-        <li id="section-6">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>Update node.Level and node.Id for tree <code>t</code></p>
 
@@ -323,11 +344,11 @@
         </li>
         
         
-        <li id="section-7">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>Update everything of a tree from <code>tree.Node</code>,
 including <code>tree.Nodes, size, node.id, level</code>.
@@ -343,11 +364,11 @@ Useful after the tree was manually edited</p>
         </li>
         
         
-        <li id="section-8">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>A tree is binary tree &lt;=&gt; every internal node has two children.
 Overwrite <code>node.IsBinary</code> method.</p>
@@ -367,11 +388,11 @@ Overwrite <code>node.IsBinary</code> method.</p>
         </li>
         
         
-        <li id="section-9">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>A map that maps taxa to (one of) the corresponding leaf node</p>
 
@@ -382,11 +403,11 @@ Overwrite <code>node.IsBinary</code> method.</p>
         </li>
         
         
-        <li id="section-10">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <p><code>TaxonMap</code> return the <code>Taxonmap</code> for a tree, and the uniqueness of its taxon.</p>
 
