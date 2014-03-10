@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
+	T "github.com/adamzy/txtgo/tree"
 	"io/ioutil"
 	"log"
 	"os"
-	T "github.com/adamzy/txtgo/tree"
 )
 
 const version = "20140302"
@@ -21,20 +21,25 @@ var (
 )
 
 func usage() {
-	s := fmt.Sprintf(`TxT-RGT
-    version %s
-Usage:
-    %s -g gene_tree -s species_tree -m method [-wdup a -wloss b]
-Options:
-    -g      gene tree file    
-    -s      species tree file
-    -m      method [mutation/duploss/lossdup/affine]
-    -wdup   weight for duplication, only for affine
-    -wloss  weight for loss, only for affine
-    -V      show version
-Example:
+	s := fmt.Sprintf(`
+  TxT-RGT
+      version %s
+
+  Usage:
+      %s -g gene_tree -s species_tree -m method [-wdup a -wloss b]
+
+  Options:
+      -g      gene tree file    
+      -s      species tree file
+      -m      method [mutation/duploss/lossdup/affine]
+      -wdup   weight for duplication, only for affine
+      -wloss  weight for loss, only for affine
+      -V      show version
+
+  Example:
     %s -g gene_tree -s species_tree -m mutation
     %s -g gene_tree -s species_tree -m affine -wdup 2 -wloss 1
+
 `, version, os.Args[0], os.Args[0], os.Args[0])
 	fmt.Print(s)
 }
